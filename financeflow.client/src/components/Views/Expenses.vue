@@ -1,7 +1,6 @@
 <template>
-  <!-- component -->
   <div class="bg-white p-8 rounded-md w-full">
-    <ListHeader Header="Transactions" SubHeader="Transactions List"/>
+    <ListHeader Header="Expenses" SubHeader="Expense List" />
     <div>
       <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div class="flex flex-col">
@@ -13,19 +12,16 @@
                     <tr>
                       <th scope="col"
                         class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Transaction Type</th>
+                        Item Name</th>
                       <th scope="col"
                         class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                         Amount</th>
-                        <th scope="col"
-                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Status</th>
                       <th scope="col"
                         class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Reference</th>
-                        <th scope="col"
+                        Quantity</th>
+                      <th scope="col"
                         class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Created At</th>
+                        Date</th>
                       <th scope="col"
                         class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                         Action</th>
@@ -39,14 +35,18 @@
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">45</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">New York No. 1
                         Lake Park</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">New York No. 1
-                          Lake Park</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">New York No. 1
-                          Lake Park</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">New York No. 1
+                        Lake Park</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                        <router-link to="" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit |</router-link>
-                        <router-link to="" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details |</router-link>
-                        <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"> Delete</button>
+                        <router-link to=""
+                          class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
+                          |</router-link>
+                        <router-link to=""
+                          class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
+                          |</router-link>
+                        <button type="button"
+                          class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">
+                          Delete</button>
                       </td>
                     </tr>
 
@@ -78,9 +78,9 @@
 </template>
 
 <script setup>
-import ListHeader from '../Components/ListHeader.vue';
-
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+</style>

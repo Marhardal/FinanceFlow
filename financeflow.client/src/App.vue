@@ -15,7 +15,7 @@
         <!--<HomeIcon class="icon"/>-->
         <!--<img src="assets/favicon.ico"/>-->
       </a>
-      <RouterLink to="/index" class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300">
+      <RouterLink to="/" class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300">
         <HomeIcon class="icon size-5" />
       </RouterLink>
 
@@ -23,15 +23,15 @@
         <arrowsUpDownIcon class="icon size-5" />
       </Router-link>
 
-      <a class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
+      <RouterLink to="/expenses" class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300">
         <ChartPieIcon class="icon size-5" />
-      </a>
-      <a class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
+      </RouterLink>
+      <RouterLink to="/incomes" class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
         <WalletIcon class="icon size-5" />
-      </a>
-      <a class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
+      </RouterLink>
+      <RouterLink to="/items" class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
         <ShoppingCartIcon class="icon size-5" />
-      </a>
+      </RouterLink>
       <a class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
         <Cog6ToothIcon class="icon size-5" />
       </a>
