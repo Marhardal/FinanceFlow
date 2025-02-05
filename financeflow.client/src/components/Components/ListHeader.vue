@@ -14,9 +14,7 @@
         <input class="bg-gray-50 ml-1 block outline-none flex-grow" type="text" name="" id="" placeholder="search...">
       </div>
       <div class="lg:ml-40 ml-10 space-x-8">
-
-        <button
-          class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">Create</button>
+        <router-link class="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer" :to="props.Navigate">Create</router-link>
       </div>
     </div>
   </div>
@@ -28,6 +26,10 @@
       type: String
     },
     SubHeader : {
+      type: String,
+      required: true
+    },
+    Navigate : {
       type: String,
       required: true
     }

@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white p-8 rounded-md w-full">
-    <ListHeader Header="Expenses" SubHeader="Expense List" />
+    <ListHeader Header="Expenses" SubHeader="Expense List" Navigate="expense/create"/>
     <div>
       <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div class="flex flex-col">
@@ -78,7 +78,7 @@
 </template>
 
 <script setup>
-
+import ListHeader from '../Components/ListHeader.vue';
 </script>
 
 <style lang="scss" scoped>

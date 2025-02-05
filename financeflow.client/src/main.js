@@ -10,6 +10,7 @@ import Transactions from './components/Views/Transactions.vue'
 import Incomes from './components/Views/Incomes.vue'
 import Expenses from './components/Views/Expenses.vue'
 import Item from './components/Views/item.vue'
+import CreateExpense from './components/Views/CreateExpense.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -18,6 +19,7 @@ const router = createRouter({
     { path: '/transactions', component: Transactions },
     { path: '/incomes', component: Incomes },
     { path: '/expenses', component: Expenses },
+    { path: '/expense/create', component: CreateExpense },
     { path: '/items', component: Item },
   ],
 });
