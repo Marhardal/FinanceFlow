@@ -2,8 +2,9 @@
 
   <ContainerBg>
     <div class="mx-auto max-w-xl">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl md:text-4xl font-extrabold mb-2">Create an Expense</h2>
+      <div class="text-start mb-8">
+        <h2 class="text-3xl md:text-4xl font-bold mb-2">Create an Expense</h2>
+        <h2 class="text-2xl md:text-2xl text-neutral-600 font-semibold mb-2">Fill in all Fields.</h2>
       </div>
       <form action="" class="space-y-5">
         <Select id="Category" name="Category" />
