@@ -36,3 +36,5 @@ app.MapControllers();
 app.MapFallbackToFile("/index.html");
 
 app.Run();
+
+//https://localhost:7001/openai/v1.json
