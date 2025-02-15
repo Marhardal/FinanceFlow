@@ -12,11 +12,11 @@ namespace FinanceFlow.Server.Models
         [Precision(18, 2)]
         public required decimal Price { get; set; }
         
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("ExpenseCategoryId")]
         public int ExpenseCategoryId { get; set; }
         
-        public ExpenseCategoriesModel ExpenseCategory { get; set; } = new ExpenseCategoriesModel { Name = string.Empty };
+        public ExpenseCategoriesModel? ExpenseCategory { get; set; }
     }
 }
