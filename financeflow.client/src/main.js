@@ -2,6 +2,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
+import axios from './Others/axios.js'
 
 import { createRouter, createWebHistory } from 'vue-router'
 

@@ -74,6 +74,16 @@
 
 <script setup>
   import ListHeader from '../Components/ListHeader.vue';
+  import axios from 'axios';
+
+const options = {method: 'GET', url: 'https://localhost:7001/api/Item'};
+
+try {
+  const { data } = await axios.request(options);
+  console.log(data);
+} catch (error) {
+  console.error(error);
+}
 </script>
 
 <style lang="scss" scoped>
