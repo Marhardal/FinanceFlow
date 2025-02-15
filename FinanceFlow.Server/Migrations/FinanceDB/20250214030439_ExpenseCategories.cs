@@ -4,10 +4,10 @@
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace FinanceFlow.Server.Migrations.DB
+namespace FinanceFlow.Server.Migrations.FinanceDB
 {
     /// <inheritdoc />
-    public partial class expensecategory : Migration
+    public partial class ExpenseCategories : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

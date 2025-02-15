@@ -1,7 +1,7 @@
 <template>
   <!-- component -->
   <div class="bg-white p-8 rounded-md w-full">
-    <ListHeader Header="Transactions" SubHeader="Transactions List"/>
+    <ListHeader Header="Transactions" SubHeader="Transactions List" Navigate=""/>
     <div>
       <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div class="flex flex-col">

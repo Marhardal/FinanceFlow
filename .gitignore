@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# ignore all migrations files in .NET Core project
+Finance.Server/Migrations/FinanceDB/*.cs

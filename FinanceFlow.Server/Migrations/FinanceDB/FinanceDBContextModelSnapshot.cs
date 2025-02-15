@@ -3,19 +3,16 @@ using FinanceFlow.Server.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FinanceFlow.Server.Migrations.DB
+namespace FinanceFlow.Server.Migrations.FinanceDB
 {
-    [DbContext(typeof(DbContext))]
-    [Migration("20250213032411_expensecategory")]
-    partial class expensecategory
+    [DbContext(typeof(FinanceDBContext))]
+    partial class FinanceDBContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

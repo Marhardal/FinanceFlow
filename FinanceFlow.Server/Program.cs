@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<DBContext>(options =>
+builder.Services.AddDbContext<FinanceDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
@@ -37,4 +37,4 @@ app.MapFallbackToFile("/index.html");
 
 app.Run();
 
-//https://localhost:7001/openai/v1.json
+//https://localhost:7001/scalar/v1#tag/expensecategory
