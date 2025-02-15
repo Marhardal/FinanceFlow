@@ -12,6 +12,8 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<ExpenseCategoriesModel> ExpenseCategories { get; set; }
 
+        public DbSet<ItemsModel> Items { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

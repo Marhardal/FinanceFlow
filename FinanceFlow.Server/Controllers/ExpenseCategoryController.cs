@@ -1,5 +1,5 @@
 ﻿using FinanceFlow.Server.DBContext;
-using FinanceFlow.Server.Migrations.FinanceDB;
+//using FinanceFlow.Server.Migrations.FinanceDB;
 using FinanceFlow.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +22,7 @@ namespace FinanceFlow.Server.Controllers
 
         // GET: api/<ExpenseCategoryController>
         [HttpGet]
-        public async Task<ActionResult<List<ExpenseCategories>>> Get()
+        public async Task<ActionResult<List<ExpenseCategoriesModel>>> Get()
         {
             return Ok(await _dbContext.ExpenseCategories.ToListAsync());
         }
