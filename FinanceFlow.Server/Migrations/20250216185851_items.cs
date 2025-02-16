@@ -5,7 +5,7 @@
 namespace FinanceFlow.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class Items : Migration
+    public partial class items : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

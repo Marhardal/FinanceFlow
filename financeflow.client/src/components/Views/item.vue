@@ -25,13 +25,12 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded" v-for="item in items" :key="item.id">
                       <!-- dark:text-neutral-200 -->
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
-                        John Brown</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">45</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">New York No. 1
-                        Lake Park</td>
+                        {{ item.name }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ item.expenseCategory.name }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ item.price }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                         <router-link to=""
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
@@ -75,15 +74,27 @@
 <script setup>
   import ListHeader from '../Components/ListHeader.vue';
   import axios from 'axios';
+import { ref, onMounted } from 'vue';
 
-const options = {method: 'GET', url: 'https://localhost:7001/api/Item'};
+const items = ref([]);
 
-try {
-  const { data } = await axios.request(options);
-  console.log(data);
-} catch (error) {
-  console.error(error);
-}
+const getItems = async () => {
+  try {
+    const response = await axios.get("https://localhost:7001/api/Item", {
+      headers: {
+        Accept: 'application/json'
+      }
+    });
+    items.value = response.data;
+    console.log(items); // Log the actual data, not the ref object
+  } catch (error) {
+    console.error("Error fetching items:", error);
+  }
+};
+
+onMounted(() => {
+  getItems(); // Ensure function is called properly
+});
 </script>
 
 <style lang="scss" scoped>

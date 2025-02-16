@@ -18,6 +18,12 @@ namespace FinanceFlow.Server.DBContext
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ItemsModel>()
+                .HasOne(i => i.ExpenseCategory)
+                .WithMany(c => c.Items)
+                .HasForeignKey(i => i.ExpenseCategoryId);
+
+
             modelBuilder.Entity<ExpenseCategoriesModel>().HasData(
                 new ExpenseCategoriesModel { Id = 1, Name = "Housing" },
                 new ExpenseCategoriesModel { Id = 2, Name = "Utilities" },

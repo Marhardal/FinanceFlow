@@ -26,7 +26,11 @@ namespace FinanceFlow.Server.Controllers
             {
                 return NotFound();
             }
-            return Ok(await _dbContext.Items.ToListAsync());
+            List<ItemsModel> items = await _dbContext.Items
+    .Include(i => i.ExpenseCategory)
+    .ToListAsync();
+
+            return Ok(items);
         }
 
         // GET api/<ItemController>/5

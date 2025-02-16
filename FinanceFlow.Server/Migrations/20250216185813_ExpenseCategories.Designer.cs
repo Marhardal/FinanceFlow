@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceFlow.Server.Migrations
 {
     [DbContext(typeof(FinanceDBContext))]
-    [Migration("20250215044826_ExpenseCategories")]
+    [Migration("20250216185813_ExpenseCategories")]
     partial class ExpenseCategories
     {
         /// <inheritdoc />
@@ -33,11 +33,16 @@ namespace FinanceFlow.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ItemsModelId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ItemsModelId");
 
                     b.ToTable("ExpenseCategories");
 
@@ -102,7 +107,7 @@ namespace FinanceFlow.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("ExpenseCategoryId")
@@ -123,6 +128,13 @@ namespace FinanceFlow.Server.Migrations
                     b.ToTable("Items");
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseCategoriesModel", b =>
+                {
+                    b.HasOne("FinanceFlow.Server.Models.ItemsModel", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("ItemsModelId");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsModel", b =>
                 {
                     b.HasOne("FinanceFlow.Server.Models.ExpenseCategoriesModel", "ExpenseCategory")
@@ -132,6 +144,11 @@ namespace FinanceFlow.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("ExpenseCategory");
+                });
+
+            modelBuilder.Entity("FinanceFlow.Server.Models.ItemsModel", b =>
+                {
+                    b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618
         }

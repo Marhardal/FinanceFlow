@@ -19,7 +19,8 @@ namespace FinanceFlow.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ItemsModelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -34,7 +35,7 @@ namespace FinanceFlow.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ExpenseCategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -50,30 +51,46 @@ namespace FinanceFlow.Server.Migrations
 
             migrationBuilder.InsertData(
                 table: "ExpenseCategories",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Id", "ItemsModelId", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Housing" },
-                    { 2, "Utilities" },
-                    { 3, "Groceries" },
-                    { 4, "Transportation" },
-                    { 5, "Healthcare" },
-                    { 6, "Debt and Savings" },
-                    { 7, "Personal Care" },
-                    { 8, "Entertainment" },
-                    { 9, "Education" },
-                    { 10, "Miscellaneous" }
+                    { 1, null, "Housing" },
+                    { 2, null, "Utilities" },
+                    { 3, null, "Groceries" },
+                    { 4, null, "Transportation" },
+                    { 5, null, "Healthcare" },
+                    { 6, null, "Debt and Savings" },
+                    { 7, null, "Personal Care" },
+                    { 8, null, "Entertainment" },
+                    { 9, null, "Education" },
+                    { 10, null, "Miscellaneous" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExpenseCategories_ItemsModelId",
+                table: "ExpenseCategories",
+                column: "ItemsModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_ExpenseCategoryId",
                 table: "Items",
                 column: "ExpenseCategoryId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ExpenseCategories_Items_ItemsModelId",
+                table: "ExpenseCategories",
+                column: "ItemsModelId",
+                principalTable: "Items",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_ExpenseCategories_Items_ItemsModelId",
+                table: "ExpenseCategories");
+
             migrationBuilder.DropTable(
                 name: "Items");
 

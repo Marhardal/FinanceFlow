@@ -4,6 +4,19 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:53386") // Allow frontend URL
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -14,6 +27,14 @@ builder.Services.AddDbContext<FinanceDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true; // Optional: makes JSON more readable
+    });
+
 
 var app = builder.Build();
 
@@ -26,6 +47,9 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
     app.MapOpenApi();
 }
+
+// Enable CORS before middleware
+app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 

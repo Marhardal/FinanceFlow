@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace FinanceFlow.Server.Models
 {
@@ -16,7 +17,10 @@ namespace FinanceFlow.Server.Models
 
         [ForeignKey("ExpenseCategoryId")]
         public int ExpenseCategoryId { get; set; }
-        
+
+        //[JsonIgnore]
         public ExpenseCategoriesModel? ExpenseCategory { get; set; }
+
+        public ICollection<ExpenseCategoriesModel> Categories { get; set; } = new List<ExpenseCategoriesModel>();
     }
 }
