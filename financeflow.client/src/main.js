@@ -2,7 +2,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import axios from './Others/axios.js'
+import axios from './Others/apiClient.js'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -12,6 +12,7 @@ import Incomes from './components/Views/Incomes.vue'
 import Expenses from './components/Views/Expenses.vue'
 import Item from './components/Views/item.vue'
 import CreateExpense from './components/Views/CreateExpense.vue'
+import CreateItem from './components/Views/CreateItem.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -22,6 +23,7 @@ const router = createRouter({
     { path: '/expenses', component: Expenses },
     { path: '/expense/create', component: CreateExpense },
     { path: '/items', component: Item },
+    { path: '/item/Create', component: CreateItem },
   ],
 });
 

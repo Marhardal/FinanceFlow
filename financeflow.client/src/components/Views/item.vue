@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white p-8 rounded-md w-full">
-    <ListHeader Header="Items" SubHeader="Item List" />
+    <ListHeader Header="Items" SubHeader="Item List" Navigate="item/create"/>
     <div>
       <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div class="flex flex-col">
@@ -73,18 +73,14 @@
 
 <script setup>
   import ListHeader from '../Components/ListHeader.vue';
-  import axios from 'axios';
+  import apiClient from '../../Others/apiClient'
 import { ref, onMounted } from 'vue';
 
 const items = ref([]);
 
 const getItems = async () => {
   try {
-    const response = await axios.get("https://localhost:7001/api/Item", {
-      headers: {
-        Accept: 'application/json'
-      }
-    });
+    const response = await apiClient.get('Item')
     items.value = response.data;
     console.log(items); // Log the actual data, not the ref object
   } catch (error) {

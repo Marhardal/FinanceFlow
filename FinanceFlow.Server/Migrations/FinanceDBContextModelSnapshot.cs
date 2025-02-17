@@ -135,12 +135,17 @@ namespace FinanceFlow.Server.Migrations
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsModel", b =>
                 {
                     b.HasOne("FinanceFlow.Server.Models.ExpenseCategoriesModel", "ExpenseCategory")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("ExpenseCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ExpenseCategory");
+                });
+
+            modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseCategoriesModel", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsModel", b =>
