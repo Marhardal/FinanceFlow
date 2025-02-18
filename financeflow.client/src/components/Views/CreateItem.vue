@@ -6,11 +6,11 @@
         <h2 class="text-2xl md:text-2xl text-neutral-600 font-semibold mb-2">Fill in all Fields.</h2>
       </div>
       <form action="" class="space-y-5">
-        <Inputbox id="name" placeholder="Enter Item Name" name="Name" />
-        <Select :options="Categories" id="Category" name="Category" display="Select an Item Category" />
+        <Inputbox id="name" placeholder="Enter Item Name" name="Name" v-model="input.name"/>
+        <Select :options="Categories" id="Category" name="Category" display="Select an Item Category" v-model="input.categoryd"/>
         <Inputbox id="price" type="Number" placeholder="Enter Item Price" name="Price" />
         <Inputbox id="measurement" type="Number" placeholder="Enter Item measurement" name="Measurement" />
-        <Button name="Create" />
+        <Button name="Create" @click="CreateItem"/>
       </form>
     </div>
 
@@ -26,7 +26,7 @@ import Select from '../Components/Forms/Select.vue';
 import ContainerBg from '../Components/ContainerBg.vue';
 
 import apiClient from '../../Others/apiClient'
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 
 const Categories = ref([]);
 
@@ -39,6 +39,13 @@ const getCategories = async () => {
     console.error("Error fetching Categories:", error);
   }
 };
+
+const input = reactive({
+  name,
+  price: '',
+  measurement: '',
+  category: '',
+});
 
 onMounted(() => {
   getCategories(); // Ensure function is called properly
