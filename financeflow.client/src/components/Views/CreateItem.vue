@@ -5,26 +5,25 @@
         <h2 class="text-3xl md:text-4xl font-bold mb-2">Create an Item</h2>
         <h2 class="text-2xl md:text-2xl text-neutral-600 font-semibold mb-2">Fill in all Fields.</h2>
       </div>
-      <form action="" class="space-y-5">
-        <Inputbox id="name" placeholder="Enter Item Name" name="Name" v-model="input.name"/>
-        <Select :options="Categories" id="Category" name="Category" display="Select an Item Category" v-model="input.categoryd"/>
-        <Inputbox id="price" type="Number" placeholder="Enter Item Price" name="Price" />
-        <Inputbox id="measurement" type="Number" placeholder="Enter Item measurement" name="Measurement" />
-        <Button name="Create" @click="CreateItem"/>
-      </form>
+      <!-- <form action="" class="space-y-5"> -->
+      <FormKit type="form" submit-label="Create" @submit="login" :submit-attrs="{
+    inputClass: 'py-3 px-4 block w-full border-gray-500 rounded text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-300 dark:border-gray-500 dark:text-neutral-700 dark:placeholder-neutral-500 dark:focus:ring-neutral-600',
+    wrapperClass: 'space-y-5',
+    'data-theme': `dark`,
+    ignore: false
+  }">
+        <FormKit label="Item Name" placeholder="Enter an Item Name." type="text" help="Enter an Item Name."
+          value="" v-model="input.name"/>
+        <FormKit type="select" label="Select Item Category" :options="Categories" v-model="input.category" help="Select an Item Category" />
+        <FormKit label="Item Price" placeholder="Enter an Item Price." type="number" v-model="input.price" help="Enter an Item Name."
+          value="" />
+      </FormKit>
     </div>
-
   </ContainerBg>
-
-
 </template>
 
 <script setup>
-import Inputbox from '../Components/Forms/inputbox.vue';
-import Button from '../Components/Forms/Button.vue';
-import Select from '../Components/Forms/Select.vue';
 import ContainerBg from '../Components/ContainerBg.vue';
-
 import apiClient from '../../Others/apiClient'
 import { ref, onMounted, reactive } from 'vue';
 
@@ -33,7 +32,10 @@ const Categories = ref([]);
 const getCategories = async () => {
   try {
     const response = await apiClient.get('ExpenseCategory')
-    Categories.value = response.data;
+    Categories.value = response.data.map((category) => ({
+      value: category.id,
+      label: category.name,
+    }));
     console.log(Categories); // Log the actual data, not the ref object
   } catch (error) {
     console.error("Error fetching Categories:", error);
@@ -46,6 +48,9 @@ const input = reactive({
   measurement: '',
   category: '',
 });
+
+
+
 
 onMounted(() => {
   getCategories(); // Ensure function is called properly

@@ -7,8 +7,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import formkitconfig from './Others/formkit.config'
 import { plugin, defaultConfig} from "@formkit/vue"
-// import '@formkit/themes/genesis'
-// import { createProPlugin, inputs } from '@formkit/pro'
 
 import index from './components/Views/index.vue'
 import Transactions from './components/Views/Transactions.vue'
