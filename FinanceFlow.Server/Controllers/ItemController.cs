@@ -20,29 +20,23 @@ namespace FinanceFlow.Server.Controllers
 
         // GET: api/<ItemController>
         [HttpGet]
-        public async Task<ActionResult<List<ItemsModel>>> Get()
+        public async Task<ActionResult<List<ItemsModel>>> Get(string search = null)
         {
             if (_dbContext.Items is null)
             {
                 return NotFound();
             }
-            List<ItemsModel> items = await _dbContext.Items
-    .Include(i => i.ExpenseCategory)
-    .ToListAsync();
+
+            IQueryable<ItemsModel> query = _dbContext.Items.Include(i => i.ExpenseCategory);
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(i => i.Name.Contains(search) || i.ExpenseCategory.Name.Contains(search));
+            }
+
+            List<ItemsModel> items = await query.ToListAsync();
 
             return Ok(items);
-        }
-
-        // GET api/<ItemController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ItemsModel>> Get(int id)
-        {
-            var item = await _dbContext.Items.FindAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return Ok(item);
         }
 
         // POST api/<ItemController>

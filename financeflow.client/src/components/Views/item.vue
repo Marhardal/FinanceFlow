@@ -1,6 +1,7 @@
 <template>
   <div class="bg-white p-8 rounded-md w-full">
-    <ListHeader Header="Items" SubHeader="Item List" Navigate="item/create"/>
+    <ListHeader Header="Items" SubHeader="Item List" Navigate="item/create" />
+    <FormKit type="search" label="Search" placeholder="Search for items" v-model="search" @keyup="getSearchedItems()"/>
     <div>
       <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div class="flex flex-col">
@@ -25,20 +26,21 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded" v-for="item in items" :key="item.id">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded" v-for="item in items"
+                      :key="item.id">
                       <!-- dark:text-neutral-200 -->
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
                         {{ item.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ item.expenseCategory.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ item.price }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                        <router-link :to="{ path: 'item/edit/'+ item.id }"
+                        <router-link :to="{ path: 'item/edit/' + item.id }"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
                           |</router-link>
                         <router-link :to="{ path: 'item/edit', params: { id: item.id } }"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
                           |</router-link>
-                          <button @click="deleteItem(item.id)"
+                        <button @click="deleteItem(item.id)"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Delete
                           |</button>
                       </td>
@@ -72,8 +74,8 @@
 </template>
 
 <script setup>
-  import ListHeader from '../Components/ListHeader.vue';
-  import apiClient from '../../Others/apiClient'
+import ListHeader from '../Components/ListHeader.vue';
+import apiClient from '../../Others/apiClient'
 import { ref, onMounted } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import { useRouter } from 'vue-router';
@@ -82,9 +84,22 @@ const items = ref([]);
 const $toast = useToast();
 const router = useRouter();
 
+const search = ref('');
+
 const getItems = async () => {
   try {
-    const response = await apiClient.get('Item')
+    const response = await apiClient.get('Item');
+    items.value = response.data;
+    console.log(items); // Log the actual data, not the ref object
+  } catch (error) {
+    console.error("Error fetching items:", error);
+  }
+};
+
+
+const getSearchedItems = async () => {
+  try {
+    const response = await apiClient.get('Item?search=' + search.value);
     items.value = response.data;
     console.log(items); // Log the actual data, not the ref object
   } catch (error) {
@@ -109,6 +124,4 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
