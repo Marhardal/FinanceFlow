@@ -32,15 +32,15 @@
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ item.expenseCategory.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ item.price }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                        <router-link to=""
+                        <router-link :to="{ path: 'item/edit/'+ item.id }"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
                           |</router-link>
-                        <router-link to=""
+                        <router-link :to="{ path: 'item/edit', params: { id: item.id } }"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
                           |</router-link>
-                        <button type="button"
-                          class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">
-                          Delete</button>
+                          <button @click="deleteItem(item.id)"
+                          class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Delete
+                          |</button>
                       </td>
                     </tr>
 
@@ -75,8 +75,12 @@
   import ListHeader from '../Components/ListHeader.vue';
   import apiClient from '../../Others/apiClient'
 import { ref, onMounted } from 'vue';
+import { useToast } from 'vue-toast-notification';
+import { useRouter } from 'vue-router';
 
 const items = ref([]);
+const $toast = useToast();
+const router = useRouter();
 
 const getItems = async () => {
   try {
@@ -85,6 +89,18 @@ const getItems = async () => {
     console.log(items); // Log the actual data, not the ref object
   } catch (error) {
     console.error("Error fetching items:", error);
+  }
+};
+
+const deleteItem = async (id) => {
+  try {
+    const response = await apiClient.delete(`Item/${id}`);
+    if (response.status === 200) {
+      $toast.success('Item deleted successfully!');
+      router.push('/items');
+    }
+  } catch (error) {
+    console.error("Error deleting item:", error);
   }
 };
 

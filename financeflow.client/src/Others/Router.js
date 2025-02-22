@@ -7,6 +7,7 @@ import Expenses from '../components/Views/Expenses.vue'
 import Item from '../components/Views/item.vue'
 import CreateExpense from '../components/Views/CreateExpense.vue'
 import CreateItem from '../components/Views/CreateItem.vue'
+import EditItem from '@/components/Views/EditItem.vue'
 
 const routes = [
   { path: '/', component: index },
@@ -16,6 +17,7 @@ const routes = [
       { path: '/expense/create', component: CreateExpense },
       { path: '/items', component: Item },
       { path: '/item/Create', component: CreateItem },
+      { path: '/item/edit/:id', component: EditItem },
 ];
 
 const router = createRouter({

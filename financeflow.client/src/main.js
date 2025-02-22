@@ -14,7 +14,19 @@ import 'vue-toast-notification/dist/theme-bootstrap.css';
 const app = createApp(App);
 
 app.use(plugin, defaultConfig(formkitconfig));
-app.use(ToastPlugin);
+app.use(ToastPlugin, {
+  duration: 3000,
+  position: 'top-right',
+  type: 'default',
+  width: '400px',
+  dismissible: true,
+  pauseOnHover: true,
+  closeOnClick: true,
+  showCloseButtonOnHover: false,
+  hideProgressBar: false,
+  closeButton: false,
+  icon: true,
+});
 
 app.use(router).mount('#app');
 
