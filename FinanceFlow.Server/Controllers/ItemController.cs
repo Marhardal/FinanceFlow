@@ -27,11 +27,11 @@ namespace FinanceFlow.Server.Controllers
                 return NotFound();
             }
 
-            IQueryable<ItemsModel> query = _dbContext.Items.Include(i => i.ExpenseCategory);
+            IQueryable<ItemsModel> query = _dbContext.Items.Include(i => i.ItemCategory);
 
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(i => i.Name.Contains(search) || i.ExpenseCategory.Name.Contains(search));
+                query = query.Where(i => i.Name.Contains(search) || i.ItemCategory.Name.Contains(search));
             }
 
             List<ItemsModel> items = await query.ToListAsync();

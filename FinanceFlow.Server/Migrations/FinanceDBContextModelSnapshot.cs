@@ -22,7 +22,7 @@ namespace FinanceFlow.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseCategoriesModel", b =>
+            modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,7 +41,7 @@ namespace FinanceFlow.Server.Migrations
 
                     b.HasIndex("ItemsModelId");
 
-                    b.ToTable("ExpenseCategories");
+                    b.ToTable("ItemCategories");
 
                     b.HasData(
                         new
@@ -107,7 +107,7 @@ namespace FinanceFlow.Server.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ExpenseCategoryId")
+                    b.Property<int>("ItemCategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -120,12 +120,46 @@ namespace FinanceFlow.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExpenseCategoryId");
+                    b.HasIndex("ItemCategoryId");
 
                     b.ToTable("Items");
                 });
 
-            modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseCategoriesModel", b =>
+            modelBuilder.Entity("FinanceFlow.Server.Models.StatusModel", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            Name = "Pending"
+                        },
+                        new
+                        {
+                            id = 2,
+                            Name = "Approved"
+                        },
+                        new
+                        {
+                            id = 3,
+                            Name = "Rejected"
+                        });
+                });
+
+            modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
                 {
                     b.HasOne("FinanceFlow.Server.Models.ItemsModel", null)
                         .WithMany("Categories")
@@ -134,16 +168,16 @@ namespace FinanceFlow.Server.Migrations
 
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsModel", b =>
                 {
-                    b.HasOne("FinanceFlow.Server.Models.ExpenseCategoriesModel", "ExpenseCategory")
+                    b.HasOne("FinanceFlow.Server.Models.ItemsCategoriesModel", "ItemCategory")
                         .WithMany("Items")
-                        .HasForeignKey("ExpenseCategoryId")
+                        .HasForeignKey("ItemCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ExpenseCategory");
+                    b.Navigation("ItemCategory");
                 });
 
-            modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseCategoriesModel", b =>
+            modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
                 {
                     b.Navigation("Items");
                 });

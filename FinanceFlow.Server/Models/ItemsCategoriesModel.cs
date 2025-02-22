@@ -1,6 +1,6 @@
 ﻿namespace FinanceFlow.Server.Models
 {
-    public class ExpenseCategoriesModel
+    public class ItemsCategoriesModel
     {
         public int Id { get; set; }
 

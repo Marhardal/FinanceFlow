@@ -11,27 +11,27 @@ namespace FinanceFlow.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExpenseCategoryController : ControllerBase
+    public class ItemCategoryController : ControllerBase
     {
         private readonly FinanceDBContext _dbContext;
 
-        public ExpenseCategoryController(FinanceDBContext context)
+        public ItemCategoryController(FinanceDBContext context)
         {
             _dbContext = context;
         }
 
         // GET: api/<ExpenseCategoryController>
         [HttpGet]
-        public async Task<ActionResult<List<ExpenseCategoriesModel>>> Get()
+        public async Task<ActionResult<List<ItemsCategoriesModel>>> Get()
         {
-            return Ok(await _dbContext.ExpenseCategories.ToListAsync());
+            return Ok(await _dbContext.ItemCategories.ToListAsync());
         }
 
         // GET api/<ExpenseCategoryController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            var category = await _dbContext.ExpenseCategories.FindAsync(id);
+            var category = await _dbContext.ItemCategories.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -41,22 +41,22 @@ namespace FinanceFlow.Server.Controllers
 
         // POST api/<ExpenseCategoryController>
         [HttpPost]
-        public async Task<ActionResult<ExpenseCategoriesModel>> Post(ExpenseCategoriesModel categories)
+        public async Task<ActionResult<ItemsCategoriesModel>> Post(ItemsCategoriesModel categories)
         {
             if (categories is null)
             {
                 return BadRequest();
             }
-            _dbContext.ExpenseCategories.Add(categories);
+            _dbContext.ItemCategories.Add(categories);
             await _dbContext.SaveChangesAsync();
             return CreatedAtAction(nameof(Get), new { id = categories.Id }, categories);
         }
 
         // PUT api/<ExpenseCategoryController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, ExpenseCategoriesModel expenseCategories)
+        public async Task<ActionResult> Put(int id, ItemsCategoriesModel expenseCategories)
         {
-            var category = await _dbContext.ExpenseCategories.FindAsync(id);
+            var category = await _dbContext.ItemCategories.FindAsync(id);
 
             if (category is null)
                 return NotFound();
@@ -72,12 +72,12 @@ namespace FinanceFlow.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var category = await _dbContext.ExpenseCategories.FindAsync(id);
+            var category = await _dbContext.ItemCategories.FindAsync(id);
 
             if (category is null)
                 return NotFound();
 
-            _dbContext.ExpenseCategories.Remove(category);
+            _dbContext.ItemCategories.Remove(category);
 
             await _dbContext.SaveChangesAsync();
 

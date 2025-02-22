@@ -38,7 +38,7 @@ const router = useRouter();
 
 const getCategories = async () => {
   try {
-    const response = await apiClient.get('ExpenseCategory')
+    const response = await apiClient.get('ItemCategory')
     Categories.value = response.data.map((category) => ({
       value: category.id,
       label: category.name,

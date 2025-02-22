@@ -1,6 +1,7 @@
-using FinanceFlow.Server.DBContext;
+﻿using FinanceFlow.Server.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using FinanceFlow.Server.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,10 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.WriteIndented = true; // Optional: makes JSON more readable
     });
 
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 
@@ -50,6 +55,12 @@ if (app.Environment.IsDevelopment())
 
 // Enable CORS before middleware
 app.UseCors("AllowSpecificOrigin");
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+};
 
 app.UseHttpsRedirection();
 

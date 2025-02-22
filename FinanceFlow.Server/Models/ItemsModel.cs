@@ -15,12 +15,12 @@ namespace FinanceFlow.Server.Models
         
         public DateTime? Date { get; set; } = DateTime.UtcNow;
 
-        [ForeignKey("ExpenseCategoryId")]
-        public int ExpenseCategoryId { get; set; }
+        [ForeignKey("ItemCategoryId")]
+        public int ItemCategoryId { get; set; }
 
         //[JsonIgnore]
-        public ExpenseCategoriesModel? ExpenseCategory { get; set; }
+        public ItemsCategoriesModel? ItemCategory { get; set; }
 
-        public ICollection<ExpenseCategoriesModel> Categories { get; set; } = new List<ExpenseCategoriesModel>();
+        public ICollection<ItemsCategoriesModel> Categories { get; set; } = new List<ItemsCategoriesModel>();
     }
 }
