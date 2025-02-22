@@ -7,16 +7,17 @@
       </div>
       <!-- <form action="" class="space-y-5"> -->
       <FormKit type="form" submit-label="Create" @submit="createItem" :submit-attrs="{
-    inputClass: 'py-3 px-4 block w-full border-gray-500 rounded text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-300 dark:border-gray-500 dark:text-neutral-700 dark:placeholder-neutral-500 dark:focus:ring-neutral-600',
-    wrapperClass: 'space-y-5',
-    'data-theme': `dark`,
-    ignore: false
-  }">
-        <FormKit label="Item Name" placeholder="Enter an Item Name." type="text" help="Enter an Item Name."
-          value="" v-model="input.name"/>
-        <FormKit type="select" label="Select Item Category" :options="Categories" v-model="input.expenseCategoryId" help="Select an Item Category" />
-        <FormKit label="Item Price" placeholder="Enter an Item Price." type="number" v-model="input.price" help="Enter an Item Name."
-          value="" />
+        inputClass: 'py-3 px-4 block w-full border-gray-500 rounded text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-300 dark:border-gray-500 dark:text-neutral-700 dark:placeholder-neutral-500 dark:focus:ring-neutral-600',
+        wrapperClass: 'space-y-5',
+        'data-theme': `dark`,
+        ignore: false
+      }">
+        <FormKit label="Item Name" placeholder="Enter an Item Name." type="text" help="Enter an Item Name." value=""
+          v-model="input.name" />
+        <FormKit type="select" label="Select Item Category" :options="Categories" v-model="input.expenseCategoryId"
+          help="Select an Item Category" />
+        <FormKit label="Item Price" placeholder="Enter an Item Price." type="number" v-model="input.price"
+          help="Enter an Item Name." value="" />
       </FormKit>
     </div>
   </ContainerBg>
@@ -26,8 +27,14 @@
 import ContainerBg from '../Components/ContainerBg.vue';
 import apiClient from '../../Others/apiClient'
 import { ref, onMounted, reactive } from 'vue';
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+import { useRouter } from 'vue-router';
 
 const Categories = ref([]);
+const $toast = useToast();
+const router = useRouter();
+
 
 const getCategories = async () => {
   try {
@@ -46,9 +53,12 @@ const getCategories = async () => {
 const createItem = async () => {
   try {
     const response = await apiClient.post('Item', input);
-    router.push({ name: 'Items' });
+
+    if (response.status === 201) {
+      $toast.success('You did it!');
+      router.push('/items');
+    }
   } catch (error) {
-    // console.log(input);
     console.error("Error creating Item:", error);
   }
 }
