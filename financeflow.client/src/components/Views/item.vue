@@ -43,7 +43,7 @@
                       <!-- dark:text-neutral-200 -->
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
                         {{ item.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ item.expenseCategory.name }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ item.itemCategory.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ item.price }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                         <router-link :to="{ path: 'item/edit/' + item.id }"

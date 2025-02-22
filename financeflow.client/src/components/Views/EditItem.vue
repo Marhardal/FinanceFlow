@@ -14,7 +14,7 @@
       }">
         <FormKit label="Item Name" placeholder="Enter an Item Name." type="text" help="Enter an Item Name." value=""
           v-model="input.name" />
-        <FormKit type="select" label="Select Item Category" :options="Categories" v-model="input.expenseCategoryId"
+        <FormKit type="select" label="Select Item Category" :options="Categories" v-model="input.itemCategoryId"
           help="Select an Item Category" />
         <FormKit label="Item Price" placeholder="Enter an Item Price." type="number" v-model="input.price"
           help="Enter an Item Name." value="" />
@@ -38,11 +38,11 @@ const router = useRouter();
 const id = useRoute().params.id;
 
 
-console.log(); // Log the ref object
+console.log(id); // Log the ref object
 
 const getCategories = async () => {
   try {
-    const response = await apiClient.get('ExpenseCategory')
+    const response = await apiClient.get('itemCategory')
     Categories.value = response.data.map((category) => ({
       value: category.id,
       label: category.name,
@@ -71,7 +71,7 @@ const getItem = async (id) => {
     const response = await apiClient.get(`Item/${id}`);
     input.name = response.data.name;
     input.price = response.data.price;
-    input.expenseCategoryId = response.data.expenseCategoryId;
+    input.itemCategoryId = response.data.itemCategoryId;
   } catch (error) {
     console.error("Error fetching Item:", error);
   }
@@ -80,11 +80,8 @@ const input = reactive({
   id: id,
   name,
   price: 0,
-  expenseCategoryId: '',
+  itemCategoryId: '',
 });
-
-
-
 
 onMounted(() => {
   getCategories(); // Ensure function is called properly

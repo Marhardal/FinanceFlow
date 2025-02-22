@@ -39,6 +39,18 @@ namespace FinanceFlow.Server.Controllers
             return Ok(items);
         }
 
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> Get(int id)
+        {
+            var items = await _dbContext.Items.FindAsync(id);
+            if (items == null)
+            {
+                return NotFound();
+            }
+            return Ok(items);
+        }
+
         // POST api/<ItemController>
         [HttpPost]
         public async Task<ActionResult> Post(ItemsModel items)
