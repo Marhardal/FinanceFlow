@@ -71,5 +71,6 @@ namespace FinanceFlow.Server.DBContext
             );
 
         }
+        public DbSet<FinanceFlow.Server.Models.IncomeModel> IncomeModel { get; set; } = default!;
     }
 }

@@ -31,5 +31,12 @@ namespace FinanceFlow.Server.Models
         public ICollection<IncomeCategoryModel> Items { get; set; } = new List<IncomeCategoryModel>();
 
         public ICollection<StatusModel> Statuses { get; set; } = new List<StatusModel>();
+
+        //// New properties
+        //public string? Notes { get; set; }
+
+        //public bool IsRecurring { get; set; } = false;
+
+        //public DateTime? RecurrenceEndDate { get; set; }
     }
 }
