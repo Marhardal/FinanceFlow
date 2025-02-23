@@ -15,9 +15,11 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<IncomeCategoryModel> incomeCategories { get; set; }
 
-        public DbSet<ItemsModel> Items { get; set; }
-
         public DbSet<StatusModel> Statuses { get; set; }
+
+        public DbSet<ItemsModel> Items { get; set; }
+        
+        public DbSet<IncomeCategoryModel> Incomes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,6 +30,16 @@ namespace FinanceFlow.Server.DBContext
                 .HasOne(i => i.ItemCategory)
                 .WithMany(c => c.Items)
                 .HasForeignKey(i => i.ItemCategoryId);
+
+            modelBuilder.Entity<IncomeModel>()
+                .HasOne(i => i.IncomeCategory)
+                .WithMany(c => c.Incomes)
+                .HasForeignKey(i => i.IncomeCategoryID);
+
+            modelBuilder.Entity<IncomeModel>()
+                .HasOne(i => i.Status)
+                .WithMany(c => c.Incomes)
+                .HasForeignKey(i => i.IncomeCategoryID);
 
             modelBuilder.Entity<ItemsCategoriesModel>().HasData(
                 new ItemsCategoriesModel { Id = 1, Name = "Housing" },

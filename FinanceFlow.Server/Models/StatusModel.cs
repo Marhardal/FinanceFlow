@@ -9,6 +9,8 @@ namespace FinanceFlow.Server.Models
         public int id { get; set; }
 
         public required string Name { get; set; }
+
+        public ICollection<IncomeModel>? Incomes { get; set; }
     }
 
 
