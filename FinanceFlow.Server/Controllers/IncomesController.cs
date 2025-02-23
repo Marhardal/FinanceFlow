@@ -25,7 +25,9 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IncomeModel>>> GetIncomeModel()
         {
-            return await _context.IncomeModel.ToListAsync();
+            
+            List<IncomeModel> incomes = await _context.IncomeModel.Include(s => s.Status).Include(c => c.IncomeCategory).ToListAsync();
+            return Ok(incomes);
         }
 
         // GET: api/Incomes/5
