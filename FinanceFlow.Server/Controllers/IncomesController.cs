@@ -78,6 +78,11 @@ namespace FinanceFlow.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<IncomeModel>> PostIncomeModel(IncomeModel incomeModel)
         {
+            if (incomeModel is null)
+            {
+                return NoContent();
+            }
+            incomeModel.CreateDate = DateTime.Now;
             _context.IncomeModel.Add(incomeModel);
             await _context.SaveChangesAsync();
 

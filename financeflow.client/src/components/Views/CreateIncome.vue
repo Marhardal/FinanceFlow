@@ -12,13 +12,17 @@
         'data-theme': `dark`,
         ignore: false
       }">
-        <FormKit label="Name" placeholder="Enter an Income Name." type="text" v-model="input.name" validation="required"/>
-        <FormKit type="select" label="Select Status" :options="Statuses" v-model="input.status"
-        validation="required" />
-        <FormKit type="select" label="Select Income Source" :options="IncomeCategories" v-model="input.incomeCategoryId" validation="required" />
+        <FormKit label="Name" placeholder="Enter an Income Name." type="text" v-model="input.name"
+          validation="required" />
+        <FormKit type="select" label="Select Status" :options="Statuses" v-model="input.statusid"
+          validation="required" />
+        <FormKit type="select" label="Select Income Source" :options="IncomeCategories" v-model="input.incomeCategoryId"
+          validation="required" />
         <FormKit label="Amount" placeholder="Enter Amount." type="number" v-model="input.amount"
-        validation="required" />
-        <FormKit label="Notes" placeholder="Enter Income Notes." type="textarea" v-model="input.description" validation="required" />
+          validation="required" />
+        <FormKit label="Date" placeholder="Enter Amount." type="date" v-model="input.date" validation="required" />
+        <FormKit label="Notes" placeholder="Enter Income Notes." type="textarea" v-model="input.description"
+          validation="required" />
       </FormKit>
     </div>
   </ContainerBg>
@@ -68,17 +72,22 @@ const createIncome = async () => {
     const response = await apiClient.post('Incomes', input);
 
     if (response.status === 201) {
-      $toast.success('You did it!');
+      $toast.success('You have successfully added an Income!');
       router.push('/incomes');
     }
   } catch (error) {
+    $toast.error('An error occurred. Please try again.');
     console.error("Error creating Item:", error);
+    console.log(input);
   }
 }
 const input = reactive({
-  name,
-  price: 0,
-  expenseCategoryId: '',
+  name: '',
+  statusid: '',
+  incomeCategoryId: '',
+  amount: '',
+  date: '',
+  description: '',
 });
 
 onMounted(() => {
