@@ -22,6 +22,55 @@ namespace FinanceFlow.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.IncomeCategoryModel", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("incomeCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            name = "Salary"
+                        },
+                        new
+                        {
+                            id = 2,
+                            name = "Freelance"
+                        },
+                        new
+                        {
+                            id = 3,
+                            name = "Investments"
+                        },
+                        new
+                        {
+                            id = 4,
+                            name = "Bonus"
+                        },
+                        new
+                        {
+                            id = 5,
+                            name = "Commissions"
+                        },
+                        new
+                        {
+                            id = 6,
+                            name = "Gifts"
+                        });
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
                 {
                     b.Property<int>("Id")

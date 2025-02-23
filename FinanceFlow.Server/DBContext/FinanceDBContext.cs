@@ -8,13 +8,17 @@ namespace FinanceFlow.Server.DBContext
     {
         public FinanceDBContext(DbContextOptions<FinanceDBContext> options) : base(options)
         {
+
         }
 
         public DbSet<ItemsCategoriesModel> ItemCategories { get; set; }
 
+        public DbSet<IncomeCategoryModel> incomeCategories { get; set; }
+
         public DbSet<ItemsModel> Items { get; set; }
 
         public DbSet<StatusModel> Statuses { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,6 +47,17 @@ namespace FinanceFlow.Server.DBContext
                 new StatusModel { id = 2, Name = "Approved" },
                 new StatusModel { id = 3, Name = "Rejected" }
             );
+
+
+            modelBuilder.Entity<IncomeCategoryModel>().HasData(
+                new IncomeCategoryModel { id = 1, name = "Salary"/*, Description = "Monthly salary from employment" */},
+                new IncomeCategoryModel { id = 2, name = "Freelance"/*, Description = "Income from freelance work"*/ },
+                new IncomeCategoryModel {id = 3, name = "Investments" },
+                new IncomeCategoryModel {id = 4, name = "Bonus" },
+                new IncomeCategoryModel {id = 5, name = "Commissions" },
+                new IncomeCategoryModel { id = 6, name = "Gifts" }
+            );
+
         }
     }
 }
