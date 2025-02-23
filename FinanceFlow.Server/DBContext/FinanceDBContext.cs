@@ -21,7 +21,6 @@ namespace FinanceFlow.Server.DBContext
         
         public DbSet<IncomeCategoryModel> Incomes { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -32,14 +31,16 @@ namespace FinanceFlow.Server.DBContext
                 .HasForeignKey(i => i.ItemCategoryId);
 
             modelBuilder.Entity<IncomeModel>()
-                .HasOne(i => i.IncomeCategory)
-                .WithMany(c => c.Incomes)
-                .HasForeignKey(i => i.IncomeCategoryID);
+        .HasOne(i => i.Status)
+        .WithMany(s => s.Incomes)
+        .HasForeignKey(i => i.StatusID)
+        .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<IncomeModel>()
-                .HasOne(i => i.Status)
+                .HasOne(i => i.IncomeCategory)
                 .WithMany(c => c.Incomes)
-                .HasForeignKey(i => i.IncomeCategoryID);
+                .HasForeignKey(i => i.IncomeCategoryID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ItemsCategoriesModel>().HasData(
                 new ItemsCategoriesModel { Id = 1, Name = "Housing" },
@@ -64,9 +65,9 @@ namespace FinanceFlow.Server.DBContext
             modelBuilder.Entity<IncomeCategoryModel>().HasData(
                 new IncomeCategoryModel { id = 1, name = "Salary"/*, Description = "Monthly salary from employment" */},
                 new IncomeCategoryModel { id = 2, name = "Freelance"/*, Description = "Income from freelance work"*/ },
-                new IncomeCategoryModel {id = 3, name = "Investments" },
-                new IncomeCategoryModel {id = 4, name = "Bonus" },
-                new IncomeCategoryModel {id = 5, name = "Commissions" },
+                new IncomeCategoryModel { id = 3, name = "Investments" },
+                new IncomeCategoryModel { id = 4, name = "Bonus" },
+                new IncomeCategoryModel { id = 5, name = "Commissions" },
                 new IncomeCategoryModel { id = 6, name = "Gifts" }
             );
 

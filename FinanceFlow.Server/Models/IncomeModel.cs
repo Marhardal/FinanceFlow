@@ -5,38 +5,28 @@ namespace FinanceFlow.Server.Models
 {
     public class IncomeModel
     {
-        public int id { get; set; }
+        public int Id { get; set; }  // Standard PascalCase for public properties
 
-        public required string name { get; set; }
+        public required string Name { get; set; }
 
-        [ForeignKey("StatusID")]
-        public int StatusID { get; set; }
+        public int StatusID { get; set; }  // Foreign key property
 
-        [ForeignKey("IncomeCategoryID")]
-        public int IncomeCategoryID { get; set; }
+        public int IncomeCategoryID { get; set; }  // Foreign key property
 
-        public required string description { get; set; }
+        public required string Description { get; set; }
 
         [Precision(18, 2)]
-        public required decimal amount { get; set; }
+        public required decimal Amount { get; set; }
 
-        public required DateTime date { get; set; } = DateTime.Now;
+        public required DateTime Date { get; set; } = DateTime.Now;
 
-        public required DateTime createdate { get; set; } = DateTime.Now;
+        public required DateTime CreateDate { get; set; } = DateTime.Now;
 
-        public StatusModel? Status { get; set; }
+        // Navigation Properties
+        [ForeignKey(nameof(StatusID))]  // Correct FK annotation
+        public required StatusModel Status { get; set; }
 
-        public IncomeCategoryModel? IncomeCategory { get; set; }
-
-        public ICollection<IncomeCategoryModel> Items { get; set; } = new List<IncomeCategoryModel>();
-
-        public ICollection<StatusModel> Statuses { get; set; } = new List<StatusModel>();
-
-        //// New properties
-        //public string? Notes { get; set; }
-
-        //public bool IsRecurring { get; set; } = false;
-
-        //public DateTime? RecurrenceEndDate { get; set; }
+        [ForeignKey(nameof(IncomeCategoryID))]  // Correct FK annotation
+        public required IncomeCategoryModel IncomeCategory { get; set; }
     }
 }

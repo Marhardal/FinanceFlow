@@ -47,7 +47,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutIncomeModel(int id, IncomeModel incomeModel)
         {
-            if (id != incomeModel.id)
+            if (id != incomeModel.Id)
             {
                 return BadRequest();
             }
@@ -81,7 +81,7 @@ namespace FinanceFlow.Server.Controllers
             _context.IncomeModel.Add(incomeModel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetIncomeModel", new { id = incomeModel.id }, incomeModel);
+            return CreatedAtAction("GetIncomeModel", new { id = incomeModel.Id }, incomeModel);
         }
 
         // DELETE: api/Incomes/5
@@ -102,7 +102,7 @@ namespace FinanceFlow.Server.Controllers
 
         private bool IncomeModelExists(int id)
         {
-            return _context.IncomeModel.Any(e => e.id == id);
+            return _context.IncomeModel.Any(e => e.Id == id);
         }
     }
 }

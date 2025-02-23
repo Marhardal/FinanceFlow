@@ -36,7 +36,7 @@ namespace FinanceFlow.Server.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("incomeCategories");
+                    b.ToTable("IncomeCategoryModel");
 
                     b.HasData(
                         new
@@ -69,6 +69,47 @@ namespace FinanceFlow.Server.Migrations
                             id = 6,
                             name = "Gifts"
                         });
+                });
+
+            modelBuilder.Entity("FinanceFlow.Server.Models.IncomeModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IncomeCategoryID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IncomeCategoryID");
+
+                    b.HasIndex("StatusID");
+
+                    b.ToTable("IncomeModel");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
@@ -208,6 +249,25 @@ namespace FinanceFlow.Server.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.IncomeModel", b =>
+                {
+                    b.HasOne("FinanceFlow.Server.Models.IncomeCategoryModel", "IncomeCategory")
+                        .WithMany("Incomes")
+                        .HasForeignKey("IncomeCategoryID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FinanceFlow.Server.Models.StatusModel", "Status")
+                        .WithMany("Incomes")
+                        .HasForeignKey("StatusID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("IncomeCategory");
+
+                    b.Navigation("Status");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
                 {
                     b.HasOne("FinanceFlow.Server.Models.ItemsModel", null)
@@ -226,6 +286,11 @@ namespace FinanceFlow.Server.Migrations
                     b.Navigation("ItemCategory");
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.IncomeCategoryModel", b =>
+                {
+                    b.Navigation("Incomes");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
                 {
                     b.Navigation("Items");
@@ -234,6 +299,11 @@ namespace FinanceFlow.Server.Migrations
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsModel", b =>
                 {
                     b.Navigation("Categories");
+                });
+
+            modelBuilder.Entity("FinanceFlow.Server.Models.StatusModel", b =>
+                {
+                    b.Navigation("Incomes");
                 });
 #pragma warning restore 612, 618
         }
