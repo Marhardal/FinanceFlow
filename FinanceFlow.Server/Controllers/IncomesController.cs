@@ -23,10 +23,15 @@ namespace FinanceFlow.Server.Controllers
 
         // GET: api/Incomes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<IncomeModel>>> GetIncomeModel()
+        public async Task<ActionResult<IEnumerable<IncomeModel>>> GetIncomeModel(string search = null)
         {
             
-            List<IncomeModel> incomes = await _context.IncomeModel.Include(s => s.Status).Include(c => c.IncomeCategory).ToListAsync();
+            IQueryable<IncomeModel> query = _context.IncomeModel.Include(s => s.Status).Include(c => c.IncomeCategory);
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(i => i.Name.Contains(search) || i.Status.Name.Contains(search) || i.IncomeCategory.name.Contains(search));
+            }
+            List<IncomeModel> incomes = await query.ToListAsync();
             return Ok(incomes);
         }
 

@@ -9,7 +9,7 @@
             clip-rule="evenodd" />
         </svg>
         <input class="bg-gray-50 ml-1 block outline-none flex-grow" type="text" name="" id=""
-          placeholder="Search for items" v-model="search" @keyup="getSearchedItems()">
+          placeholder="Search for items" v-model="search" @keyup="getSearchedIncomes()">
       </div>
     </ListHeader>
     <div>
@@ -120,11 +120,21 @@ const $toast = useToast();
 const router = useRouter();
 dayjs.extend(relativeTime);
 
+const search = ref('');
 const Incomes = ref([]);
 
 const getIncomes = async () => {
   try {
     const response = await apiClient.get('incomes')
+    Incomes.value = response.data;
+  } catch (error) {
+    console.error("Error fetching Incomes:", error);
+  }
+};
+
+const getSearchedIncomes = async () => {
+  try {
+    const response = await apiClient.get('incomes?search=' + search.value)
     Incomes.value = response.data;
   } catch (error) {
     console.error("Error fetching Incomes:", error);
