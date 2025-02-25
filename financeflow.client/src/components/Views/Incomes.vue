@@ -48,7 +48,7 @@
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
                         {{ Income.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                        {{ Income.amount }}</td>
+                      {{ Income.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                         <span v-if="Income.status.name == 'Approved'"
                           class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-300 text-black">
@@ -71,7 +71,7 @@
                         <router-link :to="{ path: 'income/edit/' + Income.id }"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
                           |</router-link>
-                        <router-link to=""
+                        <router-link :to="{ path: 'income/details/'+ Income.id }"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
                           |</router-link>
                         <button type="button" @click="deleteIncome(Income.id)"
@@ -79,7 +79,6 @@
                           Delete</button>
                       </td>
                     </tr>
-
                   </tbody>
                 </table>
               </div>

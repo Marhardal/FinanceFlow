@@ -68,7 +68,7 @@ namespace FinanceFlow.Server.Controllers
                 }
                 else
                 {
-                    throw;
+                    throw; 
                 }
             }
 
