@@ -8,8 +8,8 @@
             d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
             clip-rule="evenodd" />
         </svg>
-        <input class="bg-gray-50 ml-1 block outline-none flex-grow" type="text" name="" id="" placeholder="Search for items"
-          v-model="search" @keyup="getSearchedItems()">
+        <input class="bg-gray-50 ml-1 block outline-none flex-grow" type="text" name="" id=""
+          placeholder="Search for items" v-model="search" @keyup="getSearchedItems()">
       </div>
     </ListHeader>
     <div>
@@ -68,7 +68,7 @@
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
                         {{ dayjs(Income.date).fromNow() }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                        <router-link to=""
+                        <router-link :to="{ path: 'income/edit/' + Income.id }"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
                           |</router-link>
                         <router-link to=""
