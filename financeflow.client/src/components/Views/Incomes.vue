@@ -74,7 +74,7 @@
                         <router-link to=""
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
                           |</router-link>
-                        <button type="button"
+                        <button type="button" @click="deleteIncome(Income.id)"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">
                           Delete</button>
                       </td>
@@ -113,8 +113,12 @@ import apiClient from '../../Others/apiClient';
 import { ref, onMounted } from 'vue';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useToast } from 'vue-toast-notification';
+import { useRouter } from 'vue-router';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
-
+const $toast = useToast();
+const router = useRouter();
 dayjs.extend(relativeTime);
 
 const Incomes = ref([]);
@@ -125,6 +129,22 @@ const getIncomes = async () => {
     Incomes.value = response.data;
   } catch (error) {
     console.error("Error fetching Incomes:", error);
+  }
+};
+
+const deleteIncome = async (id) => {
+  try {
+    const response = await apiClient.delete('incomes/' + id);
+    if (response.status === 200) {
+      getIncomes();
+      $toast.success('Income Deleted Successfully!');
+      router.push('/incomes');
+    }
+    console.log(response.status);
+  } catch (error) {
+
+    $toast.error('Error Deleting Income!');
+    console.error("Error deleting Income:", error);
   }
 };
 
