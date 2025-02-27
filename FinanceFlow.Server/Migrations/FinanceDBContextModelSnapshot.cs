@@ -22,6 +22,40 @@ namespace FinanceFlow.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseModel", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ItemID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("amount")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("createdate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ItemID");
+
+                    b.ToTable("Expenses");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.IncomeCategoryModel", b =>
                 {
                     b.Property<int>("id")
@@ -83,10 +117,10 @@ namespace FinanceFlow.Server.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -197,6 +231,9 @@ namespace FinanceFlow.Server.Migrations
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("ExpenseModelid")
+                        .HasColumnType("int");
+
                     b.Property<int>("ItemCategoryId")
                         .HasColumnType("int");
 
@@ -209,6 +246,8 @@ namespace FinanceFlow.Server.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ExpenseModelid");
 
                     b.HasIndex("ItemCategoryId");
 
@@ -249,6 +288,17 @@ namespace FinanceFlow.Server.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseModel", b =>
+                {
+                    b.HasOne("FinanceFlow.Server.Models.ItemsModel", "Item")
+                        .WithMany("Expenses")
+                        .HasForeignKey("ItemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.IncomeModel", b =>
                 {
                     b.HasOne("FinanceFlow.Server.Models.IncomeCategoryModel", "IncomeCategory")
@@ -277,6 +327,10 @@ namespace FinanceFlow.Server.Migrations
 
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsModel", b =>
                 {
+                    b.HasOne("FinanceFlow.Server.Models.ExpenseModel", null)
+                        .WithMany("Items")
+                        .HasForeignKey("ExpenseModelid");
+
                     b.HasOne("FinanceFlow.Server.Models.ItemsCategoriesModel", "ItemCategory")
                         .WithMany("Items")
                         .HasForeignKey("ItemCategoryId")
@@ -284,6 +338,11 @@ namespace FinanceFlow.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("ItemCategory");
+                });
+
+            modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseModel", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.IncomeCategoryModel", b =>
@@ -299,6 +358,8 @@ namespace FinanceFlow.Server.Migrations
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsModel", b =>
                 {
                     b.Navigation("Categories");
+
+                    b.Navigation("Expenses");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.StatusModel", b =>

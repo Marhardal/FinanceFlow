@@ -22,5 +22,7 @@ namespace FinanceFlow.Server.Models
         public ItemsCategoriesModel? ItemCategory { get; set; }
 
         public ICollection<ItemsCategoriesModel> Categories { get; set; } = new List<ItemsCategoriesModel>();
+
+        public ICollection<ExpenseModel> Expenses { get; set; } = new List<ExpenseModel>();
     }
 }
