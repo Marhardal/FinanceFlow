@@ -23,6 +23,8 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<ExpenseModel> Expenses { get; set; }
 
+        public DbSet<BudgetModel> Budgets { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
