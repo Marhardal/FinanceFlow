@@ -11,6 +11,7 @@ import EditItem from '@/components/Views/EditItem.vue'
 import CreateIncome from '@/components/Views/CreateIncome.vue'
 import EditIncome from '@/components/Views/EditIncome.vue'
 import DetailsIncome from '@/components/Views/DetailsIncome.vue'
+import Budgets from '@/components/Views/Budgets.vue'
 
 const routes = [
   { path: '/', component: index },
@@ -24,6 +25,7 @@ const routes = [
       { path: '/items', component: Item },
       { path: '/item/Create', component: CreateItem },
       { path: '/item/edit/:id', component: EditItem },
+      { path: '/Budgets', component: Budgets },
 ];
 
 const router = createRouter({
