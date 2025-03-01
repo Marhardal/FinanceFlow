@@ -23,9 +23,15 @@ namespace FinanceFlow.Server.Controllers
 
         // GET: api/Budgets
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BudgetModel>>> GetBudgets()
+        public async Task<ActionResult<IEnumerable<BudgetModel>>> GetBudgets(string search = null)
         {
-            return await _context.Budgets.ToListAsync();
+            IQueryable<BudgetModel> query = _context.Budgets.Include(s => s.status).Include(i => i.Income);
+            if (search is not null)
+            {
+                query = query.Where(b => b.Name.Contains(search)).Where(i => i.Income.Name.Contains(search)).Where(s => s.status.Name.Contains(search));
+            }
+            List<BudgetModel> budgets = await query.ToListAsync();
+            return budgets;
         }
 
         // GET: api/Budgets/5
@@ -78,6 +84,10 @@ namespace FinanceFlow.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<BudgetModel>> PostBudgetModel(BudgetModel budgetModel)
         {
+            if (budgetModel is null)
+            {
+                return NoContent();
+            }
             _context.Budgets.Add(budgetModel);
             await _context.SaveChangesAsync();
 
