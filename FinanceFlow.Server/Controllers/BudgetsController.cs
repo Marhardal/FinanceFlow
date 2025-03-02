@@ -38,7 +38,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BudgetModel>> GetBudgetModel(int id)
         {
-            var budgetModel = await _context.Budgets.FindAsync(id);
+            var budgetModel = await _context.Budgets.Include(s => s.status).Include(i => i.Income).FirstOrDefaultAsync(b => b.Id == id);
 
             if (budgetModel == null)
             {
