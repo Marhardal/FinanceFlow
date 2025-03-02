@@ -49,6 +49,24 @@ namespace FinanceFlow.Server.DBContext
                 .WithMany(c => c.Expenses)
                 .HasForeignKey(e => e.ItemID);
 
+            modelBuilder.Entity<ExpenseModel>()
+                .HasOne(e => e.Budget)
+                .WithMany(b => b.Expenses)
+                .HasForeignKey(e => e.BudgetID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<BudgetModel>()
+                .HasOne(i => i.status)
+                .WithMany(s => s.Budgets)
+                .HasForeignKey(i => i.statusID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<BudgetModel>()
+                .HasOne(i => i.Income)
+                .WithMany(b => b.Budgets)
+                .HasForeignKey(i => i.IncomeID)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<ItemsCategoriesModel>().HasData(
                 new ItemsCategoriesModel { Id = 1, Name = "Housing" },
                 new ItemsCategoriesModel { Id = 2, Name = "Utilities" },

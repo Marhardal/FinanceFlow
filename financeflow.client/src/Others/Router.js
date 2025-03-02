@@ -20,7 +20,7 @@ const routes = [
       { path: '/income/edit/:id', component: EditIncome },
       { path: '/income/details/:id', component: DetailsIncome },
       { path: '/expenses', component: Expenses },
-      { path: '/expense/create', component: CreateExpense },
+      { path: '/Budget/:id/expense/create', component: CreateExpense },
       { path: '/items', component: Item },
       { path: '/item/Create', component: CreateItem },
       { path: '/item/edit/:id', component: EditItem },

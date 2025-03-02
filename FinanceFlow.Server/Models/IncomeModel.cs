@@ -28,5 +28,7 @@ namespace FinanceFlow.Server.Models
 
         [ForeignKey(nameof(IncomeCategoryID))]  // Correct FK annotation
         public IncomeCategoryModel? IncomeCategory { get; set; }
+
+        public ICollection<BudgetModel>? Budgets { get; set; }
     }
 }

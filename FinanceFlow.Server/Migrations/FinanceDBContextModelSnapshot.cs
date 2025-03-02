@@ -22,6 +22,55 @@ namespace FinanceFlow.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.BudgetModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ExpenseModelid")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IncomeID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("createdon")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("remindon")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("spentAmount")
+                        .HasColumnType("float");
+
+                    b.Property<int>("statusID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpenseModelid");
+
+                    b.HasIndex("IncomeID");
+
+                    b.HasIndex("statusID");
+
+                    b.ToTable("Budgets");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseModel", b =>
                 {
                     b.Property<int>("id")
@@ -29,6 +78,9 @@ namespace FinanceFlow.Server.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("BudgetID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -50,6 +102,8 @@ namespace FinanceFlow.Server.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("id");
+
+                    b.HasIndex("BudgetID");
 
                     b.HasIndex("ItemID");
 
@@ -138,6 +192,8 @@ namespace FinanceFlow.Server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BudgetModelId");
 
                     b.HasIndex("IncomeCategoryID");
 
@@ -288,19 +344,53 @@ namespace FinanceFlow.Server.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.BudgetModel", b =>
+                {
+                    b.HasOne("FinanceFlow.Server.Models.ExpenseModel", null)
+                        .WithMany("Budgets")
+                        .HasForeignKey("ExpenseModelid");
+
+                    b.HasOne("FinanceFlow.Server.Models.IncomeModel", "Income")
+                        .WithMany("Budgets")
+                        .HasForeignKey("IncomeID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("FinanceFlow.Server.Models.StatusModel", "status")
+                        .WithMany("Budgets")
+                        .HasForeignKey("statusID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Income");
+
+                    b.Navigation("status");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseModel", b =>
                 {
+                    b.HasOne("FinanceFlow.Server.Models.BudgetModel", "Budget")
+                        .WithMany("Expenses")
+                        .HasForeignKey("BudgetID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("FinanceFlow.Server.Models.ItemsModel", "Item")
                         .WithMany("Expenses")
                         .HasForeignKey("ItemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Budget");
+
                     b.Navigation("Item");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.IncomeModel", b =>
                 {
+                    b.HasOne("FinanceFlow.Server.Models.BudgetModel", null)
+                        .WithMany("Incomes")
+                        .HasForeignKey("BudgetModelId");
+
                     b.HasOne("FinanceFlow.Server.Models.IncomeCategoryModel", "IncomeCategory")
                         .WithMany("Incomes")
                         .HasForeignKey("IncomeCategoryID")
@@ -340,14 +430,37 @@ namespace FinanceFlow.Server.Migrations
                     b.Navigation("ItemCategory");
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.StatusModel", b =>
+                {
+                    b.HasOne("FinanceFlow.Server.Models.BudgetModel", null)
+                        .WithMany("Statuses")
+                        .HasForeignKey("BudgetModelId");
+                });
+
+            modelBuilder.Entity("FinanceFlow.Server.Models.BudgetModel", b =>
+                {
+                    b.Navigation("Expenses");
+
+                    b.Navigation("Incomes");
+
+                    b.Navigation("Statuses");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseModel", b =>
                 {
+                    b.Navigation("Budgets");
+
                     b.Navigation("Items");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.IncomeCategoryModel", b =>
                 {
                     b.Navigation("Incomes");
+                });
+
+            modelBuilder.Entity("FinanceFlow.Server.Models.IncomeModel", b =>
+                {
+                    b.Navigation("Budgets");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
@@ -364,6 +477,8 @@ namespace FinanceFlow.Server.Migrations
 
             modelBuilder.Entity("FinanceFlow.Server.Models.StatusModel", b =>
                 {
+                    b.Navigation("Budgets");
+
                     b.Navigation("Incomes");
                 });
 #pragma warning restore 612, 618
