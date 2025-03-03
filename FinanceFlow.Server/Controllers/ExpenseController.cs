@@ -73,11 +73,36 @@ namespace FinanceFlow.Server.Controllers
             return NoContent();
         }
 
+        public async Task<ActionResult<ItemsModel>> GetItem(int id)
+        {
+            var items = await _context.Items.FindAsync(id);
+            if (items == null)
+            {
+                return NotFound();
+            }
+            return Ok(items);
+        }
+
         // POST: api/Expense
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ExpenseModel>> PostExpenseModel(ExpenseModel expenseModel)
         {
+            if (expenseModel is null)
+            {
+                return NoContent();
+            }
+            var itemResult = await GetItem(expenseModel.ItemID);
+            if (itemResult.Result is NotFoundResult)
+            {
+                return NotFound();
+            }
+            var item = itemResult.Value;
+            if (item == null)
+            {
+                return NotFound();
+            }
+            expenseModel.amount = expenseModel.Quantity * (double)item.Price;
             _context.Expenses.Add(expenseModel);
             await _context.SaveChangesAsync();
 

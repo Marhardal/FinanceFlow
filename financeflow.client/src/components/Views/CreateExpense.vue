@@ -11,10 +11,8 @@
         'data-theme': `dark`,
         ignore: false
       }">
-        <FormKit type="select" label="Select an Item Name." :options="items" v-model="input.itemid" />
+        <FormKit type="select" label="Select an Item Name." :options="items" v-model="input.itemId" />
         <FormKit label="Quantity" placeholder="Enter Item Quantity." type="number" v-model="input.quantity" />
-        <FormKit label="Quantity" placeholder="Enter Total ." type="number" v-model="input.quantity" />
-        <p>Price: {{ selectedPrice * input.quantity }}</p>
       </FormKit>
     </div>
 
@@ -27,7 +25,7 @@
 import ContainerBg from '../Components/ContainerBg.vue';
 import apiClient from '../../Others/apiClient'
 import { useRoute, useRouter } from 'vue-router';
-import { computed, onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
@@ -38,8 +36,9 @@ const items = ref([]);
 
 const input = reactive({
   budgetID: id,
-  itemid: '',
-  quantity: '',
+  userID: 1,
+  itemId: '',
+  quantity: 0,
   amount: '',
   description: ''
 })
@@ -47,7 +46,6 @@ const input = reactive({
 const createBudget = async () => {
   try {
     const response = await apiClient.post('Expense', input);
-
     if (response.status === 201) {
       $toast.success('You did it!');
       router.push('/Budget/details/' + id);
@@ -57,28 +55,21 @@ const createBudget = async () => {
   }
 }
 
-const getItems = async() => {
-  try{
+const getItems = async () => {
+  try {
     const response = await apiClient.get('/item');
     if (response.data) {
       items.value = response.data;
       items.value = response.data.map((item) => ({
-      value: item.id,
-      label: item.name,
-      price: item.price
-    }));
+        value: item.id,
+        label: item.name
+      }));
       console.log(response.data)
     }
-  } catch(error){
+  } catch (error) {
     console.error(error)
   }
 }
-
-// Computed property to get the price of the selected item
-const selectedPrice = computed(() => {
-  const selectedItem = items.value.find(item => item.value === input.itemid);
-  return selectedItem ? selectedItem.price : null;
-});
 
 onMounted(() => {
   getItems()
