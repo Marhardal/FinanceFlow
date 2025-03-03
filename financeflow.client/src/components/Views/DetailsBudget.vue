@@ -66,7 +66,7 @@
           </div>
         </div>
         <div>
-          <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto" v-if="expenses">
+          <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto" v-if="Expenses">
             <div class="flex flex-col">
               <div class="-m-1.5 overflow-x-auto">
                 <div class="p-1.5 min-w-full inline-block align-middle">
@@ -77,30 +77,27 @@
                           <th scope="col"
                             class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                             Item Name</th>
+                            <th scope="col"
+                              class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                              Quantity</th>
+                              <th scope="col"
+                                class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                                Price</th>
                           <th scope="col"
                             class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                             Amount</th>
-                          <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                            Quantity</th>
-                          <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                            Date</th>
                           <th scope="col"
                             class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                             Action</th>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                        <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded">
+                        <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded" v-for="expense in Expenses" :key="expense.id">
                           <!-- dark:text-neutral-200 -->
-                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
-                            John Brown</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">45</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">New York No. 1
-                            Lake Park</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">New York No. 1
-                            Lake Park</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800" v-if="expense.item">{{ expense.item.name }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ expense.quantity }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-if="expense.item">{{ expense.item.Price }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ expense.amount }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                             <router-link to=""
                               class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
@@ -158,7 +155,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 const Budget = ref([]);
 const id = useRoute().params.id;
-const Expenses = ref();
+const Expenses = ref([]);
 
 const getBudget = async (id) => {
   try {
@@ -174,10 +171,9 @@ const getBudget = async (id) => {
 
 const getBudgetedExpenses = async (id) => {
   try {
-    const response = await apiClient.get(`Expense/${id}`);
+    const response = await apiClient.get(`Expense/?budgetid=${id}`);
     Expenses.value = response.data;
-
-    console.log(Budget.value.income);
+    console.log(Expenses.value);
   } catch (error) {
     console.error("Error fetching Budget:", error);
   }

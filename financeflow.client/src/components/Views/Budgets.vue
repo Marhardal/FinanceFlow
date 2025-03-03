@@ -112,7 +112,7 @@ const getBudgets = async () => {
 };
 
 onMounted(() => {
-  getBudgets();
+  getBudgets()
 });
 
 const deleteBudget = async (id) => {

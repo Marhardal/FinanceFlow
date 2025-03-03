@@ -35,7 +35,6 @@ const items = ref([]);
 
 const input = reactive({
   budgetID: id,
-  userID: 1,
   itemId: '',
   quantity: 0,
   amount: '',

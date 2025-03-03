@@ -22,25 +22,36 @@ namespace FinanceFlow.Server.Controllers
         }
 
         // GET: api/Expense
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ExpenseModel>>> GetExpenses()
+        [HttpGet("{budgetid}")]
+        public async Task<ActionResult<IEnumerable<ExpenseModel>>> GetBudgetedExpenses(int budgetid, string search = null)
         {
-            return await _context.Expenses.ToListAsync();
+            IQueryable<ExpenseModel> expense = _context.Expenses.Include(i => i.Item).Where(b => b.BudgetID == budgetid);
+            // Add additional logic to handle the search parameter and return the result
+            if (expense is null)
+            {
+                return NoContent();
+            }
+            if (search is not null)
+            {
+                expense.Where(expense => expense.Item.Name.Contains(search));
+            }
+            List<ExpenseModel> expenses = expense.ToList();
+            return Ok(expenses);
         }
 
         // GET: api/Expense/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ExpenseModel>> GetExpenseModel(int id)
-        {
-            var expenseModel = await _context.Expenses.FindAsync(id);
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<ExpenseModel>> GetExpenseModel(int id)
+        //{
+        //    var expenseModel = await _context.Expenses.FindAsync(id);
 
-            if (expenseModel == null)
-            {
-                return NotFound();
-            }
+        //    if (expenseModel == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return expenseModel;
-        }
+        //    return expenseModel;
+        //}
 
         // PUT: api/Expense/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -73,6 +84,7 @@ namespace FinanceFlow.Server.Controllers
             return NoContent();
         }
 
+        [HttpGet]
         public async Task<ActionResult<ItemsModel>> GetItem(int id)
         {
             var items = await _context.Items.FindAsync(id);
@@ -92,12 +104,7 @@ namespace FinanceFlow.Server.Controllers
             {
                 return NoContent();
             }
-            var itemResult = await GetItem(expenseModel.ItemID);
-            if (itemResult.Result is NotFoundResult)
-            {
-                return NotFound();
-            }
-            var item = itemResult.Value;
+            var item = await _context.Items.FindAsync(expenseModel.ItemID);
             if (item == null)
             {
                 return NotFound();

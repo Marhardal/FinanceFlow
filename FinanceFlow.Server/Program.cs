@@ -36,6 +36,11 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.WriteIndented = true; // Optional: makes JSON more readable
     });
 
+builder.Services.Configure<ScalarOptions>(options =>
+{
+    options.WithOpenApiRoutePattern("/openapi/v1.json");
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
