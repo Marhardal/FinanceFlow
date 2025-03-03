@@ -11,8 +11,8 @@ namespace FinanceFlow.Server.Models
         [ForeignKey("ItemID")]
         public int ItemID { get; set; }
 
-        [ForeignKey("IncomeID")]
-        public int IncomeID { get; set; }
+        [ForeignKey("BudgetID")]
+        public int BudgetID { get; set; }
 
         public required double Quantity { get; set; }
 
@@ -26,8 +26,8 @@ namespace FinanceFlow.Server.Models
 
         public ICollection<ItemsModel> Items { get; set; } = new List<ItemsModel>();
 
-        public IncomeModel? Income { get; set; }
+        public BudgetModel? Budget { get; set; }
 
-        public ICollection<IncomeModel> Incomes { get; set; } = new List<IncomeModel>();
+        public ICollection<BudgetModel> Budgets { get; set; } = new List<BudgetModel>();
     }
 }

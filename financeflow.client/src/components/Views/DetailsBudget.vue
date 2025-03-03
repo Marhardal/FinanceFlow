@@ -61,12 +61,12 @@
             <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-gray-800 px-4 py-2">Download</button>
           </div>
           <div class="col-span-1">
-            <router-link to="" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:text-black focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-blue-600 px-4 py-2 justify-end align-baseline">Create
+            <router-link :to="{ path: '/Budget/'+Budget.id+'/expense/create' }" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:text-black focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-blue-600 px-4 py-2 justify-end align-baseline">Create
             </router-link>
           </div>
         </div>
         <div>
-          <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto" v-if="Budget.expenses">
+          <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto" v-if="expenses">
             <div class="flex flex-col">
               <div class="-m-1.5 overflow-x-auto">
                 <div class="p-1.5 min-w-full inline-block align-middle">
@@ -158,6 +158,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 const Budget = ref([]);
 const id = useRoute().params.id;
+const Expenses = ref();
 
 const getBudget = async (id) => {
   try {
@@ -170,8 +171,21 @@ const getBudget = async (id) => {
   }
 };
 
+
+const getBudgetedExpenses = async (id) => {
+  try {
+    const response = await apiClient.get(`Expense/${id}`);
+    Expenses.value = response.data;
+
+    console.log(Budget.value.income);
+  } catch (error) {
+    console.error("Error fetching Budget:", error);
+  }
+};
+
 onMounted(() => {
   getBudget(id);
+  getBudgetedExpenses(id);
 });
 </script>
 
