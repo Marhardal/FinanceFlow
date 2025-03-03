@@ -23,7 +23,7 @@
         <arrowsUpDownIcon class="icon size-5" />
       </Router-link>
 
-      <RouterLink to="/expenses" class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300">
+      <RouterLink to="/Budgets" class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300">
         <ChartPieIcon class="icon size-5" />
       </RouterLink>
       <RouterLink to="/incomes" class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">

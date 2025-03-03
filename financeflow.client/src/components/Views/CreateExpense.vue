@@ -18,7 +18,6 @@
 
   </ContainerBg>
 
-
 </template>
 
 <script setup>
