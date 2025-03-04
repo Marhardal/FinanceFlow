@@ -96,14 +96,11 @@
                           <!-- dark:text-neutral-200 -->
                           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800" v-if="expense.item">{{ expense.item.name }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ expense.quantity }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-if="expense.item">{{ expense.item.Price }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-if="expense.item">{{ expense.item.price }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ expense.amount }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                            <router-link to=""
+                            <router-link :to="{ path: '/Budget/'+Budget.id+'/expense/edit/'+expense.id }"
                               class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
-                              |</router-link>
-                            <router-link to=""
-                              class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
                               |</router-link>
                             <button type="button"
                               class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400" @click="deleteExpense(expense.id)">Delete</button>
@@ -147,18 +144,18 @@
 import ContainerBg from '../Components/ContainerBg.vue';
 import apiClient from '../../Others/apiClient'
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
-import router from '@/Others/Router';
 
 dayjs.extend(relativeTime);
 const Budget = ref([]);
 const id = useRoute().params.id;
 const Expenses = ref([]);
 const $toast = useToast();
+const router = useRouter();
 
 const getBudget = async (id) => {
   try {
@@ -187,8 +184,8 @@ const deleteExpense = async (id) => {
     const response = await apiClient.delete(`Expense/${id}`);
     if (response.status === 200) {
       $toast.success('Budgeted Expense Deleted Successfully!');
-      //router.go(0);
-      window.location.reload();
+      router.go(0);
+      // window.location.reload();
     }
   } catch (error) {
     $toast.error('Failed to Deleted Budgeted Expense!');
