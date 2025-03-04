@@ -16,14 +16,14 @@
           <div class="col-span-1">
             <h3 class="text-lg font-semibold mb-3">Budgeted Amount</h3>
           </div>
-          <div class="col-span-3">
-            <p class="text-md">{{ Budget.amount }}</p>
+          <div class="col-span-3" v-if="Budget.amount != null">
+            <p class="text-md">{{ Budget.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</p>
           </div>
           <div class="col-span-1">
             <h3 class="text-lg font-semibold mb-3">Budgeted Income</h3>
           </div>
           <div class="col-span-3" v-if="Budget.income">
-            <p class="text-md">{{ Budget.income.name + "->" + Budget.income.amount }}</p>
+            <p class="text-md">{{ Budget.income.name + "->" + Budget.income.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</p>
           </div>
           <div class="col-span-1">
             <h3 class="text-lg font-semibold mb-3">Budgeted Status</h3>
@@ -34,8 +34,8 @@
           <div class="col-span-1">
             <h3 class="text-lg font-semibold mb-3">Spent Amount</h3>
           </div>
-          <div class="col-span-3">
-            <p class="text-md">{{ Budget.spentAmount }}</p>
+          <div class="col-span-3" v-if="Budget.spentAmount != null">
+            <p class="text-md">{{ Budget.spentAmount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</p>
           </div>
           <div class="col-span-1">
             <h3 class="text-lg font-semibold">Remind on</h3>
@@ -96,8 +96,8 @@
                           <!-- dark:text-neutral-200 -->
                           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800" v-if="expense.item">{{ expense.item.name }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ expense.quantity }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-if="expense.item">{{ expense.item.price }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ expense.amount }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-if="expense.item">{{ expense.item.price.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ expense.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                             <router-link :to="{ path: '/Budget/'+Budget.id+'/expense/edit/'+expense.id }"
                               class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
