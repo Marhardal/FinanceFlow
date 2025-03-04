@@ -171,7 +171,7 @@ const getBudget = async (id) => {
 
 const getBudgetedExpenses = async (id) => {
   try {
-    const response = await apiClient.get(`Expense/?budgetid=${id}`);
+    const response = await apiClient.get(`Expense/${id}`);
     Expenses.value = response.data;
     console.log(Expenses.value);
   } catch (error) {

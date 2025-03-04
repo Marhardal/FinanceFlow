@@ -11,7 +11,7 @@
         'data-theme': `dark`,
         ignore: false
       }">
-        <FormKit type="select" label="Select an Item Name." :options="items" v-model="input.itemId" />
+        <FormKit type="select" label="Select an Item Name." :options="items" v-model="input.itemID" />
         <FormKit label="Quantity" placeholder="Enter Item Quantity." type="number" v-model="input.quantity" />
       </FormKit>
     </div>
@@ -35,21 +35,22 @@ const items = ref([]);
 
 const input = reactive({
   budgetID: id,
-  itemId: '',
+  itemID: '',
   quantity: 0,
-  amount: '',
-  description: ''
+  amount: 0,
+  description: 'NA'
 })
 
 const createBudget = async () => {
   try {
     const response = await apiClient.post('Expense', input);
     if (response.status === 201) {
-      $toast.success('You did it!');
+      $toast.success('You Created an Expense Sucessfully!');
       router.push('/Budget/details/' + id);
     }
   } catch (error) {
     console.error("Error creating Item:", error);
+    $toast.error('Failed to create an Expense!');
   }
 }
 
