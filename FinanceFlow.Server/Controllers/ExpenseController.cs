@@ -113,7 +113,7 @@ namespace FinanceFlow.Server.Controllers
             _context.Expenses.Add(expenseModel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBudgetedExpenses", new { id = expenseModel.id }, expenseModel);
+            return Ok(CreatedAtAction("GetBudgetedExpenses", new { id = expenseModel.id }, expenseModel));
         }
 
         // DELETE: api/Expense/5
