@@ -58,7 +58,7 @@
             <h2 class="text-xl py-2 font-bold">Expense List</h2>
           </div>
           <div class="col-span-1">
-            <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-gray-800 px-4 py-2">Download</button>
+            <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-gray-800 px-4 py-2" @click="generatePDF(id)">Download</button>
           </div>
           <div class="col-span-1">
             <router-link :to="{ path: '/Budget/'+Budget.id+'/expense/create' }" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:text-black focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-blue-600 px-4 py-2 justify-end align-baseline">Create
@@ -168,7 +168,6 @@ const getBudget = async (id) => {
   }
 };
 
-
 const getBudgetedExpenses = async (id) => {
   try {
     const response = await apiClient.get(`Expense/${id}`);
@@ -178,6 +177,30 @@ const getBudgetedExpenses = async (id) => {
     console.error("Error fetching Budget:", error);
   }
 };
+const generatePDF = async (id) => {
+  try {
+    const response = await apiClient.get(`PDF/Generate?Budgetid=${id}`, {
+      responseType: 'blob' // Important to get binary data
+    });
+
+    // Create a download link
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Budget_${id}_Expenses.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+
+    $toast.success('PDF Downloaded Successfully!');
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    $toast.error('Failed to generate PDF');
+  }
+};
+
+
 
 const deleteExpense = async (id) => {
   try {
