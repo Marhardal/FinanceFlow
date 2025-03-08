@@ -58,7 +58,7 @@
             <h2 class="text-xl py-2 font-bold">Expense List</h2>
           </div>
           <div class="col-span-1">
-            <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-gray-800 px-4 py-2">Download</button>
+            <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-gray-800 px-4 py-2" @click="downloadBudgetedExpenses(Budget.id)">Download</button>
           </div>
           <div class="col-span-1">
             <router-link :to="{ path: '/Budget/'+Budget.id+'/expense/create' }" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:text-black focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-blue-600 px-4 py-2 justify-end align-baseline">Create
@@ -168,6 +168,14 @@ const getBudget = async (id) => {
   }
 };
 
+const downloadBudgetedExpenses = async (id) => {
+  try {
+    const response = await apiClient.get(`Expense/Download/?budgetid=${id}`);
+    console.log(response);
+  } catch (error) {
+    console.error("Error fetching Budget:", error);
+  }
+};
 
 const getBudgetedExpenses = async (id) => {
   try {
