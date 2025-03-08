@@ -50,9 +50,10 @@
                         {{ Budget.status.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
                         {{ Budget.income.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ Budget.amount }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                        {{ Budget.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">
-                        {{ Budget.remindon }}</td>
+                        {{ dayjs(Budget.remindon).fromNow() }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                         <router-link :to="{path: 'Budget/edit/' + Budget.id}"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
@@ -97,6 +98,11 @@
 import ListHeader from '../Components/ListHeader.vue';
 import apiClient from '../../Others/apiClient';
 import { onMounted, ref } from 'vue';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
 
 const Budgets = ref([]);
 

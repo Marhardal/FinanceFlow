@@ -16,14 +16,14 @@
           <div class="col-span-1">
             <h3 class="text-lg font-semibold mb-3">Budgeted Amount</h3>
           </div>
-          <div class="col-span-3">
-            <p class="text-md">{{ Budget.amount }}</p>
+          <div class="col-span-3" v-if="Budget.amount != null">
+            <p class="text-md">{{ Budget.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</p>
           </div>
           <div class="col-span-1">
             <h3 class="text-lg font-semibold mb-3">Budgeted Income</h3>
           </div>
           <div class="col-span-3" v-if="Budget.income">
-            <p class="text-md">{{ Budget.income.name + "->" + Budget.income.amount }}</p>
+            <p class="text-md">{{ Budget.income.name + "->" + Budget.income.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</p>
           </div>
           <div class="col-span-1">
             <h3 class="text-lg font-semibold mb-3">Budgeted Status</h3>
@@ -34,8 +34,8 @@
           <div class="col-span-1">
             <h3 class="text-lg font-semibold mb-3">Spent Amount</h3>
           </div>
-          <div class="col-span-3">
-            <p class="text-md">{{ Budget.spentAmount }}</p>
+          <div class="col-span-3" v-if="Budget.spentAmount != null">
+            <p class="text-md">{{ Budget.spentAmount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</p>
           </div>
           <div class="col-span-1">
             <h3 class="text-lg font-semibold">Remind on</h3>
@@ -58,7 +58,7 @@
             <h2 class="text-xl py-2 font-bold">Expense List</h2>
           </div>
           <div class="col-span-1">
-            <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-gray-800 px-4 py-2" @click="downloadBudgetedExpenses(Budget.id)">Download</button>
+            <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-gray-800 px-4 py-2" @click="generatePDF(id)">Download</button>
           </div>
           <div class="col-span-1">
             <router-link :to="{ path: '/Budget/'+Budget.id+'/expense/create' }" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:text-black focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-blue-600 px-4 py-2 justify-end align-baseline">Create
@@ -96,18 +96,14 @@
                           <!-- dark:text-neutral-200 -->
                           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800" v-if="expense.item">{{ expense.item.name }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ expense.quantity }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-if="expense.item">{{ expense.item.Price }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ expense.amount }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-if="expense.item">{{ expense.item.price.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ expense.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                            <router-link to=""
+                            <router-link :to="{ path: '/Budget/'+Budget.id+'/expense/edit/'+expense.id }"
                               class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
                               |</router-link>
-                            <router-link to=""
-                              class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
-                              |</router-link>
                             <button type="button"
-                              class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">
-                              Delete</button>
+                              class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400" @click="deleteExpense(expense.id)">Delete</button>
                           </td>
                         </tr>
 
@@ -148,14 +144,18 @@
 import ContainerBg from '../Components/ContainerBg.vue';
 import apiClient from '../../Others/apiClient'
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import dayjs from 'dayjs';
+import { useRoute, useRouter } from 'vue-router';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+import dayjs from 'dayjs';
 
 dayjs.extend(relativeTime);
 const Budget = ref([]);
 const id = useRoute().params.id;
 const Expenses = ref([]);
+const $toast = useToast();
+const router = useRouter();
 
 const getBudget = async (id) => {
   try {
@@ -168,22 +168,51 @@ const getBudget = async (id) => {
   }
 };
 
-const downloadBudgetedExpenses = async (id) => {
-  try {
-    const response = await apiClient.get(`Expense/Download/?budgetid=${id}`);
-    console.log(response);
-  } catch (error) {
-    console.error("Error fetching Budget:", error);
-  }
-};
-
 const getBudgetedExpenses = async (id) => {
   try {
-    const response = await apiClient.get(`Expense/?budgetid=${id}`);
+    const response = await apiClient.get(`Expense/${id}`);
     Expenses.value = response.data;
     console.log(Expenses.value);
   } catch (error) {
     console.error("Error fetching Budget:", error);
+  }
+};
+const generatePDF = async (id) => {
+  try {
+    const response = await apiClient.get(`PDF/Generate?Budgetid=${id}`, {
+      responseType: 'blob' // Important to get binary data
+    });
+
+    // Create a download link
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Budget_${id}_Expenses.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+
+    $toast.success('PDF Downloaded Successfully!');
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    $toast.error('Failed to generate PDF');
+  }
+};
+
+
+
+const deleteExpense = async (id) => {
+  try {
+    const response = await apiClient.delete(`Expense/${id}`);
+    if (response.status === 200) {
+      $toast.success('Budgeted Expense Deleted Successfully!');
+      router.go(0);
+      // window.location.reload();
+    }
+  } catch (error) {
+    $toast.error('Failed to Deleted Budgeted Expense!');
+    console.error("Error deleting Expense:", error);
   }
 };
 

@@ -39,19 +39,21 @@ namespace FinanceFlow.Server.Controllers
             return Ok(expenses);
         }
 
-        // GET: api/Expense/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<ExpenseModel>> GetExpenseModel(int id)
-        //{
-        //    var expenseModel = await _context.Expenses.FindAsync(id);
+        //GET: api/Expense/5
+        [HttpGet("{expenseid}/{budgetid}")]
+        public async Task<ActionResult<ExpenseModel>> GetExpenseModel(int expenseid, int budgetid)
+        {
+            var expenseModel = await _context.Expenses
+                .Where(e => e.id == expenseid && e.BudgetID == budgetid)
+                .FirstOrDefaultAsync();
 
-        //    if (expenseModel == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (expenseModel == null)
+            {
+                return NotFound();
+            }
 
-        //    return expenseModel;
-        //}
+            return expenseModel;
+        }
 
         // PUT: api/Expense/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -62,7 +64,12 @@ namespace FinanceFlow.Server.Controllers
             {
                 return BadRequest();
             }
-
+            var item = await _context.Items.FindAsync(expenseModel.ItemID);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            expenseModel.amount = expenseModel.Quantity * (double)item.Price;
             _context.Entry(expenseModel).State = EntityState.Modified;
 
             try
@@ -113,7 +120,7 @@ namespace FinanceFlow.Server.Controllers
             _context.Expenses.Add(expenseModel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetExpenseModel", new { id = expenseModel.id }, expenseModel);
+            return Ok(CreatedAtAction("GetBudgetedExpenses", new { id = expenseModel.id }, expenseModel));
         }
 
         // DELETE: api/Expense/5
