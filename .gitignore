@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # ignore all migrations files in .NET Core project
 FinanceFlow.Server/Migrations/*
+FinanceFlow.Server/*.pdf
