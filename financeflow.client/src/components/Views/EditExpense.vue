@@ -13,6 +13,7 @@
       }">
         <FormKit type="select" label="Select an Item Name." :options="items" v-model="input.itemID" />
         <FormKit label="Quantity" placeholder="Enter Item Quantity." type="number" v-model="input.quantity" />
+        <FormKit label="Expected Amount" placeholder="Enter the Expected Amount." type="number" v-model="input.expectedamount" />
         <FormKit label="Amount" placeholder="Enter Item Amount." type="number" v-model="input.amount" />
         <FormKit label="Description" placeholder="Enter Item description." type="textarea" v-model="input.description" />
       </FormKit>
@@ -40,14 +41,15 @@ const input = reactive({
   id: expenseID,
   budgetID: budgetID,
   itemID: '',
-  quantity: 0,
-  amount: 0,
+  quantity: '',
+  amount: '',
+  expectedamount: '',
   description: ''
 })
 
 const updateExpense = async (expenseID) => {
   try {
-    const response = await apiClient.put('Expense/'+expenseID, input);
+    const response = await apiClient.put('/Expense/'+expenseID, input);
     if (response.status === 201) {
       $toast.success('You updated an Expense Sucessfully!');
       router.go(-1);
@@ -63,10 +65,10 @@ const getItems = async () => {
     const response = await apiClient.get('/item');
     if (response.data) {
       items.value = response.data;
-      items.value = response.data.map((item) => ({
+      items.value = [{value: '', label: 'Select an Item.'}, ...response.data.map((item) => ({
         value: item.id,
         label: item.name
-      }));
+      }))];
       console.log(response.data)
     }
   } catch (error) {
@@ -81,6 +83,7 @@ const getBudgetedExpense = async (expenseID) => {
       input.budgetID = response.data.budgetID;
       input.itemID = response.data.itemID;
       input.quantity = response.data.quantity;
+      input.expectedamount = response.data.expectedamount;
       input.amount = response.data.amount;
       input.description = response.data.description;
       console.log(response.data)

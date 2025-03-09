@@ -5,16 +5,17 @@
         <h2 class="text-3xl md:text-4xl font-bold mb-2">Create an Expense</h2>
         <h2 class="text-2xl md:text-2xl text-neutral-600 font-semibold mb-2">Fill in all Fields.</h2>
       </div>
-      <FormKit type="form" submit-label="Create" @submit="createBudget" :submit-attrs="{
+      <FormKit type="form" submit-label="Create" @submit="createExpense" :submit-attrs="{
         inputClass: 'py-3 px-4 block w-full border-gray-500 rounded text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-300 dark:border-gray-500 dark:text-neutral-700 dark:placeholder-neutral-500 dark:focus:ring-neutral-600',
         wrapperClass: 'space-y-5',
         'data-theme': `dark`,
         ignore: false
       }">
-        <FormKit type="select" label="Select an Item Name." :options="items" v-model="input.itemID" />
-        <FormKit label="Quantity" placeholder="Enter Item Quantity." type="number" v-model="input.quantity" />
-        <FormKit label="Amount" placeholder="Enter Item Amount." type="number" v-model="input.amount" />
-        <FormKit label="Description" placeholder="Enter Item description." type="textarea" v-model="input.description" />
+        <FormKit type="select" label="Select an Item Name." :options="items" validation="required" v-model="input.itemID" />
+        <FormKit label="Quantity" placeholder="Enter Item Quantity." type="number" validation="required" v-model="input.quantity" />
+        <FormKit label="Expected Amount" placeholder="Enter the Expected Amount." type="number" v-model="input.Expectedamount" />
+        <FormKit label="Amount" placeholder="Enter Item Amount." type="number" validation="required" v-model="input.amount" />
+        <FormKit label="Description" placeholder="Enter Item description." type="textarea" validation="required" v-model="input.description" />
       </FormKit>
     </div>
 
@@ -38,17 +39,21 @@ const items = ref([]);
 const input = reactive({
   budgetID: id,
   itemID: '',
-  quantity: 0,
-  amount: 0,
-  description: ''
+  quantity: '',
+  amount: '',
+  description: '',
+  Expectedamount: ''
 })
 
-const createBudget = async () => {
+const createExpense = async () => {
   try {
+    if (input.Expectedamount == '') {
+      input.Expectedamount = input.amount;
+    }
     const response = await apiClient.post('Expense', input);
     if (response.status === 201) {
       $toast.success('You Created an Expense Sucessfully!');
-      router.push('/Budget/details/' + id);
+      router.push(`Budget/details/${id}`);
     }
   } catch (error) {
     console.error("Error creating Item:", error);
@@ -61,10 +66,10 @@ const getItems = async () => {
     const response = await apiClient.get('/item');
     if (response.data) {
       items.value = response.data;
-      items.value = response.data.map((item) => ({
+      items.value = [{value: '', label: 'Select Item Name' }, ...response.data.map((item) => ({
         value: item.id,
         label: item.name
-      }));
+      }))];
       console.log(response.data)
     }
   } catch (error) {

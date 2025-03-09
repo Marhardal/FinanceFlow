@@ -41,18 +41,18 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded" v-for="Budget in Budgets"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800" v-for="Budget in Budgets"
                       :key="Budget.id">
                       <!-- dark:text-neutral-200 -->
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ Budget.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ Budget.status.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ Budget.income.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm">
                         {{ Budget.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm">
                         {{ dayjs(Budget.remindon).fromNow() }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                         <router-link :to="{path: 'Budget/edit/' + Budget.id}"

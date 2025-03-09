@@ -78,6 +78,8 @@ namespace FinanceFlow.Server.Controllers
 
             try
             {
+                _context.Entry(expenseModel).State = EntityState.Modified;
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -92,7 +94,7 @@ namespace FinanceFlow.Server.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         [HttpGet]
@@ -120,7 +122,7 @@ namespace FinanceFlow.Server.Controllers
             if (budget != null)
             {
                 // Update the budget entity as needed
-                budget.spentAmount = _context.Expenses.Where(e => e.BudgetID == expenseModel.BudgetID).Sum(e => e.amount);
+                budget.spentAmount = _context.Expenses.Where(e => e.BudgetID == expenseModel.BudgetID).Sum(e => e.amount) + expenseModel.amount;
                 _context.Budgets.Update(budget);
             }
             _context.Expenses.Add(expenseModel);

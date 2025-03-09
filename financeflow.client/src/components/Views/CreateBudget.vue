@@ -19,8 +19,8 @@
           validation="required" />
         <FormKit label="Amount" placeholder="Enter Budget Amount." type="number" v-model="input.amount"
           validation="required" />
-        <FormKit label="Spent Amount" placeholder="Enter the Spent Amount on the Budget." type="number" v-model="input.spentamount"
-          validation="required" />
+        <!-- <FormKit label="Spent Amount" placeholder="Enter the Spent Amount on the Budget." type="number" v-model="input.spentamount"
+          validation="required" /> -->
         <FormKit label="Date" placeholder="Enter Budget Date." type="date" v-model="input.remindon" validation="required" />
         <FormKit label="Notes" placeholder="Enter Budget Notes." type="textarea" v-model="input.description"
           validation="required" />
@@ -45,7 +45,7 @@ const router = useRouter();
 const getStatus = async () => {
   try {
     const response = await apiClient.get('status')
-    Statuses.value = [{ value: '', label: 'Select Status' }, ...response.data.map((status) => ({
+    Statuses.value = [{ value: '', label: 'Select Status.' }, ...response.data.map((status) => ({
       value: status.id,
       label: status.name,
     }))]; // Log the actual data, not the ref object
@@ -57,10 +57,10 @@ const getStatus = async () => {
 const getIncomes = async () => {
   try {
     const response = await apiClient.get('Incomes')
-    Incomes.value = response.data.map((income) => ({
+    Incomes.value =[{ value: '', label: 'Select Income.'}, ...response.data.map((income) => ({
       value: income.id,
       label: income.name,
-    })); // Log the actual data, not the ref object
+    }))]; // Log the actual data, not the ref object
   } catch (error) {
     console.error("Error fetching income:", error);
   }
