@@ -16,7 +16,7 @@
           v-model="input.name" />
         <FormKit type="select" label="Select Item Category" :options="Categories" v-model="input.itemCategoryId"
           help="Select an Item Category" />
-        <FormKit label="Item Price" placeholder="Enter an Item Price." type="number" v-model="input.price"
+        <FormKit label="Item Measurement" placeholder="Enter an Measurement." type="text" v-model="input.measurement"
           help="Enter an Item Name." value="" />
       </FormKit>
     </div>
@@ -70,7 +70,7 @@ const getItem = async (id) => {
   try {
     const response = await apiClient.get(`Item/${id}`);
     input.name = response.data.name;
-    input.price = response.data.price;
+    input.measurement = response.data.measurement;
     input.itemCategoryId = response.data.itemCategoryId;
   } catch (error) {
     console.error("Error fetching Item:", error);
@@ -79,7 +79,7 @@ const getItem = async (id) => {
 const input = reactive({
   id: id,
   name,
-  price: 0,
+  measurement: '',
   itemCategoryId: '',
 });
 
