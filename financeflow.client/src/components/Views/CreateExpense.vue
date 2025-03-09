@@ -13,6 +13,8 @@
       }">
         <FormKit type="select" label="Select an Item Name." :options="items" v-model="input.itemID" />
         <FormKit label="Quantity" placeholder="Enter Item Quantity." type="number" v-model="input.quantity" />
+        <FormKit label="Amount" placeholder="Enter Item Amount." type="number" v-model="input.amount" />
+        <FormKit label="Description" placeholder="Enter Item description." type="textarea" v-model="input.description" />
       </FormKit>
     </div>
 
@@ -38,7 +40,7 @@ const input = reactive({
   itemID: '',
   quantity: 0,
   amount: 0,
-  description: 'NA'
+  description: ''
 })
 
 const createBudget = async () => {

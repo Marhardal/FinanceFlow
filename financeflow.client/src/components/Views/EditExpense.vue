@@ -2,7 +2,7 @@
   <ContainerBg>
     <div class="mx-auto max-w-xl">
       <div class="text-start mb-8">
-        <h2 class="text-3xl md:text-4xl font-bold mb-2">Create an Expense</h2>
+        <h2 class="text-3xl md:text-4xl font-bold mb-2">Edit an Expense</h2>
         <h2 class="text-2xl md:text-2xl text-neutral-600 font-semibold mb-2">Fill in all Fields.</h2>
       </div>
       <FormKit type="form" submit-label="Update" @submit="updateExpense(expenseID)" :submit-attrs="{
@@ -13,6 +13,8 @@
       }">
         <FormKit type="select" label="Select an Item Name." :options="items" v-model="input.itemID" />
         <FormKit label="Quantity" placeholder="Enter Item Quantity." type="number" v-model="input.quantity" />
+        <FormKit label="Amount" placeholder="Enter Item Amount." type="number" v-model="input.amount" />
+        <FormKit label="Description" placeholder="Enter Item description." type="textarea" v-model="input.description" />
       </FormKit>
     </div>
 
@@ -40,7 +42,7 @@ const input = reactive({
   itemID: '',
   quantity: 0,
   amount: 0,
-  description: 'NA'
+  description: ''
 })
 
 const updateExpense = async (expenseID) => {

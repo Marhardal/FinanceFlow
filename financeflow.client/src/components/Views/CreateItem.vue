@@ -14,7 +14,7 @@
       }">
         <FormKit label="Item Name" placeholder="Enter an Item Name." type="text" help="Enter an Item Name." value=""
           v-model="input.name" />
-        <FormKit type="select" label="Select Item Category" :options="Categories" v-model="input.itemCategoryId"
+        <FormKit type="select" label="Select Item Category" :options="Categories" v-model="input.ItemCategoryId"
           help="Select an Item Category" />
         <FormKit label="Item Price" placeholder="Enter an Item Price." type="number" v-model="input.price"
           help="Enter an Item Name." value="" />
@@ -65,7 +65,7 @@ const createItem = async () => {
 const input = reactive({
   name,
   price: 0,
-  itemCategoryId: '',
+  ItemCategoryId: '',
 });
 
 

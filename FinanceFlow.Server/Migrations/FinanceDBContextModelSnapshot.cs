@@ -86,6 +86,9 @@ namespace FinanceFlow.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("Expectedamount")
+                        .HasColumnType("float");
+
                     b.Property<int>("ItemID")
                         .HasColumnType("int");
 
@@ -296,13 +299,12 @@ namespace FinanceFlow.Server.Migrations
                     b.Property<int>("ItemCategoryId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Measurement")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -419,7 +421,7 @@ namespace FinanceFlow.Server.Migrations
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
                 {
                     b.HasOne("FinanceFlow.Server.Models.ItemsModel", null)
-                        .WithMany("Categories")
+                        .WithMany("ItemCategories")
                         .HasForeignKey("ItemsModelId");
                 });
 
@@ -478,9 +480,9 @@ namespace FinanceFlow.Server.Migrations
 
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsModel", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("Expenses");
+
+                    b.Navigation("ItemCategories");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.StatusModel", b =>

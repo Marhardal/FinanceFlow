@@ -14,7 +14,9 @@ namespace FinanceFlow.Server.Models
         [ForeignKey("BudgetID")]
         public int BudgetID { get; set; }
 
-        public required double Quantity { get; set; }
+        public required double Quantity { get; set; } = 0;
+
+        public required double Expectedamount { get; set; } = 0;
 
         public required double amount { get; set; }
 

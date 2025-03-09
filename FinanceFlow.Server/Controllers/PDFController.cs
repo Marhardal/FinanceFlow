@@ -56,14 +56,14 @@ namespace FinanceFlow.Server.Controllers
                 {
                     table.AddCell(expense.Item?.Name ?? "N/A");
                     table.AddCell(expense.Quantity.ToString());
-                    table.AddCell(expense.Item?.Price.ToString() ?? "N/A");
-                    table.AddCell((expense.Quantity * (double)(expense.Item?.Price ?? 0)).ToString());
-                    sum += expense.Quantity * (double)(expense.Item?.Price ?? 0);
+                    table.AddCell(expense.Item?.Measurement ?? "N/A");
+                    table.AddCell(expense.Quantity.ToString() ?? "N/A");
+                    
                 }
                 table.AddCell("");
                 table.AddCell("");
                 table.AddCell("Total");
-                table.AddCell(sum.ToString("C", new CultureInfo("en-MW")));
+                table.AddCell(budgetModel.spentAmount.ToString("C", new CultureInfo("en-MW")));
 
                 // Add table to the document
                 document.Add(table);

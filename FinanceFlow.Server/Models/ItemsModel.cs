@@ -10,8 +10,7 @@ namespace FinanceFlow.Server.Models
 
         public required string Name { get; set; }
 
-        [Precision(18, 2)]
-        public required decimal Price { get; set; }
+        public required string? Measurement { get; set; } = null;
         
         public DateTime? Date { get; set; } = DateTime.UtcNow;
 
@@ -21,7 +20,7 @@ namespace FinanceFlow.Server.Models
         //[JsonIgnore]
         public ItemsCategoriesModel? ItemCategory { get; set; }
 
-        public ICollection<ItemsCategoriesModel> Categories { get; set; } = new List<ItemsCategoriesModel>();
+        public ICollection<ItemsCategoriesModel> ItemCategories { get; set; } = new List<ItemsCategoriesModel>();
 
         public ICollection<ExpenseModel> Expenses { get; set; } = new List<ExpenseModel>();
     }

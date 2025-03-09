@@ -60,17 +60,21 @@ namespace FinanceFlow.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutExpenseModel(int id, ExpenseModel expenseModel)
         {
-            if (id != expenseModel.id)
+            if (expenseModel is null)
             {
-                return BadRequest();
+                return NoContent();
             }
-            var item = await _context.Items.FindAsync(expenseModel.ItemID);
-            if (item == null)
+            
+            if (expenseModel.BudgetID != 0)
             {
-                return NotFound();
+                var budget = await _context.Budgets.FindAsync(expenseModel.BudgetID);
+                if (budget != null)
+                {
+                    // Update the budget entity as needed
+                    budget.spentAmount = _context.Expenses.Where(e => e.BudgetID == expenseModel.BudgetID).Sum(e => e.amount);
+                    _context.Budgets.Update(budget);
+                }
             }
-            expenseModel.amount = expenseModel.Quantity * (double)item.Price;
-            _context.Entry(expenseModel).State = EntityState.Modified;
 
             try
             {
@@ -110,13 +114,15 @@ namespace FinanceFlow.Server.Controllers
             if (expenseModel is null)
             {
                 return NoContent();
+               
             }
-            var item = await _context.Items.FindAsync(expenseModel.ItemID);
-            if (item == null)
+            var budget = await _context.Budgets.FindAsync(expenseModel.BudgetID);
+            if (budget != null)
             {
-                return NotFound();
+                // Update the budget entity as needed
+                budget.spentAmount = _context.Expenses.Where(e => e.BudgetID == expenseModel.BudgetID).Sum(e => e.amount);
+                _context.Budgets.Update(budget);
             }
-            expenseModel.amount = expenseModel.Quantity * (double)item.Price;
             _context.Expenses.Add(expenseModel);
             await _context.SaveChangesAsync();
 
