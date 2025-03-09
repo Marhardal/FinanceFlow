@@ -45,10 +45,10 @@ const router = useRouter();
 const getStatus = async () => {
   try {
     const response = await apiClient.get('status')
-    Statuses.value = response.data.map((status) => ({
+    Statuses.value = [{ value: '', label: 'Select Status' }, ...response.data.map((status) => ({
       value: status.id,
       label: status.name,
-    })); // Log the actual data, not the ref object
+    }))]; // Log the actual data, not the ref object
   } catch (error) {
     console.error("Error fetching Statuses:", error);
   }
@@ -57,10 +57,10 @@ const getStatus = async () => {
 const getIncomeCategories = async () => {
   try {
     const response = await apiClient.get('IncomeCategory')
-    IncomeCategories.value = response.data.map((category) => ({
+    IncomeCategories.value = [{ value: '', label: 'Select income Category' },  ...response.data.map((category) => ({
       value: category.id,
       label: category.name,
-    })); // Log the actual data, not the ref object
+    }))]; // Log the actual data, not the ref object
   } catch (error) {
     console.error("Error fetching category:", error);
   }
