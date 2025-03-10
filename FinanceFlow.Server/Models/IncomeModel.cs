@@ -30,5 +30,7 @@ namespace FinanceFlow.Server.Models
         public IncomeCategoryModel? IncomeCategory { get; set; }
 
         public ICollection<BudgetModel>? Budgets { get; set; }
+
+        public ICollection<IncomePaymentModel>? IncomePayment { get; set; } = new List<IncomePaymentModel>();
     }
 }

@@ -208,6 +208,32 @@ namespace FinanceFlow.Server.Migrations
                     b.ToTable("IncomeModel");
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.IncomePaymentModel", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("IncomeID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentMethodID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PaymentMethodModelid")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("IncomeID");
+
+                    b.HasIndex("PaymentMethodModelid");
+
+                    b.ToTable("incomePayment");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
                 {
                     b.Property<int>("Id")
@@ -315,6 +341,75 @@ namespace FinanceFlow.Server.Migrations
                     b.ToTable("Items");
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.PaymentMethodModel", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("paymentMethods");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            Name = "Cash"
+                        },
+                        new
+                        {
+                            id = 2,
+                            Name = "Credit Card"
+                        },
+                        new
+                        {
+                            id = 3,
+                            Name = "Debit Card"
+                        },
+                        new
+                        {
+                            id = 4,
+                            Name = "Bank Transfer"
+                        },
+                        new
+                        {
+                            id = 5,
+                            Name = "Mobile Money"
+                        },
+                        new
+                        {
+                            id = 6,
+                            Name = "Cheque"
+                        },
+                        new
+                        {
+                            id = 7,
+                            Name = "Cryptocurrency"
+                        },
+                        new
+                        {
+                            id = 8,
+                            Name = "Digital Wallets"
+                        },
+                        new
+                        {
+                            id = 9,
+                            Name = "Prepaid Card"
+                        },
+                        new
+                        {
+                            id = 10,
+                            Name = "Online Payment Gateways"
+                        });
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.StatusModel", b =>
                 {
                     b.Property<int>("id")
@@ -418,6 +513,23 @@ namespace FinanceFlow.Server.Migrations
                     b.Navigation("Status");
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.IncomePaymentModel", b =>
+                {
+                    b.HasOne("FinanceFlow.Server.Models.IncomeModel", "IncomeModel")
+                        .WithMany("IncomePayment")
+                        .HasForeignKey("IncomeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FinanceFlow.Server.Models.PaymentMethodModel", "PaymentMethodModel")
+                        .WithMany()
+                        .HasForeignKey("PaymentMethodModelid");
+
+                    b.Navigation("IncomeModel");
+
+                    b.Navigation("PaymentMethodModel");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
                 {
                     b.HasOne("FinanceFlow.Server.Models.ItemsModel", null)
@@ -471,6 +583,8 @@ namespace FinanceFlow.Server.Migrations
             modelBuilder.Entity("FinanceFlow.Server.Models.IncomeModel", b =>
                 {
                     b.Navigation("Budgets");
+
+                    b.Navigation("IncomePayment");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>

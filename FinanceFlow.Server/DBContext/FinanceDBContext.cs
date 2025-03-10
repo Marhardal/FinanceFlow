@@ -26,6 +26,10 @@ namespace FinanceFlow.Server.DBContext
         public DbSet<ExpenseModel> Expenses { get; set; }
 
         public DbSet<BudgetModel> Budgets { get; set; }
+        
+        public DbSet<IncomeModel> IncomeModel { get; set; }
+
+        public DbSet<IncomePaymentModel> incomePayment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -71,6 +75,11 @@ namespace FinanceFlow.Server.DBContext
                 .HasForeignKey(i => i.IncomeID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<IncomePaymentModel>()
+                .HasOne(i => i.IncomeModel)
+                .WithMany(p => p.IncomePayment)
+                .HasForeignKey(i => i.IncomeID);
+
             modelBuilder.Entity<ItemsCategoriesModel>().HasData(
                 new ItemsCategoriesModel { Id = 1, Name = "Housing" },
                 new ItemsCategoriesModel { Id = 2, Name = "Utilities" },
@@ -114,6 +123,7 @@ namespace FinanceFlow.Server.DBContext
             );
 
         }
-        public DbSet<FinanceFlow.Server.Models.IncomeModel> IncomeModel { get; set; } = default!;
+
+
     }
 }
