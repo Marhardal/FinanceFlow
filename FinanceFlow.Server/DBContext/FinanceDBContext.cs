@@ -15,6 +15,8 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<IncomeCategoryModel> incomeCategories { get; set; }
 
+        public DbSet<PaymentMethodModel> paymentMethods { get; set; }
+
         public DbSet<StatusModel> Statuses { get; set; }
 
         public DbSet<ItemsModel> Items { get; set; }
@@ -96,6 +98,19 @@ namespace FinanceFlow.Server.DBContext
                 new IncomeCategoryModel { id = 4, name = "Bonus" },
                 new IncomeCategoryModel { id = 5, name = "Commissions" },
                 new IncomeCategoryModel { id = 6, name = "Gifts" }
+            );
+
+            modelBuilder.Entity<PaymentMethodModel>().HasData(
+                new PaymentMethodModel { id = 1, Name = "Cash", },
+                new PaymentMethodModel { id = 2, Name = "Credit Card", },
+                new PaymentMethodModel { id = 3, Name = "Debit Card", },
+                new PaymentMethodModel { id = 4, Name = "Bank Transfer", },
+                new PaymentMethodModel { id = 5, Name = "Mobile Money", },
+                new PaymentMethodModel { id = 6, Name = "Cheque", },
+                new PaymentMethodModel { id = 7, Name = "Cryptocurrency", },
+                new PaymentMethodModel { id = 8, Name = "Digital Wallets", },
+                new PaymentMethodModel { id = 9, Name = "Prepaid Card", },
+                new PaymentMethodModel { id = 10, Name = "Online Payment Gateways", }
             );
 
         }

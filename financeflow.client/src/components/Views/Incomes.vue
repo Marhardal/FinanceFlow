@@ -42,30 +42,30 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded" v-for="Income in Incomes"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800" v-for="Income in Incomes"
                       :key="Income.id">
                       <!-- dark:text-neutral-200 -->
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ Income.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm">
                       {{ Income.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <span v-if="Income.status.name == 'Approved'"
-                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-300 text-black">
+                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-300">
                           {{ Income.status.name }}
                         </span>
                         <span v-else-if="Income.status.name == 'Pending'"
-                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-300 text-black">
+                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-300">
                           {{ Income.status.name }}
                         </span>
                         <span v-else-if="Income.status.name == 'Rejected'"
-                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-400 text-black">
+                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-400">
                           {{ Income.status.name }}
                         </span>
                       </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ Income.incomeCategory.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ dayjs(Income.date).fromNow() }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                         <router-link :to="{ path: 'income/edit/' + Income.id }"
