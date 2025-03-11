@@ -18,6 +18,8 @@
           validation="required" />
         <FormKit type="select" label="Select Income Source" :options="IncomeCategories" v-model="input.incomeCategoryId"
           validation="required" />
+        <FormKit type="select" multiple label="Select Payment Type" :options="PaymentMethods" v-model="input.paymentMethodID"
+         validation="required" />
         <FormKit label="Amount" placeholder="Enter Amount." type="number" v-model="input.amount"
           validation="required" />
         <FormKit label="Date" placeholder="Enter Amount." type="date" v-model="input.date" validation="required" />
@@ -40,7 +42,7 @@ const Statuses = ref([]);
 const IncomeCategories = ref([]);
 const $toast = useToast();
 const router = useRouter();
-
+const PaymentMethods = ref([]);
 
 const getStatus = async () => {
   try {
@@ -66,10 +68,25 @@ const getIncomeCategories = async () => {
   }
 };
 
+const getPaymentMethods = async () => {
+  try {
+    const response = await apiClient.get('PaymentMethod')
+    PaymentMethods.value = [{ value: '', label: 'Select Payment Method' },  ...response.data.map((Payment) => ({
+      value: Payment.id,
+      label: Payment.name,
+    }))]; // Log the actual data, not the ref object
+  } catch (error) {
+    console.error("Error fetching Payment Methods:", error);
+  }
+};
 
 const createIncome = async () => {
+  const payload = {
+    IncomeModel: input,
+    PaymentMethodID: input.paymentMethodID
+  }
   try {
-    const response = await apiClient.post('Incomes', input);
+    const response = await apiClient.post('Incomes', payload );
 
     if (response.status === 201) {
       $toast.success('You have successfully added an Income!');
@@ -88,11 +105,13 @@ const input = reactive({
   amount: '',
   date: '',
   description: '',
+  paymentMethodID: [],
 });
 
 onMounted(() => {
   getStatus(); // Ensure function is called properly
   getIncomeCategories(); // Ensure function is called properly
+  getPaymentMethods(); // Ensure function is called properly
 });
 </script>
 

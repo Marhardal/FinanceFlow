@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
+using FinanceFlow.Server.Migrations;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -83,14 +84,25 @@ namespace FinanceFlow.Server.Controllers
         // POST: api/Incomes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<IncomeModel>> PostIncomeModel(IncomeModel incomeModel)
+        public async Task<ActionResult<IncomeModel>> PostIncomeModel(IncomeModel incomeModel, List<IncomePaymentModel> incomePayment)
         {
-            if (incomeModel is null)
+            if (incomeModel is null || incomePayment is null)
             {
                 return NoContent();
             }
+            
             incomeModel.CreateDate = DateTime.Now;
             _context.IncomeModel.Add(incomeModel);
+
+            await _context.SaveChangesAsync();
+
+            foreach (var item in incomePayment)
+            {
+                item.IncomeID = incomeModel.Id;
+                _context.incomePayment.Add(item);
+                
+            }
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetIncomeModel", new { id = incomeModel.Id }, incomeModel);
