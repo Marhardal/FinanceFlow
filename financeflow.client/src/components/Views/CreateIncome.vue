@@ -34,14 +34,14 @@
 import ContainerBg from '../Components/ContainerBg.vue';
 import apiClient from '../../Others/apiClient'
 import { ref, onMounted, reactive } from 'vue';
-import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import { useToast } from 'vue-toast-notification';
 import { useRouter } from 'vue-router';
 
-const Statuses = ref([]);
-const IncomeCategories = ref([]);
 const $toast = useToast();
 const router = useRouter();
+const Statuses = ref([]);
+const IncomeCategories = ref([]);
 const PaymentMethods = ref([]);
 
 const getStatus = async () => {

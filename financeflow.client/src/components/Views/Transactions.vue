@@ -34,12 +34,12 @@
                       <!-- dark:text-neutral-200 -->
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-if="transition.type == 0">Incomes
                       </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-else-if="transition.type == 1">
+                        Budgets</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.incomeName">{{
                         transition.incomeName }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.budgetName">{{
                         transition.budgetName }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-else-if="transition.type == 1">
-                        Budgets</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ transition.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ dayjs(transition.date).fromNow()
                       }}</td>
@@ -52,11 +52,12 @@
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
                           :to="{ path: 'income/details/'+transition.incomeid }" v-if="transition.incomeid != null">Details
                           |</router-link>
+
                           <router-link
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
-                          :to="{ path: 'income/details/'+transition.budgetid }" v-if="transition.budgetid != null">Details
+                          :to="{ path: 'Budget/details/'+transition.budgetid }" v-if="transition.budgetid != null">Details
                           |</router-link>
-                        <button type="button"
+                        <button type="button" @click="deleteTransaction(transition.id)"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">
                           Delete</button>
                       </td>
@@ -95,6 +96,11 @@ import ListHeader from '../Components/ListHeader.vue';
 import apiClient from '../../Others/apiClient'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useToast } from 'vue-toast-notification';
+import { useRouter } from 'vue-router';
+
+const $toast = useToast();
+const router = useRouter();
 
 dayjs.extend(relativeTime);
 const Transactions = ref([]);
@@ -104,6 +110,22 @@ const getTransactions = async () => {
   if (response) {
     Transactions.value = response.data;
     console.log(Transactions);
+  }
+}
+
+const deleteTransaction = async (id) => {
+  try {
+  const response = await apiClient.delete(`transactions/${id}`);
+  if (response.status === 200) {
+      getTransactions();
+      $toast.success('Income Deleted Successfully!');
+      router.push('/incomes');
+    }
+    console.log(response.status);
+  } catch (error) {
+
+    $toast.error('Error Deleting Income!');
+    console.error("Error deleting Income:", error);
   }
 }
 
