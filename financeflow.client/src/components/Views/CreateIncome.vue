@@ -18,8 +18,8 @@
           validation="required" />
         <FormKit type="select" label="Select Income Source" :options="IncomeCategories" v-model="input.incomeCategoryId"
           validation="required" />
-        <FormKit type="select" multiple label="Select Payment Type" :options="PaymentMethods" v-model="input.paymentMethodID"
-         validation="required" />
+        <!-- <FormKit type="select" multiple label="Select Payment Type" :options="PaymentMethods" v-model="input.paymentMethodID"
+         validation="required" /> -->
         <FormKit label="Amount" placeholder="Enter Amount." type="number" v-model="input.amount"
           validation="required" />
         <FormKit label="Date" placeholder="Enter Amount." type="date" v-model="input.date" validation="required" />
@@ -81,12 +81,9 @@ const getPaymentMethods = async () => {
 };
 
 const createIncome = async () => {
-  const payload = {
-    IncomeModel: input,
-    PaymentMethodID: input.paymentMethodID
-  }
+
   try {
-    const response = await apiClient.post('Incomes', payload );
+    const response = await apiClient.post('Incomes', input );
 
     if (response.status === 201) {
       $toast.success('You have successfully added an Income!');

@@ -84,9 +84,9 @@ namespace FinanceFlow.Server.Controllers
         // POST: api/Incomes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<IncomeModel>> PostIncomeModel(IncomeModel incomeModel, List<IncomePaymentModel> incomePayment)
+        public async Task<ActionResult<IncomeModel>> PostIncomeModel(IncomeModel incomeModel)
         {
-            if (incomeModel is null || incomePayment is null)
+            if (incomeModel is null)
             {
                 return NoContent();
             }
@@ -96,12 +96,12 @@ namespace FinanceFlow.Server.Controllers
 
             await _context.SaveChangesAsync();
 
-            foreach (var item in incomePayment)
-            {
-                item.IncomeID = incomeModel.Id;
-                _context.incomePayment.Add(item);
+            //foreach (var item in incomePayment)
+            //{
+            //    item.IncomeID = incomeModel.Id;
+            //    _context.incomePayment.Add(item);
                 
-            }
+            //}
 
             await _context.SaveChangesAsync();
 
