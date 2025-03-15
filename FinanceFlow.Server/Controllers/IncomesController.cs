@@ -78,6 +78,22 @@ namespace FinanceFlow.Server.Controllers
                 }
             }
 
+            if (incomeModel.Status is not null || incomeModel.StatusID is 2)
+            {
+                TransactionModel transactions = new TransactionModel();
+
+                transactions.amount = incomeModel.Amount;
+                transactions.date = DateTime.Now;
+                transactions.incomeid = incomeModel.Id;
+                transactions.type = TransactionType.Incomes;
+                transactions.createdon = DateTime.Now;
+                transactions.date = DateTime.Now;
+                transactions.incomeid = incomeModel.Id;
+
+                _context.Transactions.Add(transactions);
+                await _context.SaveChangesAsync();
+            }
+
             return NoContent();
         }
 
@@ -100,10 +116,26 @@ namespace FinanceFlow.Server.Controllers
             //{
             //    item.IncomeID = incomeModel.Id;
             //    _context.incomePayment.Add(item);
-                
+
             //}
 
             await _context.SaveChangesAsync();
+
+            if (incomeModel.Status is not null || incomeModel.Status.Name is "Approved")
+            {
+                TransactionModel transactions = new TransactionModel();
+
+                transactions.amount = incomeModel.Amount;
+                transactions.date = DateTime.Now;
+                transactions.incomeid = incomeModel.Id;
+                transactions.type = TransactionType.Incomes;
+                transactions.createdon = DateTime.Now;
+                transactions.date = DateTime.Now;
+                transactions.incomeid = incomeModel.Id;
+
+                _context.Transactions.Add(transactions);
+                await _context.SaveChangesAsync();
+            }
 
             return CreatedAtAction("GetIncomeModel", new { id = incomeModel.Id }, incomeModel);
         }

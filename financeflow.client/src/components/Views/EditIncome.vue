@@ -14,9 +14,9 @@
       }">
         <FormKit label="Name" placeholder="Enter an Income Name." type="text" v-model="input.name"
           validation="required" />
-        <FormKit type="select" label="Select Status" :options="Statuses" v-model="input.statusid"
+        <FormKit type="select" label="Select Status" :options="Statuses" v-model="input.statusID"
           validation="required" />
-        <FormKit type="select" label="Select Income Source" :options="IncomeCategories" v-model="input.incomeCategoryId"
+        <FormKit type="select" label="Select Income Source" :options="IncomeCategories" v-model="input.incomeCategoryID"
           validation="required" />
         <FormKit label="Amount" placeholder="Enter Amount." type="number" v-model="input.amount"
           validation="required" />
@@ -46,10 +46,10 @@ const id = useRoute().params.id;
 const getStatus = async () => {
   try {
     const response = await apiClient.get('status')
-    Statuses.value = response.data.map((status) => ({
+    Statuses.value = [{label: "Select an income status", value: ""}, ...response.data.map((status) => ({
       value: status.id,
       label: status.name,
-    })); // Log the actual data, not the ref object
+    }))]; // Log the actual data, not the ref object
   } catch (error) {
     console.error("Error fetching Statuses:", error);
   }
@@ -58,10 +58,10 @@ const getStatus = async () => {
 const getIncomeCategories = async () => {
   try {
     const response = await apiClient.get('IncomeCategory')
-    IncomeCategories.value = response.data.map((category) => ({
+    IncomeCategories.value = [{value: "", label: "Select an Income Category."}, ...response.data.map((category) => ({
       value: category.id,
       label: category.name,
-    })); // Log the actual data, not the ref object
+    }))]; // Log the actual data, not the ref object
   } catch (error) {
     console.error("Error fetching category:", error);
   }
@@ -82,8 +82,9 @@ const getIncome = async () => {
 }
 
 const updateIncome = async () => {
+  console.log(input);
   try {
-    const response = await apiClient.put('Incomes/'+id, input);
+    const response = await apiClient.put(`Incomes/${id}`, input);
 
     if (response.status === 201) {
       $toast.success('You have successfully updated an Income!');
@@ -98,17 +99,17 @@ const updateIncome = async () => {
 const input = reactive({
   id: id,
   name: '',
-  statusid: '',
-  incomeCategoryId: '',
+  statusID: "",
+  incomeCategoryID: "",
   amount: '',
-  date: '',
   description: '',
+  date: '',
 });
 
 onMounted(() => {
+  getIncome(id);
   getStatus(); // Ensure function is called properly
   getIncomeCategories(); // Ensure function is called properly
-  getIncome(id);
 });
 </script>
 
