@@ -25,7 +25,25 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TransactionModel>>> GetTransactions()
         {
-            return await _context.Transactions.ToListAsync();
+            var transactions = await _context.Transactions
+        .Include(t => t.Income)  // Properly include Income
+        .Include(t => t.Budget)  // Properly include Budget
+        .Select(t => new
+        {
+            t.id,
+            t.type,
+            t.amount,
+            t.date,
+            IncomeName = t.Income != null ? t.Income.Name : null,   // Get Income Name if available
+            BudgetName = t.Budget != null ? t.Budget.Name : null,   // Get Budget Name if available
+        }).ToListAsync();
+
+            if (!transactions.Any())
+            {
+                return NoContent();
+            }
+
+            return Ok(transactions);
         }
 
         // GET: api/Transactions/5

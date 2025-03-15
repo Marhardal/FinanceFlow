@@ -19,6 +19,10 @@ namespace FinanceFlow.Server.Models
         public DateTime date { get; set; } = DateTime.Now;
 
         public DateTime createdon { get; set; } = DateTime.Now;
+    
+        public IncomeModel? Income { get; set; }
+
+        public BudgetModel? Budget { get; set; }
     }
 
     public enum TransactionType

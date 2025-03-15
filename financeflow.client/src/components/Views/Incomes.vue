@@ -110,15 +110,15 @@
 import ListHeader from '../Components/ListHeader.vue';
 import apiClient from '../../Others/apiClient';
 import { ref, onMounted } from 'vue';
-import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useToast } from 'vue-toast-notification';
 import { useRouter } from 'vue-router';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import dayjs from 'dayjs';
 
+dayjs.extend(relativeTime);
 const $toast = useToast();
 const router = useRouter();
-dayjs.extend(relativeTime);
 
 const search = ref('');
 const Incomes = ref([]);
