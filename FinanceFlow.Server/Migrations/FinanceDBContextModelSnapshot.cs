@@ -449,6 +449,38 @@ namespace FinanceFlow.Server.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.TransactionModel", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<decimal?>("amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("budgetid")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("createdon")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("incomeid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("type")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Transactions");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.BudgetModel", b =>
                 {
                     b.HasOne("FinanceFlow.Server.Models.ExpenseModel", null)

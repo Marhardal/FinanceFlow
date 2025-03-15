@@ -31,6 +31,8 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<IncomePaymentModel> incomePayment { get; set; }
 
+        public DbSet<TransactionModel> Transactions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
