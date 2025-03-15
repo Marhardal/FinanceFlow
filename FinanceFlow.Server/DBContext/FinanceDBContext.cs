@@ -82,6 +82,17 @@ namespace FinanceFlow.Server.DBContext
                 .WithMany(p => p.IncomePayment)
                 .HasForeignKey(i => i.IncomeID);
 
+            modelBuilder.Entity<TransactionModel>()
+    .HasOne(i => i.Income)
+    .WithOne(t => t.Transaction)
+    .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TransactionModel>()
+    .HasOne(b => b.Budget)
+    .WithOne(t => t.Transaction)
+    .OnDelete(DeleteBehavior.Cascade);
+
+
             modelBuilder.Entity<ItemsCategoriesModel>().HasData(
                 new ItemsCategoriesModel { Id = 1, Name = "Housing" },
                 new ItemsCategoriesModel { Id = 2, Name = "Utilities" },
@@ -125,7 +136,5 @@ namespace FinanceFlow.Server.DBContext
             );
 
         }
-
-
     }
 }

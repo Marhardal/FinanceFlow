@@ -35,5 +35,7 @@ namespace FinanceFlow.Server.Models
         public ICollection<IncomeModel> Incomes { get; set; } = new List<IncomeModel>();
 
         public ICollection<ExpenseModel> Expenses { get; set; } = new List<ExpenseModel>();
+    
+        public TransactionModel? Transaction { get; set; }
     }
 }

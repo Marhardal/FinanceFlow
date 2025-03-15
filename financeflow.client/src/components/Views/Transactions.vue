@@ -13,19 +13,16 @@
                     <tr>
                       <th scope="col"
                         class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Transaction Type</th>
-                      <th scope="col"
-                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Amount</th>
-                      <th scope="col"
-                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Status</th>
+                        Type</th>
                       <th scope="col"
                         class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                         Reference</th>
                       <th scope="col"
                         class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Created At</th>
+                        Amount</th>
+                      <th scope="col"
+                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        Date</th>
                       <th scope="col"
                         class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                         Action</th>
@@ -35,16 +32,22 @@
                     <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded"
                       v-for="transition in Transactions" :key="transition.id">
                       <!-- dark:text-neutral-200 -->
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-if="transition.type == 0">Incomes</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-else-if="transition.type == 1">Budgets</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ transition.amount }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ dayjs(transition.date).fromNow() }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.incomeName">{{ transition.incomeName }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.budgetName">{{ transition.budgetName }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-if="transition.type == 0">Incomes
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.incomeName">{{
+                        transition.incomeName }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.budgetName">{{
+                        transition.budgetName }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-else-if="transition.type == 1">
+                        Budgets</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ transition.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ dayjs(transition.date).fromNow()
+                      }}</td>
+
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                        <router-link to=""
+                        <!-- <router-link to=""
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
-                          |</router-link>
+                          |</router-link> -->
                         <router-link to=""
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
                           |</router-link>
