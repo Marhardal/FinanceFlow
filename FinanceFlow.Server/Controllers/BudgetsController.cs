@@ -45,21 +45,6 @@ namespace FinanceFlow.Server.Controllers
                 return NotFound();
             }
 
-            if (budgetModel.status is not null || budgetModel.statusID is 2)
-            {
-                TransactionModel transactions = new TransactionModel();
-
-                transactions.amount = Convert.ToDecimal(budgetModel.Amount);
-                transactions.date = DateTime.Now;
-                transactions.budgetid = budgetModel.Id;
-                transactions.type = TransactionType.Budgets;
-                transactions.createdon = DateTime.Now;
-                transactions.date = DateTime.Now;
-
-                _context.Transactions.Add(transactions);
-                await _context.SaveChangesAsync();
-            }
-
             return budgetModel;
         }
 
@@ -72,22 +57,7 @@ namespace FinanceFlow.Server.Controllers
             {
                 return BadRequest();
             }
-
-            if (budgetModel.status is not null || budgetModel.statusID is 2)
-            {
-                TransactionModel transactions = new TransactionModel();
-
-                transactions.amount = Convert.ToDecimal(budgetModel.Amount);
-                transactions.date = DateTime.Now;
-                transactions.budgetid = budgetModel.Id;
-                transactions.type = TransactionType.Budgets;
-                transactions.createdon = DateTime.Now;
-                transactions.date = DateTime.Now;
-
-                _context.Transactions.Add(transactions);
-                await _context.SaveChangesAsync();
-            }
-
+                        
             _context.Entry(budgetModel).State = EntityState.Modified;
 
             try
@@ -106,6 +76,23 @@ namespace FinanceFlow.Server.Controllers
                 }
             }
 
+
+            var transaction = _context.Transactions.Where(b => b.budgetid == budgetModel.Id).FirstOrDefault();
+
+            if (transaction is null || (budgetModel.status is not null || budgetModel.statusID is 2))
+            {
+                TransactionModel transactions = new TransactionModel();
+
+                transactions.amount = Convert.ToDecimal(budgetModel.Amount);
+                transactions.date = DateTime.Now;
+                transactions.budgetid = budgetModel.Id;
+                transactions.type = TransactionType.Budgets;
+                transactions.createdon = DateTime.Now;
+                transactions.date = DateTime.Now;
+                _context.Transactions.Add(transactions);
+                await _context.SaveChangesAsync();
+
+            }
             return NoContent();
         }
 
@@ -121,6 +108,23 @@ namespace FinanceFlow.Server.Controllers
             _context.Budgets.Add(budgetModel);
             await _context.SaveChangesAsync();
 
+            var transaction = _context.Transactions.Where(b => b.budgetid == budgetModel.Id).FirstOrDefault();
+
+            if (transaction is null || (budgetModel.status is not null || budgetModel.statusID is 2))
+            {
+                TransactionModel transactions = new TransactionModel();
+
+                transactions.amount = Convert.ToDecimal(budgetModel.Amount);
+                transactions.date = DateTime.Now;
+                transactions.budgetid = budgetModel.Id;
+                transactions.type = TransactionType.Budgets;
+                transactions.createdon = DateTime.Now;
+                transactions.date = DateTime.Now;
+
+                _context.Transactions.Add(transactions);
+                await _context.SaveChangesAsync();
+            }
+            
             return CreatedAtAction("GetBudgetModel", new { id = budgetModel.Id }, budgetModel);
         }
 

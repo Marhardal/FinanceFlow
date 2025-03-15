@@ -78,7 +78,9 @@ namespace FinanceFlow.Server.Controllers
                 }
             }
 
-            if (incomeModel.Status is not null || incomeModel.StatusID is 2)
+            var transaction = _context.Transactions.Where(b => b.incomeid == incomeModel.Id).FirstOrDefault();
+
+            if (transaction is null && (incomeModel.Status != null || incomeModel.StatusID == 2))
             {
                 TransactionModel transactions = new TransactionModel();
 
@@ -93,7 +95,6 @@ namespace FinanceFlow.Server.Controllers
                 _context.Transactions.Add(transactions);
                 await _context.SaveChangesAsync();
             }
-
             return NoContent();
         }
 
@@ -121,7 +122,9 @@ namespace FinanceFlow.Server.Controllers
 
             await _context.SaveChangesAsync();
 
-            if (incomeModel.Status is not null || incomeModel.Status.Name is "Approved")
+            var transaction = _context.Transactions.Where(b => b.incomeid == incomeModel.Id);
+
+            if (transaction is null && (incomeModel.Status != null || incomeModel.StatusID == 2))
             {
                 TransactionModel transactions = new TransactionModel();
 
@@ -136,7 +139,6 @@ namespace FinanceFlow.Server.Controllers
                 _context.Transactions.Add(transactions);
                 await _context.SaveChangesAsync();
             }
-
             return CreatedAtAction("GetIncomeModel", new { id = incomeModel.Id }, incomeModel);
         }
 
