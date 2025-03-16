@@ -2,9 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using FinanceFlow.Server.Controllers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://localhost:7000";
+        options.Audience = "scalar";
+    });
 
 // Add CORS policy
 builder.Services.AddCors(options =>
