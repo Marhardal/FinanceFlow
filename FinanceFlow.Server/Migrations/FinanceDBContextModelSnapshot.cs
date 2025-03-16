@@ -17,7 +17,7 @@ namespace FinanceFlow.Server.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -478,7 +478,49 @@ namespace FinanceFlow.Server.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("budgetid")
+                        .IsUnique()
+                        .HasFilter("[budgetid] IS NOT NULL");
+
+                    b.HasIndex("incomeid")
+                        .IsUnique()
+                        .HasFilter("[incomeid] IS NOT NULL");
+
                     b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("FinanceFlow.Server.Models.UserModel", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<DateOnly>("DOB")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createat")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.BudgetModel", b =>
@@ -591,6 +633,23 @@ namespace FinanceFlow.Server.Migrations
                         .HasForeignKey("BudgetModelId");
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.TransactionModel", b =>
+                {
+                    b.HasOne("FinanceFlow.Server.Models.BudgetModel", "Budget")
+                        .WithOne("Transaction")
+                        .HasForeignKey("FinanceFlow.Server.Models.TransactionModel", "budgetid")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("FinanceFlow.Server.Models.IncomeModel", "Income")
+                        .WithOne("Transaction")
+                        .HasForeignKey("FinanceFlow.Server.Models.TransactionModel", "incomeid")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Budget");
+
+                    b.Navigation("Income");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.BudgetModel", b =>
                 {
                     b.Navigation("Expenses");
@@ -598,6 +657,8 @@ namespace FinanceFlow.Server.Migrations
                     b.Navigation("Incomes");
 
                     b.Navigation("Statuses");
+
+                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.ExpenseModel", b =>
@@ -617,6 +678,8 @@ namespace FinanceFlow.Server.Migrations
                     b.Navigation("Budgets");
 
                     b.Navigation("IncomePayment");
+
+                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.ItemsCategoriesModel", b =>
