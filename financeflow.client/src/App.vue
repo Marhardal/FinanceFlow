@@ -1,6 +1,7 @@
 <script setup>
   import { HomeIcon, ArrowsUpDownIcon, ChartPieIcon, WalletIcon, ShoppingCartIcon, Cog6ToothIcon, UserCircleIcon, BellIcon } from '@heroicons/vue/24/solid';
   import { RouterLink, RouterView } from 'vue-router'
+import router from './Others/Router';
 </script>
 
 <template>
@@ -35,9 +36,9 @@
       <a class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
         <Cog6ToothIcon class="icon size-5" />
       </a>
-      <a class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 mt-auto rounded hover:bg-gray-300" href="#">
+      <router-link to="/register" class="flex items-center justify-center flex-shrink-0 w-10 h-10 bg-gray-200 mt-auto rounded hover:bg-gray-300" href="#">
         <UserCircleIcon class="icon size-5" />
-      </a>
+      </router-link>
     </div>
 
     <div class="flex flex-col flex-grow">
@@ -58,7 +59,7 @@
             <!-- <span class="px-4 py-2">Martin</span> -->
           </div>
           <div class="absolute right-0 flex-col items-start hidden w-40 pb-1 rounded pt-2 bg-white border border-gray-300 shadow-lg group-focus:flex">
-            <a class="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
+            <router-link to="/register" class="w-full px-4 py-2 text-left hover:bg-gray-300">Register</router-link>
             <a class="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
             <a class="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
           </div>

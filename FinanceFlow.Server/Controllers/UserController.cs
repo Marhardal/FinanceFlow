@@ -18,6 +18,7 @@ namespace FinanceFlow.Server.Controllers
             _context = context;
         }
 
+        [HttpPost("register")]
         public async Task<ActionResult<UserModel>> Register(UserDTO request)
         {
             //var user = await _context.Users.FindAsync(id);
@@ -43,6 +44,29 @@ namespace FinanceFlow.Server.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             
+            return Ok();
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<UserModel>> Login(UserDTO userDTO)
+        {
+            if (userDTO is null)
+            {
+                return NoContent();
+            }
+
+            UserModel user = new UserModel();
+            var password = new PasswordHasher<UserModel>().HashPassword(user, userDTO.Password);
+            user.Username = userDTO.Username;
+            user.PasswordHash = password;
+
+            IQueryable usr = _context.Users.Where(u => u.Username == user.Username).Where(u => u.PasswordHash == user.PasswordHash);
+
+            if (user is null)
+            {
+                return NoContent();
+            }
+
             return Ok();
         }
     }
