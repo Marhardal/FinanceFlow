@@ -22,8 +22,25 @@
           validation="required" />
         <FormKit label="Date of Birth" type="date" v-model="input.dob"
           validation="required" />
-        <FormKit label="Password" placeholder="Enter your Password." type="password" v-model="input.Password"
-          validation="required" />
+        <FormKit label="Password" name="password" placeholder="Enter your Password." type="password" v-model="input.Password"
+        validation="required"
+    validation-visibility="live"
+    suffix-icon="eyeClosed"
+    @suffix-icon-click="handleIconClick"
+    suffix-icon-class="hover:text-blue-500"
+  />
+  <FormKit
+    type="password"
+    name="password_confirm"
+    label="Confirm password"
+    placeholder="Confirm your Password."
+    validation="required|confirm"
+    validation-visibility="live"
+    validation-label="Password confirmation"
+    suffix-icon="eyeClosed"
+    @suffix-icon-click="handleIconClick"
+    suffix-icon-class="hover:text-blue-500"
+  />
       </FormKit>
     </div>
   </ContainerBg>
@@ -59,6 +76,11 @@ const createAccount = async() => {
     console.error("Error creating Account:", error);
     $toast.error('An error occurred while creating an Account!');
   }
+}
+
+const handleIconClick = (node, e) => {
+  node.props.suffixIcon = node.props.suffixIcon === 'eye' ? 'eyeClosed' : 'eye'
+  node.props.type = node.props.type === 'password' ? 'text' : 'password'
 }
 </script>
 
