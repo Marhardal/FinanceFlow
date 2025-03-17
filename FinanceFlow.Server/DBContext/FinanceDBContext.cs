@@ -27,7 +27,7 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<BudgetModel> Budgets { get; set; }
         
-        public DbSet<IncomeModel> IncomeModel { get; set; }
+        public DbSet<IncomeModel> Income { get; set; }
 
         public DbSet<IncomePaymentModel> incomePayment { get; set; }
 

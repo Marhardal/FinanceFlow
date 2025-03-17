@@ -205,7 +205,7 @@ namespace FinanceFlow.Server.Migrations
 
                     b.HasIndex("StatusID");
 
-                    b.ToTable("IncomeModel");
+                    b.ToTable("Income");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.IncomePaymentModel", b =>
@@ -491,11 +491,9 @@ namespace FinanceFlow.Server.Migrations
 
             modelBuilder.Entity("FinanceFlow.Server.Models.UserModel", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly>("DOB")
                         .HasColumnType("date");

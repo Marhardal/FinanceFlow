@@ -16,9 +16,9 @@
           validation="required" />
         <FormKit label="Surname" placeholder="Enter your Surname." type="text" v-model="input.surname"
           validation="required" />
-        <FormKit label="Email" placeholder="Enter your Email Address." type="text" v-model="input.email"
+        <FormKit label="Email" placeholder="Enter your Email Address." type="email" v-model="input.email"
           validation="required" />
-        <FormKit label="Username" placeholder="Enter your Username." type="email" v-model="input.username"
+        <FormKit label="Username" placeholder="Enter your Username." type="text" v-model="input.username"
           validation="required" />
         <FormKit label="Date of Birth" type="date" v-model="input.dob"
           validation="required" />
@@ -50,7 +50,7 @@ const input = reactive({
 
 const createAccount = async() => {
   try {
-    const response = await apiClient.post('/user', input);
+    const response = await apiClient.post('/user/register', input);
     if (response) {
       $toast.success('An Account has been created!');
       router.push('/login');

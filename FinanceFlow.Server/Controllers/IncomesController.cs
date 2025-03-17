@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
-using FinanceFlow.Server.Migrations;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -27,7 +26,7 @@ namespace FinanceFlow.Server.Controllers
         public async Task<ActionResult<IEnumerable<IncomeModel>>> GetIncomeModel(string search = null)
         {
             
-            IQueryable<IncomeModel> query = _context.IncomeModel.Include(s => s.Status).Include(c => c.IncomeCategory);
+            IQueryable<IncomeModel> query = _context.Income.Include(s => s.Status).Include(c => c.IncomeCategory);
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(i => i.Name.Contains(search) || i.Status.Name.Contains(search) || i.IncomeCategory.name.Contains(search));
@@ -40,7 +39,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IncomeModel>> GetIncomeModel(int id)
         {
-            var incomeModel = await _context.IncomeModel.FindAsync(id);
+            var incomeModel = await _context.Income.FindAsync(id);
 
             if (incomeModel == null)
             {
@@ -109,7 +108,7 @@ namespace FinanceFlow.Server.Controllers
             }
             
             incomeModel.CreateDate = DateTime.Now;
-            _context.IncomeModel.Add(incomeModel);
+            _context.Income.Add(incomeModel);
 
             await _context.SaveChangesAsync();
 
@@ -146,13 +145,13 @@ namespace FinanceFlow.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteIncomeModel(int id)
         {
-            var incomeModel = await _context.IncomeModel.FindAsync(id);
+            var incomeModel = await _context.Income.FindAsync(id);
             if (incomeModel == null)
             {
                 return NotFound();
             }
 
-            _context.IncomeModel.Remove(incomeModel);
+            _context.Income.Remove(incomeModel);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -160,7 +159,7 @@ namespace FinanceFlow.Server.Controllers
 
         private bool IncomeModelExists(int id)
         {
-            return _context.IncomeModel.Any(e => e.Id == id);
+            return _context.Income.Any(e => e.Id == id);
         }
     }
 }

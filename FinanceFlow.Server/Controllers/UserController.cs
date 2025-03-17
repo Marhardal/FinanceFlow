@@ -1,73 +1,47 @@
 ﻿using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.DTOs;
 using FinanceFlow.Server.Models;
+using FinanceFlow.Server.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace FinanceFlow.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController(IAuthService service) : ControllerBase
     {
-        private readonly FinanceDBContext _context;
-
-        public UserController(FinanceDBContext context)
-        {
-            _context = context;
-        }
-
+                
         [HttpPost("register")]
         public async Task<ActionResult<UserModel>> Register(UserDTO request)
         {
-            //var user = await _context.Users.FindAsync(id);
-            if (request == null)
+            var User = await service.CreateUserAsync(request);
+
+            if (User is null)
             {
-                return NotFound();
+                return BadRequest("Username already exist.");
             }
 
-            var user = new UserModel
-            {
-                FirstName = request.FirstName,
-                Surname = request.Surname,
-                Email = request.Email,
-                Username = request.Username,
-                DOB = request.DOB,
-                createat = request.createat
-            };
-
-            var hashed = new PasswordHasher<UserModel>().HashPassword(user, request.Password);
-
-            user.PasswordHash = hashed;
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            
-            return Ok();
+            return Ok(User);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserModel>> Login(UserDTO userDTO)
+        public async Task<ActionResult<string>> Login(UserDTO userDTO)
         {
-            if (userDTO is null)
+            var usertoken = await service.AuthenticateAsync(userDTO);
+
+            if (usertoken is null)
             {
-                return NoContent();
+                return BadRequest("Either Password or Username is wrong");
             }
 
-            UserModel user = new UserModel();
-            var password = new PasswordHasher<UserModel>().HashPassword(user, userDTO.Password);
-            user.Username = userDTO.Username;
-            user.PasswordHash = password;
-
-            IQueryable usr = _context.Users.Where(u => u.Username == user.Username).Where(u => u.PasswordHash == user.PasswordHash);
-
-            if (user is null)
-            {
-                return NoContent();
-            }
-
-            return Ok();
+            return Ok(usertoken);
         }
+
     }
 }
