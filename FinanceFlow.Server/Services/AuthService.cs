@@ -39,7 +39,8 @@ namespace FinanceFlow.Server.Services
                 new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username)
             };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("AppSettings:Token")!));
+            string stoken = configuration.GetValue<string>("AppSettings:Token");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(stoken));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
             var token = new JwtSecurityToken(
                 issuer: configuration.GetValue<string>("AppSettings:Issuer"),

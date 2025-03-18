@@ -17,6 +17,7 @@ import EditBudget from '@/components/Views/EditBudget.vue'
 import DetailsBudget from '@/components/Views/DetailsBudget.vue'
 import EditExpense from '@/components/Views/EditExpense.vue'
 import Register from '@/components/Views/Register.vue'
+import Login from '@/components/Views/Login.vue'
 
 const routes = [
   { path: '/', component: index },
@@ -35,7 +36,8 @@ const routes = [
       { path: '/Budget/create', component: CreateBudget },
       { path: '/Budget/edit/:id', component: EditBudget },
       { path: '/Budget/details/:id', component: DetailsBudget },
-      { path: '/register', component: Register}
+      { path: '/register', component: Register},
+      { path: '/login', component: Login},
 ];
 
 const router = createRouter({

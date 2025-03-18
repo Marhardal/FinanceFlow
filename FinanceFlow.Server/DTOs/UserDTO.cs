@@ -6,20 +6,15 @@ namespace FinanceFlow.Server.DTOs
     {
         public int id { get; set; }
 
-        [Required]
-        public string? FirstName { get; set; }
+        public string? FirstName { get; set; } = null;
 
-        [Required]
-        public string? Surname { get; set; }
+        public string? Surname { get; set; } = null;
 
-        [Required]
-        public string? Email { get; set; }
+        public string? Email { get; set; } = null;
 
-        [Required]
-        public string? Username { get; set; }
+        public string? Username { get; set; } = null;
 
-        [Required]
-        public string? Password { get; set; }
+        public string? Password { get; set; } = null;
 
         public DateOnly DOB { get; set; } = DateOnly.MinValue;
 
