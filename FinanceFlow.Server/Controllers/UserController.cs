@@ -31,7 +31,7 @@ namespace FinanceFlow.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDTO userDTO)
+        public async Task<ActionResult<UserDTO>> Login(UserDTO userDTO)
         {
             var usertoken = await service.AuthenticateAsync(userDTO);
 

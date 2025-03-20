@@ -1,7 +1,10 @@
-﻿using FinanceFlow.Server.DBContext;
+﻿using Azure;
+using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.DTOs;
+using FinanceFlow.Server.Migrations;
 using FinanceFlow.Server.Models;
 using iText.Commons.Actions.Contexts;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,8 +17,7 @@ namespace FinanceFlow.Server.Services
     public class AuthService(FinanceDBContext context, IConfiguration configuration) : IAuthService
     {
 
-
-        public async Task<string?> AuthenticateAsync(UserDTO request)
+        public async Task<UserDTO> AuthenticateAsync(UserDTO request)
         {
             var user = await context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
 
@@ -29,8 +31,20 @@ namespace FinanceFlow.Server.Services
                 return null;
             }
 
-            return Claim(user);
+            string claim = Claim(user);
+            UserDTO userDTO = new UserDTO
+            {
+                Token = claim
+            };
+            userDTO.FirstName = user.FirstName;
+            userDTO.Surname = user.Surname;
+            userDTO.Username = user.Username;
+            userDTO.Email = user.Email;
+            userDTO.DOB = user.DOB;
+            userDTO.User = user;
+            return userDTO;
         }
+
 
         private string Claim(UserModel user)
         {

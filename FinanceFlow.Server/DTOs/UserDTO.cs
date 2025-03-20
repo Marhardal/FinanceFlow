@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FinanceFlow.Server.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace FinanceFlow.Server.DTOs
 {
@@ -20,5 +21,8 @@ namespace FinanceFlow.Server.DTOs
 
         public DateTime createat { get; set; } = DateTime.Now;
 
+        public string? Token { get; set; }
+
+        public UserModel? User { get; set; }
     }
 }

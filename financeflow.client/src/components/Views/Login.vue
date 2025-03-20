@@ -40,10 +40,12 @@
 import { reactive } from 'vue'
 import { useToast } from 'vue-toast-notification';
 import { useRouter } from 'vue-router';
-import apiClient from '../../Others/apiClient'
+import { useStore } from '@/Stores/Pinia';
 
 const $toast = useToast();
 const router = useRouter();
+
+const authuseStore = useStore();
 
 const input = reactive({
   username: "",
@@ -51,16 +53,26 @@ const input = reactive({
 })
 
 const Login = async () => {
-  try {
-    const response = await apiClient.post('/user/login', input)
-    console.log(response)
-    $toast.success("Logged in successfully.");
-    router.push({ path: '/dashboard' })
-  } catch (error) {
-    console.error("Error logging in:", error);
+  const success = await authuseStore.Login(input.username, input.Password);
+  if (!success) {
     $toast.error("Error logging in. Please try again.");
+    return;
   }
+  router.push({ path: '/dashboard' })
+  // $toast.success("Logged in successfully.");
 }
+
+// const Login = async () => {
+//   try {
+//     const response = await apiClient.post('/user/login', input)
+//     console.log(response)
+//     $toast.success("Logged in successfully.");
+//     router.push({ path: '/dashboard' })
+//   } catch (error) {
+//     console.error("Error logging in:", error);
+//     $toast.error("Error logging in. Please try again.");
+//   }
+// }
 
 const handleIconClick = (node, e) => {
   node.props.suffixIcon = node.props.suffixIcon === 'eye' ? 'eyeClosed' : 'eye'
