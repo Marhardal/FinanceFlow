@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -21,6 +22,7 @@ namespace FinanceFlow.Server.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: api/Incomes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IncomeModel>>> GetIncomeModel(string search = null)
@@ -35,6 +37,7 @@ namespace FinanceFlow.Server.Controllers
             return Ok(incomes);
         }
 
+        [Authorize]
         // GET: api/Incomes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<IncomeModel>> GetIncomeModel(int id)
@@ -49,6 +52,7 @@ namespace FinanceFlow.Server.Controllers
             return incomeModel;
         }
 
+        [Authorize]
         // PUT: api/Incomes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -97,6 +101,7 @@ namespace FinanceFlow.Server.Controllers
             return NoContent();
         }
 
+        [Authorize]
         // POST: api/Incomes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -141,6 +146,7 @@ namespace FinanceFlow.Server.Controllers
             return CreatedAtAction("GetIncomeModel", new { id = incomeModel.Id }, incomeModel);
         }
 
+        [Authorize]
         // DELETE: api/Incomes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteIncomeModel(int id)

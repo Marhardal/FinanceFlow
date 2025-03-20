@@ -3,6 +3,7 @@ using FinanceFlow.Server.Models;
 using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,8 @@ namespace FinanceFlow.Server.Controllers
         {
             _context = context;
         }
+
+        [Authorize]
         [HttpGet("Generate")]
         public IActionResult BudgetedExpenseListPDF(int Budgetid)
         {

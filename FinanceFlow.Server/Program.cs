@@ -4,12 +4,26 @@ using Scalar.AspNetCore;
 using FinanceFlow.Server.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using FinanceFlow.Server.Services;
+using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["AppSettings:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]!)),
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true
+        };
         options.Authority = "https://localhost:7000";
         options.Audience = "scalar";
     });

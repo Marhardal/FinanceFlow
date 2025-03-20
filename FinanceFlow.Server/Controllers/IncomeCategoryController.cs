@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -21,6 +22,7 @@ namespace FinanceFlow.Server.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: api/IncomeCategory
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IncomeCategoryModel>>> GetincomeCategories()
@@ -28,6 +30,7 @@ namespace FinanceFlow.Server.Controllers
             return await _context.incomeCategories.ToListAsync();
         }
 
+        [Authorize]
         // GET: api/IncomeCategory/5
         [HttpGet("{id}")]
         public async Task<ActionResult<IncomeCategoryModel>> GetIncomeCategoryModel(int id)
@@ -42,6 +45,7 @@ namespace FinanceFlow.Server.Controllers
             return incomeCategoryModel;
         }
 
+        [Authorize]
         // PUT: api/IncomeCategory/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -73,6 +77,7 @@ namespace FinanceFlow.Server.Controllers
             return NoContent();
         }
 
+        [Authorize]
         // POST: api/IncomeCategory
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -84,6 +89,7 @@ namespace FinanceFlow.Server.Controllers
             return CreatedAtAction("GetIncomeCategoryModel", new { id = incomeCategoryModel.id }, incomeCategoryModel);
         }
 
+        [Authorize]
         // DELETE: api/IncomeCategory/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteIncomeCategoryModel(int id)

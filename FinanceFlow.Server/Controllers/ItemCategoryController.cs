@@ -1,6 +1,7 @@
 ﻿using FinanceFlow.Server.DBContext;
 //using FinanceFlow.Server.Migrations.FinanceDB;
 using FinanceFlow.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Internal;
@@ -20,6 +21,7 @@ namespace FinanceFlow.Server.Controllers
             _dbContext = context;
         }
 
+        [Authorize]
         // GET: api/<ExpenseCategoryController>
         [HttpGet]
         public async Task<ActionResult<List<ItemsCategoriesModel>>> Get()
@@ -27,6 +29,7 @@ namespace FinanceFlow.Server.Controllers
             return Ok(await _dbContext.ItemCategories.ToListAsync());
         }
 
+        [Authorize]
         // GET api/<ExpenseCategoryController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
@@ -39,6 +42,7 @@ namespace FinanceFlow.Server.Controllers
             return Ok(category);
         }
 
+        [Authorize]
         // POST api/<ExpenseCategoryController>
         [HttpPost]
         public async Task<ActionResult<ItemsCategoriesModel>> Post(ItemsCategoriesModel categories)
@@ -52,6 +56,7 @@ namespace FinanceFlow.Server.Controllers
             return CreatedAtAction(nameof(Get), new { id = categories.Id }, categories);
         }
 
+        [Authorize]
         // PUT api/<ExpenseCategoryController>/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, ItemsCategoriesModel expenseCategories)
@@ -68,6 +73,7 @@ namespace FinanceFlow.Server.Controllers
             return NoContent();
         }
 
+        [Authorize]
         // DELETE api/<ExpenseCategoryController>/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)

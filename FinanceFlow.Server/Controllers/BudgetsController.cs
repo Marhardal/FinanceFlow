@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -21,7 +22,9 @@ namespace FinanceFlow.Server.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: api/Budgets
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BudgetModel>>> GetBudgets(string search = null)
         {
@@ -34,6 +37,7 @@ namespace FinanceFlow.Server.Controllers
             return budgets;
         }
 
+        [Authorize]
         // GET: api/Budgets/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BudgetModel>> GetBudgetModel(int id)
@@ -48,6 +52,7 @@ namespace FinanceFlow.Server.Controllers
             return budgetModel;
         }
 
+        [Authorize]
         // PUT: api/Budgets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -96,6 +101,7 @@ namespace FinanceFlow.Server.Controllers
             return NoContent();
         }
 
+        [Authorize]
         // POST: api/Budgets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -128,6 +134,7 @@ namespace FinanceFlow.Server.Controllers
             return CreatedAtAction("GetBudgetModel", new { id = budgetModel.Id }, budgetModel);
         }
 
+        [Authorize]
         // DELETE: api/Budgets/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBudgetModel(int id)

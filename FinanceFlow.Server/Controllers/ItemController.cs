@@ -1,5 +1,6 @@
 ﻿using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ namespace FinanceFlow.Server.Controllers
             _dbContext = context;
         }
 
+        [Authorize]
         // GET: api/<ItemController>
         [HttpGet]
         public async Task<ActionResult<List<ItemsModel>>> Get(string search = null)
@@ -39,7 +41,7 @@ namespace FinanceFlow.Server.Controllers
             return Ok(items);
         }
 
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -51,6 +53,7 @@ namespace FinanceFlow.Server.Controllers
             return Ok(items);
         }
 
+        [Authorize]
         // POST api/<ItemController>
         [HttpPost]
         public async Task<ActionResult> Post(ItemsModel items)
@@ -65,6 +68,7 @@ namespace FinanceFlow.Server.Controllers
             return CreatedAtAction(nameof(Get), new { id = items.Id }, items);
         }
 
+        [Authorize]
         // PUT api/<ItemController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] ItemsModel items)
@@ -95,6 +99,7 @@ namespace FinanceFlow.Server.Controllers
             return NoContent();
         }
 
+        [Authorize]
         // DELETE api/<ItemController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -21,6 +22,7 @@ namespace FinanceFlow.Server.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: api/PaymentMethod
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PaymentMethodModel>>> GetpaymentMethods()
@@ -28,6 +30,7 @@ namespace FinanceFlow.Server.Controllers
             return await _context.paymentMethods.ToListAsync();
         }
 
+        [Authorize]
         // GET: api/PaymentMethod/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PaymentMethodModel>> GetPaymentMethodModel(int id)
@@ -42,6 +45,7 @@ namespace FinanceFlow.Server.Controllers
             return paymentMethodModel;
         }
 
+        [Authorize]
         // PUT: api/PaymentMethod/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -73,6 +77,7 @@ namespace FinanceFlow.Server.Controllers
             return NoContent();
         }
 
+        [Authorize]
         // POST: api/PaymentMethod
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -84,6 +89,7 @@ namespace FinanceFlow.Server.Controllers
             return CreatedAtAction("GetPaymentMethodModel", new { id = paymentMethodModel.id }, paymentMethodModel);
         }
 
+        [Authorize]
         // DELETE: api/PaymentMethod/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePaymentMethodModel(int id)

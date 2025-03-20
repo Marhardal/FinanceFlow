@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -21,6 +22,7 @@ namespace FinanceFlow.Server.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: api/Expense
         [HttpGet("{budgetid}")]
         public async Task<ActionResult<IEnumerable<ExpenseModel>>> GetBudgetedExpenses(int budgetid, string search = null)
@@ -39,6 +41,7 @@ namespace FinanceFlow.Server.Controllers
             return Ok(expenses);
         }
 
+        [Authorize]
         //GET: api/Expense/5
         [HttpGet("{expenseid}/{budgetid}")]
         public async Task<ActionResult<ExpenseModel>> GetExpenseModel(int expenseid, int budgetid)
@@ -55,6 +58,7 @@ namespace FinanceFlow.Server.Controllers
             return expenseModel;
         }
 
+        [Authorize]
         // PUT: api/Expense/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -97,6 +101,7 @@ namespace FinanceFlow.Server.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<ItemsModel>> GetItem(int id)
         {
@@ -108,6 +113,7 @@ namespace FinanceFlow.Server.Controllers
             return Ok(items);
         }
 
+        [Authorize]
         // POST: api/Expense
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -131,6 +137,7 @@ namespace FinanceFlow.Server.Controllers
             return Ok(CreatedAtAction("GetBudgetedExpenses", new { id = expenseModel.id }, expenseModel));
         }
 
+        [Authorize]
         // DELETE: api/Expense/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteExpenseModel(int id)

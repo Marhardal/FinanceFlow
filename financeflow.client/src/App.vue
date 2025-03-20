@@ -1,7 +1,24 @@
 <script setup>
   import { HomeIcon, ArrowsUpDownIcon, ChartPieIcon, WalletIcon, ShoppingCartIcon, Cog6ToothIcon, UserCircleIcon, BellIcon } from '@heroicons/vue/24/solid';
   import { RouterLink, RouterView } from 'vue-router'
-import router from './Others/Router';
+  import { useStore } from '@/Stores/Pinia';
+import { useToast } from 'vue-toast-notification';
+import { useRouter } from 'vue-router';
+
+  const $toast = useToast();
+const router = useRouter();
+
+  const authuseStore = useStore();
+
+  const Logout = async () => {
+  const success = await authuseStore.logout();
+  if (!success) {
+    $toast.error("Error logging out. Please try again.");
+    return;
+  }
+  router.push({ path: '/login' })
+  // $toast.success("Logged in successfully.");
+}
 </script>
 
 <template>
@@ -61,7 +78,7 @@ import router from './Others/Router';
           <div class="absolute right-0 flex-col items-start hidden w-40 pb-1 rounded pt-2 bg-white border border-gray-300 shadow-lg group-focus:flex">
             <router-link to="/register" class="w-full px-4 py-2 text-left hover:bg-gray-300">Register</router-link>
             <a class="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
-            <a class="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
+            <button type="button" class="w-full px-4 py-2 text-left hover:bg-gray-300" @click="Logout">Logout</button>
           </div>
         </button>
       </div>
