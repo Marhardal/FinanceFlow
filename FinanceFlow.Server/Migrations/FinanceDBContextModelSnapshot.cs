@@ -197,6 +197,9 @@ namespace FinanceFlow.Server.Migrations
                     b.Property<int>("StatusID")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BudgetModelId");
@@ -204,6 +207,8 @@ namespace FinanceFlow.Server.Migrations
                     b.HasIndex("IncomeCategoryID");
 
                     b.HasIndex("StatusID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Income");
                 });
@@ -410,6 +415,20 @@ namespace FinanceFlow.Server.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.RolesModel", b =>
+                {
+                    b.Property<Guid>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.StatusModel", b =>
                 {
                     b.Property<int>("id")
@@ -507,6 +526,12 @@ namespace FinanceFlow.Server.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("Rolesid")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
@@ -517,6 +542,8 @@ namespace FinanceFlow.Server.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("id");
+
+                    b.HasIndex("Rolesid");
 
                     b.ToTable("Users");
                 });
@@ -580,9 +607,17 @@ namespace FinanceFlow.Server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("FinanceFlow.Server.Models.UserModel", "User")
+                        .WithMany("Incomes")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("IncomeCategory");
 
                     b.Navigation("Status");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.IncomePaymentModel", b =>
@@ -648,6 +683,15 @@ namespace FinanceFlow.Server.Migrations
                     b.Navigation("Income");
                 });
 
+            modelBuilder.Entity("FinanceFlow.Server.Models.UserModel", b =>
+                {
+                    b.HasOne("FinanceFlow.Server.Models.RolesModel", "Roles")
+                        .WithMany()
+                        .HasForeignKey("Rolesid");
+
+                    b.Navigation("Roles");
+                });
+
             modelBuilder.Entity("FinanceFlow.Server.Models.BudgetModel", b =>
                 {
                     b.Navigation("Expenses");
@@ -696,6 +740,11 @@ namespace FinanceFlow.Server.Migrations
                 {
                     b.Navigation("Budgets");
 
+                    b.Navigation("Incomes");
+                });
+
+            modelBuilder.Entity("FinanceFlow.Server.Models.UserModel", b =>
+                {
                     b.Navigation("Incomes");
                 });
 #pragma warning restore 612, 618

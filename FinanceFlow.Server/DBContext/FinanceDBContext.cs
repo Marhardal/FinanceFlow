@@ -35,6 +35,8 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<UserModel> Users { get; set; }
 
+        public DbSet<RolesModel> Roles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -100,6 +102,10 @@ namespace FinanceFlow.Server.DBContext
                 .HasForeignKey(i => i.UserID)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            //modelBuilder.Entity<UserModel>()
+            //    .HasOne(u => u.Roles)
+            //    .WithOne(r => r.User);
+
             modelBuilder.Entity<ItemsCategoriesModel>().HasData(
                 new ItemsCategoriesModel { Id = 1, Name = "Housing" },
                 new ItemsCategoriesModel { Id = 2, Name = "Utilities" },
@@ -119,7 +125,6 @@ namespace FinanceFlow.Server.DBContext
                 new StatusModel { id = 3, Name = "Rejected" }
             );
 
-
             modelBuilder.Entity<IncomeCategoryModel>().HasData(
                 new IncomeCategoryModel { id = 1, name = "Salary"/*, Description = "Monthly salary from employment" */},
                 new IncomeCategoryModel { id = 2, name = "Freelance"/*, Description = "Income from freelance work"*/ },
@@ -128,6 +133,12 @@ namespace FinanceFlow.Server.DBContext
                 new IncomeCategoryModel { id = 5, name = "Commissions" },
                 new IncomeCategoryModel { id = 6, name = "Gifts" }
             );
+
+            //modelBuilder.Entity<RolesModel>().HasData(
+            //        new RolesModel { id = new Guid(), name = "Admin" },
+            //        new RolesModel { id = new Guid(), name = "Subscribed" },
+            //        new RolesModel { id = new Guid(), name = "Freemium" }
+            //    );
 
             modelBuilder.Entity<PaymentMethodModel>().HasData(
                 new PaymentMethodModel { id = 1, Name = "Cash", },
