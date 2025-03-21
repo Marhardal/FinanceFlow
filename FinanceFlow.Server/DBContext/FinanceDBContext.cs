@@ -94,6 +94,11 @@ namespace FinanceFlow.Server.DBContext
     .WithOne(t => t.Transaction)
     .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<IncomeModel>()
+                .HasOne(i => i.User)
+                .WithMany(u => u.Incomes)
+                .HasForeignKey(i => i.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ItemsCategoriesModel>().HasData(
                 new ItemsCategoriesModel { Id = 1, Name = "Housing" },

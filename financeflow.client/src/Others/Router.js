@@ -28,7 +28,7 @@ function auth(to, from) {
 
 function guest(to, from) {
   if (localStorage.getItem('authToken')) {
-      return "/";
+      return "/register";
   }
 }
 

@@ -44,6 +44,8 @@ const Statuses = ref([]);
 const IncomeCategories = ref([]);
 const PaymentMethods = ref([]);
 
+const user = localStorage.getItem("authUser");
+
 const getStatus = async () => {
   try {
     const response = await apiClient.get('status')
@@ -108,7 +110,8 @@ const input = reactive({
 onMounted(() => {
   getStatus(); // Ensure function is called properly
   getIncomeCategories(); // Ensure function is called properly
-  getPaymentMethods(); // Ensure function is called properly
+  getPaymentMethods();
+  console.log(user)// Ensure function is called properly
 });
 </script>
 

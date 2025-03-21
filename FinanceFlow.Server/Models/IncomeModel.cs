@@ -9,6 +9,9 @@ namespace FinanceFlow.Server.Models
 
         public required string Name { get; set; }
 
+        [ForeignKey("UserID")]
+        public required Guid UserID { get; set; }
+
         public required int StatusID { get; set; }  // Foreign key property
 
         public required int IncomeCategoryID { get; set; }  // Foreign key property
@@ -34,5 +37,7 @@ namespace FinanceFlow.Server.Models
         public ICollection<IncomePaymentModel>? IncomePayment { get; set; } = new List<IncomePaymentModel>();
 
         public TransactionModel? Transaction { get; set; }
+
+        public UserModel? User { get; set; }
     }
 }

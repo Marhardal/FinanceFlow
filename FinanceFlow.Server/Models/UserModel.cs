@@ -24,5 +24,7 @@ namespace FinanceFlow.Server.Models
         public DateOnly DOB { get; set; } = DateOnly.MinValue;
 
         public DateTime createat { get; set; } = DateTime.Now;
+
+        public ICollection<IncomeModel>? Incomes { get; set; }
     }
 }

@@ -128,7 +128,7 @@ namespace FinanceFlow.Server.Controllers
 
             var transaction = _context.Transactions.Where(b => b.incomeid == incomeModel.Id);
 
-            if (transaction is null && (incomeModel.Status != null || incomeModel.StatusID == 2))
+            if (incomeModel.Status != null || incomeModel.StatusID == 2)
             {
                 TransactionModel transactions = new TransactionModel();
 
