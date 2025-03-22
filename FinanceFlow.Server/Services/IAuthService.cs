@@ -5,8 +5,8 @@ namespace FinanceFlow.Server.Services
 {
     public interface IAuthService
     {
-        Task<UserDTO> AuthenticateAsync(UserDTO user);
-
+        Task<TokenRefresh> AuthenticateAsync(UserDTO user);
+        Task<TokenRefresh> RefreshTokensAsync(RefreshTokenDTO token);
         Task<UserModel?> CreateUserAsync(UserDTO user);
     }
 }

@@ -427,6 +427,23 @@ namespace FinanceFlow.Server.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            id = new Guid("b90a5c85-3d63-4e80-aeb9-ecf661d1384d"),
+                            name = "Admin"
+                        },
+                        new
+                        {
+                            id = new Guid("0f0a5c85-3d63-4e80-aeb9-ecf661d1384d"),
+                            name = "Subscribed"
+                        },
+                        new
+                        {
+                            id = new Guid("1e0a5c85-3d63-4e80-aeb9-ecf661d1384d"),
+                            name = "Freemium"
+                        });
                 });
 
             modelBuilder.Entity("FinanceFlow.Server.Models.StatusModel", b =>
@@ -539,6 +556,12 @@ namespace FinanceFlow.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("createat")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("refreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("refreshTokenExpirelyToken")
                         .HasColumnType("datetime2");
 
                     b.HasKey("id");

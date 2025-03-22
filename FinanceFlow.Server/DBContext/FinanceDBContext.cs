@@ -1,4 +1,5 @@
 ﻿using FinanceFlow.Server.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -20,13 +21,13 @@ namespace FinanceFlow.Server.DBContext
         public DbSet<StatusModel> Statuses { get; set; }
 
         public DbSet<ItemsModel> Items { get; set; }
-        
+
         public DbSet<IncomeCategoryModel> Incomes { get; set; }
 
         public DbSet<ExpenseModel> Expenses { get; set; }
 
         public DbSet<BudgetModel> Budgets { get; set; }
-        
+
         public DbSet<IncomeModel> Income { get; set; }
 
         public DbSet<IncomePaymentModel> incomePayment { get; set; }
@@ -134,11 +135,11 @@ namespace FinanceFlow.Server.DBContext
                 new IncomeCategoryModel { id = 6, name = "Gifts" }
             );
 
-            //modelBuilder.Entity<RolesModel>().HasData(
-            //        new RolesModel { id = new Guid(), name = "Admin" },
-            //        new RolesModel { id = new Guid(), name = "Subscribed" },
-            //        new RolesModel { id = new Guid(), name = "Freemium" }
-            //    );
+            modelBuilder.Entity<RolesModel>().HasData(
+                new RolesModel { id = Guid.Parse("b90a5c85-3d63-4e80-aeb9-ecf661d1384d"), name = "Admin" },
+                new RolesModel { id = Guid.Parse("0f0a5c85-3d63-4e80-aeb9-ecf661d1384d"), name = "Subscribed" },
+                new RolesModel { id = Guid.Parse("1e0a5c85-3d63-4e80-aeb9-ecf661d1384d"), name = "Freemium" }
+            );
 
             modelBuilder.Entity<PaymentMethodModel>().HasData(
                 new PaymentMethodModel { id = 1, Name = "Cash", },

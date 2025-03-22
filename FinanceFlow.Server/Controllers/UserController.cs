@@ -16,7 +16,7 @@ namespace FinanceFlow.Server.Controllers
     [ApiController]
     public class UserController(IAuthService service) : ControllerBase
     {
-                
+
         [HttpPost("register")]
         public async Task<ActionResult<UserModel>> Register(UserDTO request)
         {
@@ -31,17 +31,28 @@ namespace FinanceFlow.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDTO>> Login(UserDTO userDTO)
+        public async Task<ActionResult<TokenRefresh>> Login(UserDTO userDTO)
         {
-            var usertoken = await service.AuthenticateAsync(userDTO);
+            var token = await service.AuthenticateAsync(userDTO);
 
-            if (usertoken is null)
+            if (token is null)
             {
                 return BadRequest("Either Password or Username is wrong");
             }
 
-            return Ok(usertoken);
+            return Ok(token);
         }
 
+
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult<TokenRefresh>> RefreshToken(RefreshTokenDTO request)
+        {
+            var result = await service.RefreshTokensAsync(request);
+            if (result is null || result.AccessToken is null || request.refreshToken is null)
+            {
+                return Unauthorized();
+            }
+            return Ok(result);
+        }
     }
-}
+ }

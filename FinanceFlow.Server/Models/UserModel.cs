@@ -28,8 +28,14 @@ namespace FinanceFlow.Server.Models
 
         public DateTime createat { get; set; } = DateTime.Now;
 
+        public string? refreshToken { get; set; }
+
+        public DateTime? refreshTokenExpirelyToken { get; set; }
+
         public ICollection<IncomeModel>? Incomes { get; set; }
 
         public RolesModel? Roles { get; set; }
+
+
     }
 }

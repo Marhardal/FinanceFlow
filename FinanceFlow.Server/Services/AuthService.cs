@@ -1,7 +1,6 @@
 ﻿using Azure;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.DTOs;
-using FinanceFlow.Server.Migrations;
 using FinanceFlow.Server.Models;
 using iText.Commons.Actions.Contexts;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -10,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace FinanceFlow.Server.Services
@@ -17,7 +17,7 @@ namespace FinanceFlow.Server.Services
     public class AuthService(FinanceDBContext context, IConfiguration configuration) : IAuthService
     {
 
-        public async Task<UserDTO> AuthenticateAsync(UserDTO request)
+        public async Task<TokenRefresh> AuthenticateAsync(UserDTO request)
         {
             var user = await context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
 
@@ -36,15 +36,38 @@ namespace FinanceFlow.Server.Services
             {
                 Token = claim
             };
-            userDTO.FirstName = user.FirstName;
-            userDTO.Surname = user.Surname;
-            userDTO.Username = user.Username;
-            userDTO.Email = user.Email;
-            userDTO.DOB = user.DOB;
-            userDTO.User = user;
-            return userDTO;
+            //userDTO.FirstName = user.FirstName;
+            //userDTO.Surname = user.Surname;
+            //userDTO.Username = user.Username;
+            //userDTO.Email = user.Email;
+            //userDTO.DOB = user.DOB;
+
+
+            return await createTokenResponce(user);
         }
 
+        private async Task<TokenRefresh>  createTokenResponce(UserModel user)
+        {
+            return new TokenRefresh
+            {
+                AccessToken = generateToken(),
+                RefrshToken = await generateAndSaveRefreshTokenasync(user)
+            };
+        }
+
+        public async Task<TokenRefresh> RefreshTokensAsync(RefreshTokenDTO request)
+        {
+            var token = ValidateRefreshTokenAsync(request.UserId, request.refreshToken);
+
+            if (token is null)
+            {
+                return null;
+            }
+
+            var user = await context.Users.FindAsync(request.UserId);
+
+            return await createTokenResponce(user);
+        }
 
         private string Claim(UserModel user)
         {
@@ -64,6 +87,33 @@ namespace FinanceFlow.Server.Services
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string generateToken()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
+        private async Task<UserModel?> ValidateRefreshTokenAsync(Guid UserId, string refreshToken)
+        {
+            var user = await context.Users.FindAsync(UserId);
+            if (user is null || user.refreshToken != refreshToken || user.refreshTokenExpirelyToken <= DateTime.UtcNow)
+            {
+                return null;
+            }
+            return user;
+        }
+
+        public async Task<string> generateAndSaveRefreshTokenasync(UserModel user)
+        {
+            var refreshToken = generateToken();
+            user.refreshToken = refreshToken;
+            user.refreshTokenExpirelyToken = DateTime.UtcNow.AddDays(1);
+            await context.SaveChangesAsync();
+            return refreshToken;
         }
 
         public async Task<UserModel?> CreateUserAsync(UserDTO request)
@@ -93,5 +143,6 @@ namespace FinanceFlow.Server.Services
 
             return user;
         }
+
     }
 }
