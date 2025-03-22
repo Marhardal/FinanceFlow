@@ -543,8 +543,8 @@ namespace FinanceFlow.Server.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("Rolesid")
                         .HasColumnType("uniqueidentifier");

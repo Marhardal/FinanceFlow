@@ -8,7 +8,7 @@ namespace FinanceFlow.Server.Models
         public Guid id { get; set; }
 
         [ForeignKey("ReleId")]
-        public string? RoleId { get; set; }
+        public Guid RoleId { get; set; }
         [Required]
         public string? FirstName { get; set; }
 

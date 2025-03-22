@@ -36,13 +36,8 @@ namespace FinanceFlow.Server.Services
             {
                 Token = claim
             };
-            //userDTO.FirstName = user.FirstName;
-            //userDTO.Surname = user.Surname;
-            //userDTO.Username = user.Username;
-            //userDTO.Email = user.Email;
-            //userDTO.DOB = user.DOB;
 
-
+            return userDTO;
             return await createTokenResponce(user);
         }
 
@@ -51,7 +46,9 @@ namespace FinanceFlow.Server.Services
             return new TokenRefresh
             {
                 AccessToken = generateToken(),
-                RefrshToken = await generateAndSaveRefreshTokenasync(user)
+                RefrshToken = await generateAndSaveRefreshTokenasync(user),
+                UserID = user.id,
+                RoleID = user.RoleId
             };
         }
 
@@ -91,7 +88,7 @@ namespace FinanceFlow.Server.Services
 
         public string generateToken()
         {
-            var randomNumber = new byte[32];
+            var randomNumber = new byte[64];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
