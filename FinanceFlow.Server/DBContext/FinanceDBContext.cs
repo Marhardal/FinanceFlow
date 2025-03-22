@@ -36,8 +36,6 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<UserModel> Users { get; set; }
 
-        public DbSet<RolesModel> Roles { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -103,10 +101,6 @@ namespace FinanceFlow.Server.DBContext
                 .HasForeignKey(i => i.UserID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //modelBuilder.Entity<UserModel>()
-            //    .HasOne(u => u.Roles)
-            //    .WithOne(r => r.User);
-
             modelBuilder.Entity<ItemsCategoriesModel>().HasData(
                 new ItemsCategoriesModel { Id = 1, Name = "Housing" },
                 new ItemsCategoriesModel { Id = 2, Name = "Utilities" },
@@ -125,6 +119,7 @@ namespace FinanceFlow.Server.DBContext
                 new StatusModel { id = 2, Name = "Approved" },
                 new StatusModel { id = 3, Name = "Rejected" }
             );
+
 
             modelBuilder.Entity<IncomeCategoryModel>().HasData(
                 new IncomeCategoryModel { id = 1, name = "Salary"/*, Description = "Monthly salary from employment" */},

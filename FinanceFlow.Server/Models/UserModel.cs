@@ -1,5 +1,4 @@
 ﻿using Microsoft.Build.Framework;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinanceFlow.Server.Models
 {
@@ -7,8 +6,6 @@ namespace FinanceFlow.Server.Models
     {
         public Guid id { get; set; }
 
-        [ForeignKey("ReleId")]
-        public string? RoleId { get; set; }
         [Required]
         public string? FirstName { get; set; }
 
