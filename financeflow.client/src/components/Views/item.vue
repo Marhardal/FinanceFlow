@@ -38,13 +38,13 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded" v-for="item in items"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800" v-for="item in items"
                       :key="item.id">
                       <!-- dark:text-neutral-200 -->
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 ">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ item.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ item.itemCategory.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ item.measurement }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{{ item.itemCategory.name }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{{ item.measurement }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                         <router-link :to="{ path: 'item/edit/' + item.id }"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
