@@ -80,14 +80,18 @@ const updateBudget = async () => {
     console.log(input);
   }
 }
+
+const userID = localStorage.getItem("authUserID");
+
 const input = reactive({
   name: '',
   statusID: '',
   incomeID: '',
   amount: '',
-  spentamount: '',
+  spentamount: 0,
   remindon: '',
   description: '',
+  userID: userID
 });
 
 onMounted(() => {

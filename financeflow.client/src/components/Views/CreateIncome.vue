@@ -83,8 +83,7 @@ const getPaymentMethods = async () => {
 };
 
 const createIncome = async () => {
-
-  try {
+try {
     const response = await apiClient.post('Incomes', input );
 
     if (response.status === 201) {
@@ -98,7 +97,7 @@ const createIncome = async () => {
   }
 }
 
-const userID = localStorage.getItem("authUser");
+const userID = localStorage.getItem("authUserID");
 
 const input = reactive({
   name: '',
