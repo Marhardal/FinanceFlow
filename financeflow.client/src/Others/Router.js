@@ -33,7 +33,7 @@ function guest(to, from) {
 }
 
 const routes = [
-  { path: '/', component: index },
+  { path: '/', component: index, beforeEnter: auth },
       { path: '/transactions', component: Transactions, beforeEnter: auth },
       { path: '/incomes', component: Incomes, beforeEnter: auth },
       { path: '/income/create', component: CreateIncome, beforeEnter: auth },

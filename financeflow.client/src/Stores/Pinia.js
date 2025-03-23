@@ -20,7 +20,7 @@ export const useStore = defineStore("store", {
           username,
           password,
         });
-        console.log(data.data.user)
+        console.log(data.data)
         this.authToken = data.data.accessToken;
         this.authUserID = data.data.userID;
         this.authRole = data.data.roleID;

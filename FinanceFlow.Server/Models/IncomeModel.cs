@@ -10,7 +10,7 @@ namespace FinanceFlow.Server.Models
         public required string Name { get; set; }
 
         [ForeignKey("UserID")]
-        public required Guid UserID { get; set; }
+        public required int UserID { get; set; }
 
         public required int StatusID { get; set; }  // Foreign key property
 

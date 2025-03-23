@@ -23,10 +23,13 @@ instance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+      const authUserID = localStorage.getItem("authUserID");
       const refreshToken = localStorage.getItem("authRefreshToken");
-      const res = await instance.post("/user/refreshToken", {
-        refreshToken,
+      console.log(authUserID + " " + refreshToken);
+      originalRequest._retry = true;
+      const res = await instance.post("/user/refresh-Token", {
+        authUserID,
+        refreshToken
       });
       if (res.status === 200) {
         localStorage.setItem("authToken", res.data.accessToken);

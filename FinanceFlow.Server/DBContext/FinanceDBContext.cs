@@ -135,11 +135,11 @@ namespace FinanceFlow.Server.DBContext
                 new IncomeCategoryModel { id = 6, name = "Gifts" }
             );
 
-            modelBuilder.Entity<RolesModel>().HasData(
-                new RolesModel { id = Guid.Parse("b90a5c85-3d63-4e80-aeb9-ecf661d1384d"), name = "Admin" },
-                new RolesModel { id = Guid.Parse("0f0a5c85-3d63-4e80-aeb9-ecf661d1384d"), name = "Subscribed" },
-                new RolesModel { id = Guid.Parse("1e0a5c85-3d63-4e80-aeb9-ecf661d1384d"), name = "Freemium" }
-            );
+            //modelBuilder.Entity<RolesModel>().HasData(
+            //    new RolesModel { name = "Admin" },
+            //    new RolesModel { name = "Subscribed" },
+            //    new RolesModel { name = "Freemium" }
+            //);
 
             modelBuilder.Entity<PaymentMethodModel>().HasData(
                 new PaymentMethodModel { id = 1, Name = "Cash", },

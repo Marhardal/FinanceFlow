@@ -5,10 +5,10 @@ namespace FinanceFlow.Server.Models
 {
     public class UserModel
     {
-        public Guid id { get; set; }
+        public int id { get; set; }
 
         [ForeignKey("ReleId")]
-        public Guid RoleId { get; set; }
+        public int RoleId { get; set; }
         [Required]
         public string? FirstName { get; set; }
 

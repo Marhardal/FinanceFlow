@@ -37,15 +37,19 @@ namespace FinanceFlow.Server.Services
                 Token = claim
             };
 
-            return userDTO;
-            return await createTokenResponce(user);
+            //return userDTO;
+            return await createTokenResponce(user, claim);
         }
 
-        private async Task<TokenRefresh>  createTokenResponce(UserModel user)
+        private async Task<TokenRefresh>  createTokenResponce(UserModel user, string token)
         {
+            if (token is null)
+            {
+                token = generateToken();
+            }
             return new TokenRefresh
             {
-                AccessToken = generateToken(),
+                AccessToken = token,
                 RefrshToken = await generateAndSaveRefreshTokenasync(user),
                 UserID = user.id,
                 RoleID = user.RoleId
@@ -63,7 +67,7 @@ namespace FinanceFlow.Server.Services
 
             var user = await context.Users.FindAsync(request.UserId);
 
-            return await createTokenResponce(user);
+            return await createTokenResponce(user, null);
         }
 
         private string Claim(UserModel user)
@@ -94,7 +98,7 @@ namespace FinanceFlow.Server.Services
             return Convert.ToBase64String(randomNumber);
         }
 
-        private async Task<UserModel?> ValidateRefreshTokenAsync(Guid UserId, string refreshToken)
+        private async Task<UserModel?> ValidateRefreshTokenAsync(int UserId, string refreshToken)
         {
             var user = await context.Users.FindAsync(UserId);
             if (user is null || user.refreshToken != refreshToken || user.refreshTokenExpirelyToken <= DateTime.UtcNow)

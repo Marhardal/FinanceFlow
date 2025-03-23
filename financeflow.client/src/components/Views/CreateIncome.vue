@@ -97,6 +97,9 @@ const createIncome = async () => {
     console.log(input);
   }
 }
+
+const userID = localStorage.getItem("authUser");
+
 const input = reactive({
   name: '',
   statusid: '',
@@ -104,7 +107,8 @@ const input = reactive({
   amount: '',
   date: '',
   description: '',
-  paymentMethodID: [],
+  // paymentMethodID: [],
+  userID: userID,
 });
 
 onMounted(() => {
