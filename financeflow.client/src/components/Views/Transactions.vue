@@ -29,10 +29,10 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-neutral-700" v-if="Transactions != null">
-                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded"
+                    <tr class="px-6 py-4 whitespace-nowrap text-sm font-medium"
                       v-for="transition in Transactions" :key="transition.id">
                       <!-- dark:text-neutral-200 -->
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-if="transition.type == 0">Incomes
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="transition.type == 0">Incomes
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-else-if="transition.type == 1">
                         Budgets</td>
