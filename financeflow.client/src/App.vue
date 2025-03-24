@@ -55,6 +55,9 @@ const router = useRouter();
       <RouterLink to="/items" class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
         <ShoppingCartIcon class="icon size-5" />
       </RouterLink>
+      <RouterLink to="/investment" class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
+        <ArrowsUpDownIcon class="icon size-5" />
+      </RouterLink>
       <a class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
         <Cog6ToothIcon class="icon size-5" />
       </a>
