@@ -67,7 +67,7 @@ namespace FinanceFlow.Server.Services
                 return null;
             }
 
-            var user = await context.Users.FindAsync(request.UserId);
+            var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.id == request.UserId);
 
             return await createTokenResponce(user, null);
         }
@@ -102,7 +102,7 @@ namespace FinanceFlow.Server.Services
 
         private async Task<UserModel?> ValidateRefreshTokenAsync(int UserId, string refreshToken)
         {
-            var user = await context.Users.FindAsync(UserId);
+            var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.id == UserId);
             if (user is null || user.refreshToken != refreshToken || user.refreshTokenExpirelyToken <= DateTime.UtcNow)
             {
                 return null;

@@ -50,9 +50,9 @@ const routes = [
       { path: '/Budget/create', component: CreateBudget, beforeEnter: auth },
       { path: '/Budget/edit/:id', component: EditBudget, beforeEnter: auth },
       { path: '/Budget/details/:id', component: DetailsBudget, beforeEnter: auth },
+      { path: '/investment', component: Investment, beforeEnter: auth},
       { path: '/register', component: Register, beforeEnter: guest},
       { path: '/login', component: Login, beforeEnter: guest},
-      { path: '/investment', component: Investment, beforeEnter: guest},
 ];
 
 const router = createRouter({
