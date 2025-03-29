@@ -26,7 +26,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ItemsCategoriesModel>>> Get()
         {
-            return Ok(await _dbContext.ItemCategories.ToListAsync());
+            return Ok(await _dbContext.itemCategories.ToListAsync());
         }
 
         [Authorize]
@@ -34,7 +34,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            var category = await _dbContext.ItemCategories.FindAsync(id);
+            var category = await _dbContext.itemCategories.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -51,7 +51,7 @@ namespace FinanceFlow.Server.Controllers
             {
                 return BadRequest();
             }
-            _dbContext.ItemCategories.Add(categories);
+            _dbContext.itemCategories.Add(categories);
             await _dbContext.SaveChangesAsync();
             return CreatedAtAction(nameof(Get), new { id = categories.Id }, categories);
         }
@@ -61,7 +61,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, ItemsCategoriesModel expenseCategories)
         {
-            var category = await _dbContext.ItemCategories.FindAsync(id);
+            var category = await _dbContext.itemCategories.FindAsync(id);
 
             if (category is null)
                 return NotFound();
@@ -78,12 +78,12 @@ namespace FinanceFlow.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var category = await _dbContext.ItemCategories.FindAsync(id);
+            var category = await _dbContext.itemCategories.FindAsync(id);
 
             if (category is null)
                 return NotFound();
 
-            _dbContext.ItemCategories.Remove(category);
+            _dbContext.itemCategories.Remove(category);
 
             await _dbContext.SaveChangesAsync();
 

@@ -12,7 +12,7 @@ namespace FinanceFlow.Server.DBContext
 
         }
 
-        public DbSet<ItemsCategoriesModel> ItemCategories { get; set; }
+        public DbSet<ItemsCategoriesModel> itemCategories { get; set; }
 
         public DbSet<IncomeCategoryModel> incomeCategories { get; set; }
 
@@ -22,13 +22,11 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<ItemsModel> Items { get; set; }
 
-        public DbSet<IncomeCategoryModel> Incomes { get; set; }
-
         public DbSet<ExpenseModel> Expenses { get; set; }
 
         public DbSet<BudgetModel> Budgets { get; set; }
 
-        public DbSet<IncomeModel> Income { get; set; }
+        public DbSet<IncomeModel> Incomes { get; set; }
 
         public DbSet<IncomePaymentModel> incomePayment { get; set; }
 
@@ -37,6 +35,8 @@ namespace FinanceFlow.Server.DBContext
         public DbSet<UserModel> Users { get; set; }
 
         public DbSet<RolesModel> Roles { get; set; }
+
+        public DbSet<InvestmentTypeModel> investmentTypes { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -154,6 +154,18 @@ namespace FinanceFlow.Server.DBContext
                 new PaymentMethodModel { id = 10, Name = "Online Payment Gateways", }
             );
 
+            modelBuilder.Entity<InvestmentTypeModel>().HasData(
+                new InvestmentTypeModel { id = 1, name = "Stock and Equities" },
+                new InvestmentTypeModel { id = 2, name = "Bond" },
+                new InvestmentTypeModel { id = 3, name = "Mutual Fund" },
+                new InvestmentTypeModel { id = 4, name = "Cryptocurrency" },
+                new InvestmentTypeModel { id = 5, name = "Real Estate" },
+                new InvestmentTypeModel { id = 6, name = "Money Morket" },
+                new InvestmentTypeModel { id = 7, name = "Pension Funds" },
+                new InvestmentTypeModel { id = 8, name = "Agriculture" }
+                );
         }
+
+
     }
 }
