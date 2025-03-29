@@ -48,21 +48,8 @@
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ Investment.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ Investment.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <span v-if="Investment.status.name == 'Approved'"
-                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-300">
-                          {{ Investment.status.name }}
-                        </span>
-                        <span v-else-if="Investment.status.name == 'Pending'"
-                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-300">
-                          {{ Investment.status.name }}
-                        </span>
-                        <span v-else-if="Investment.status.name == 'Rejected'"
-                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-400">
-                          {{ Investment.status.name }}
-                        </span>
-                      </td>
+                      {{ Investment.currentAmount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
+
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ Investment.InvestmentCategory.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">

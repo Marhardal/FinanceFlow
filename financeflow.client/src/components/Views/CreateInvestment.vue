@@ -17,9 +17,9 @@
           validation="required" />
         <FormKit label="Amount" placeholder="Enter Investment Amount." type="number" v-model="input.currentAmount"
           validation="required" />
-        <FormKit label="text" placeholder="Enter Investment Company." type="number" v-model="input.company"
+        <FormKit label="Company" placeholder="Enter Investment Company." type="text" v-model="input.company"
           validation="required" />
-        <FormKit label="text" placeholder="Enter Investment Reference." type="number" v-model="input.Reference"
+        <FormKit label="Reference" placeholder="Enter Investment Reference." type="text" v-model="input.Reference"
           validation="required" />
           <FormKit label="Percentage" placeholder="Enter Investment Percentage." type="number" v-model="input.percentage"
           validation="required" />
