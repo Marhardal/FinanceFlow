@@ -1,5 +1,5 @@
 <script setup>
-  import { HomeIcon, ArrowsUpDownIcon, ChartPieIcon, WalletIcon, ShoppingCartIcon, Cog6ToothIcon, UserCircleIcon, BellIcon } from '@heroicons/vue/24/solid';
+  import { HomeIcon, ArrowsUpDownIcon, ChartPieIcon, WalletIcon, ShoppingCartIcon, Cog6ToothIcon, UserCircleIcon, BellIcon, ArrowTrendingUpIcon } from '@heroicons/vue/24/solid';
   import { RouterLink, RouterView } from 'vue-router'
   import { useStore } from '@/Stores/Pinia';
 import { useToast } from 'vue-toast-notification';
@@ -56,7 +56,7 @@ const router = useRouter();
         <ShoppingCartIcon class="icon size-5" />
       </RouterLink>
       <RouterLink to="/investment" class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
-        <ArrowsUpDownIcon class="icon size-5" />
+        <ArrowTrendingUpIcon class="icon size-5" />
       </RouterLink>
       <a class="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
         <Cog6ToothIcon class="icon size-5" />

@@ -1,7 +1,7 @@
 <template>
   <!-- component -->
   <div class="bg-white p-8 rounded-md w-full">
-    <ListHeader Header="Investment" SubHeader="Incomes List" Navigate="invest/create">
+    <ListHeader Header="Investment" SubHeader="Investments List" Navigate="investment/Create">
       <div class="flex bg-gray-50 items-center p-2 rounded-md outline-2 w-full">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd"
@@ -9,7 +9,7 @@
             clip-rule="evenodd" />
         </svg>
         <input class="bg-gray-50 ml-1 block outline-none flex-grow" type="text" name="" id=""
-          placeholder="Search for items" v-model="search" @keyup="getSearchedIncomes()">
+          placeholder="Search for Investments." v-model="search" @keyup="getSearchedInvestments()">
       </div>
     </ListHeader>
     <div>
@@ -42,39 +42,39 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800" v-for="Income in Incomes"
-                      :key="Income.id">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800" v-for="Investment in Investments"
+                      :key="Investment.id">
                       <!-- dark:text-neutral-200 -->
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {{ Income.name }}</td>
+                        {{ Investment.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm">
-                      {{ Income.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
+                      {{ Investment.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <span v-if="Income.status.name == 'Approved'"
+                        <span v-if="Investment.status.name == 'Approved'"
                           class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-300">
-                          {{ Income.status.name }}
+                          {{ Investment.status.name }}
                         </span>
-                        <span v-else-if="Income.status.name == 'Pending'"
+                        <span v-else-if="Investment.status.name == 'Pending'"
                           class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-300">
-                          {{ Income.status.name }}
+                          {{ Investment.status.name }}
                         </span>
-                        <span v-else-if="Income.status.name == 'Rejected'"
+                        <span v-else-if="Investment.status.name == 'Rejected'"
                           class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-400">
-                          {{ Income.status.name }}
+                          {{ Investment.status.name }}
                         </span>
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {{ Income.incomeCategory.name }}</td>
+                        {{ Investment.InvestmentCategory.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {{ dayjs(Income.date).fromNow() }}</td>
+                        {{ dayjs(Investment.date).fromNow() }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                        <router-link :to="{ path: 'income/edit/' + Income.id }"
+                        <router-link :to="{ path: 'Investment/edit/' + Investment.id }"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
                           |</router-link>
-                        <router-link :to="{ path: 'income/details/'+ Income.id }"
+                        <router-link :to="{ path: 'Investment/details/'+ Investment.id }"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
                           |</router-link>
-                        <button type="button" @click="deleteIncome(Income.id)"
+                        <button type="button" @click="deleteInvestment(Investment.id)"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">
                           Delete</button>
                       </td>
@@ -121,44 +121,44 @@ const $toast = useToast();
 const router = useRouter();
 
 const search = ref('');
-const Incomes = ref([]);
+const Investments = ref([]);
 
-const getIncomes = async () => {
+const getInvestments = async () => {
   try {
-    const response = await apiClient.get('incomes')
-    Incomes.value = response.data;
+    const response = await apiClient.get('Investments')
+    Investments.value = response.data;
   } catch (error) {
-    console.error("Error fetching Incomes:", error);
+    console.error("Error fetching Investments:", error);
   }
 };
 
-const getSearchedIncomes = async () => {
+const getSearchedInvestments = async () => {
   try {
-    const response = await apiClient.get('incomes?search=' + search.value)
-    Incomes.value = response.data;
+    const response = await apiClient.get('Investments?search=' + search.value)
+    Investments.value = response.data;
   } catch (error) {
-    console.error("Error fetching Incomes:", error);
+    console.error("Error fetching Investments:", error);
   }
 };
 
-const deleteIncome = async (id) => {
+const deleteInvestment = async (id) => {
   try {
-    const response = await apiClient.delete('incomes/' + id);
+    const response = await apiClient.delete('Investments/' + id);
     if (response.status === 200) {
-      getIncomes();
-      $toast.success('Income Deleted Successfully!');
-      router.push('/incomes');
+      getInvestments();
+      $toast.success('Investment Deleted Successfully!');
+      router.push('/Investments');
     }
     console.log(response.status);
   } catch (error) {
 
-    $toast.error('Error Deleting Income!');
-    console.error("Error deleting Income:", error);
+    $toast.error('Error Deleting Investment!');
+    console.error("Error deleting Investment:", error);
   }
 };
 
 onMounted(() => {
-  getIncomes();
+  getInvestments();
 });
 </script>
 

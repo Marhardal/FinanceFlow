@@ -19,6 +19,7 @@ import EditExpense from '@/components/Views/EditExpense.vue'
 import Register from '@/components/Views/Register.vue'
 import Login from '@/components/Views/Login.vue'
 import Investment from '@/components/Views/Investment.vue'
+import CreateInvestment from '@/components/Views/CreateInvestment.vue'
 
 
 function auth(to, from) {
@@ -51,6 +52,7 @@ const routes = [
       { path: '/Budget/edit/:id', component: EditBudget, beforeEnter: auth },
       { path: '/Budget/details/:id', component: DetailsBudget, beforeEnter: auth },
       { path: '/investment', component: Investment, beforeEnter: auth},
+      { path: '/investment/Create', component: CreateInvestment, beforeEnter: auth},
       { path: '/register', component: Register, beforeEnter: guest},
       { path: '/login', component: Login, beforeEnter: guest},
 ];
