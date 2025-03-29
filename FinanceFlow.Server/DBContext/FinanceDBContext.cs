@@ -38,6 +38,8 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<InvestmentTypeModel> investmentTypes { get; set; } 
 
+        public DbSet<InvestmentModel> Investments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -48,10 +50,10 @@ namespace FinanceFlow.Server.DBContext
                 .HasForeignKey(i => i.ItemCategoryId);
 
             modelBuilder.Entity<IncomeModel>()
-        .HasOne(i => i.Status)
-        .WithMany(s => s.Incomes)
-        .HasForeignKey(i => i.StatusID)
-        .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(i => i.Status)
+                .WithMany(s => s.Incomes)
+                .HasForeignKey(i => i.StatusID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<IncomeModel>()
                 .HasOne(i => i.IncomeCategory)
@@ -88,20 +90,33 @@ namespace FinanceFlow.Server.DBContext
                 .HasForeignKey(i => i.IncomeID);
 
             modelBuilder.Entity<TransactionModel>()
-    .HasOne(i => i.Income)
-    .WithOne(t => t.Transaction)
-    .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(i => i.Income)
+                .WithOne(t => t.Transaction)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<TransactionModel>()
-    .HasOne(b => b.Budget)
-    .WithOne(t => t.Transaction)
-    .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(b => b.Budget)
+                .WithOne(t => t.Transaction)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<IncomeModel>()
                 .HasOne(i => i.User)
                 .WithMany(u => u.Incomes)
                 .HasForeignKey(i => i.UserID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<InvestmentModel>()
+                .HasOne(s => s.Status)
+                .WithMany(e => e.Investments)
+                .HasForeignKey(s => s.StatusID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<InvestmentModel>()
+                .HasOne(i => i.investmentType)
+                .WithMany(c => c.Investments)
+                .HasForeignKey(i => i.investTypeID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //modelBuilder.Entity<UserModel>()
             //    .HasOne(u => u.Roles)

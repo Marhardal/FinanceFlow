@@ -10,40 +10,35 @@ namespace FinanceFlow.Server.Models
 
         public required string? Name { get; set; }
 
+        [ForeignKey("userId")]
         public required int UserId { get; set; }
 
         [ForeignKey("investTypeID")]
         public required int investTypeID { get; set; }
 
-        public required Status Status { get; set; }
+        [ForeignKey("StatusID")]
+        public required int StatusID { get; set; }
 
         [Precision(18, 2)]
         public required decimal? CurrentAmount { get; set; }
 
         public required decimal Percentage { get; set; }
 
+        public string? Description { get; set; }
+
         public required DateOnly Date { get; set; }
 
         public DateTime createdOn { get; set; } = DateTime.Now;
 
-        public InvestmentModel? Investment { get; set; }
+        public InvestmentTypeModel? investmentType { get; set; }
 
+        public ICollection<InvestmentTypeModel>? InvestmentTypes { get; set; }
 
+        public StatusModel? Status { get; set; }
+
+        public ICollection<StatusModel> Statuses { get; set; } = new List<StatusModel>();
+
+        public UserModel? User { get; set; }
     }
 
-    public enum Status
-    {
-        Pending,
-        Approval
-    }
-
-    //public enum Type
-    //{
-    //    Stock,
-    //    Bond,
-    //    MutualFund,
-    //    ETF,
-    //    Crypto,
-    //    RealEstate,
-    //}
 }
