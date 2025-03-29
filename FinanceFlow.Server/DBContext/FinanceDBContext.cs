@@ -39,6 +39,8 @@ namespace FinanceFlow.Server.DBContext
         public DbSet<InvestmentTypeModel> investmentTypes { get; set; } 
 
         public DbSet<InvestmentModel> Investments { get; set; }
+        
+        public DbSet<InvestModel> Invests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -116,6 +118,19 @@ namespace FinanceFlow.Server.DBContext
                 .HasOne(i => i.investmentType)
                 .WithMany(c => c.Investments)
                 .HasForeignKey(i => i.investTypeID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<InvestModel>()
+                .HasOne(s => s.Status)
+                .WithMany(e => e.Invests)
+                .HasForeignKey(s => s.StatusID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<InvestModel>()
+                .HasOne(i => i.Investment)
+                .WithMany(c => c.Invests)
+                .HasForeignKey(i => i.InvestmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //modelBuilder.Entity<UserModel>()

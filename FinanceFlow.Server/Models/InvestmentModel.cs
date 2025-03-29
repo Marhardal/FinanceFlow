@@ -37,6 +37,10 @@ namespace FinanceFlow.Server.Models
         public StatusModel? Status { get; set; }
 
         public ICollection<StatusModel> Statuses { get; set; } = new List<StatusModel>();
+        
+        public InvestModel? Invest { get; set; }
+
+        public ICollection<InvestModel> Invests { get; set; } = new List<InvestModel>();
 
         public UserModel? User { get; set; }
     }
