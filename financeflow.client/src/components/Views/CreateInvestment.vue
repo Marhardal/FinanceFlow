@@ -5,7 +5,7 @@
         <h2 class="text-3xl md:text-4xl font-bold mb-2">Create a Investment</h2>
         <h2 class="text-2xl md:text-2xl text-neutral-600 font-semibold mb-2">Fill in all Fields.</h2>
       </div>
-      <FormKit type="form" submit-label="Create" @submit="updateInvestment" :submit-attrs="{
+      <FormKit type="form" submit-label="Create" @submit="createInvestment" :submit-attrs="{
         inputClass: 'py-3 px-4 block w-full border-gray-500 rounded text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-300 dark:border-gray-500 dark:text-neutral-700 dark:placeholder-neutral-500 dark:focus:ring-neutral-600',
         wrapperClass: 'space-y-5',
         'data-theme': `dark`,
@@ -13,15 +13,17 @@
       }">
         <FormKit label="Name" placeholder="Enter a Investment Name." type="text" v-model="input.name"
           validation="required" />
-        <FormKit type="select" label="Select Status" :options="Statuses" v-model="input.statusID"
+        <FormKit type="select" label="Select Investment Type." :options="InvestmentTypes" v-model="input.investTypeID"
           validation="required" />
-        <FormKit type="select" label="Select Income" :options="InvestmentTypes" v-model="input.incomeID"
+        <FormKit label="Amount" placeholder="Enter Investment Amount." type="number" v-model="input.currentAmount"
           validation="required" />
-        <FormKit label="Amount" placeholder="Enter Investment Amount." type="number" v-model="input.amount"
+        <FormKit label="text" placeholder="Enter Investment Company." type="number" v-model="input.company"
           validation="required" />
-        <!-- <FormKit label="Spent Amount" placeholder="Enter the Spent Amount on the Investment." type="number" v-model="input.spentamount"
-          validation="required" /> -->
-        <FormKit label="Date" placeholder="Enter Investment Date." type="date" v-model="input.remindon" validation="required" />
+        <FormKit label="text" placeholder="Enter Investment Reference." type="number" v-model="input.Reference"
+          validation="required" />
+          <FormKit label="Percentage" placeholder="Enter Investment Percentage." type="number" v-model="input.percentage"
+          validation="required" />
+        <FormKit label="Date" placeholder="Enter Investment Date." type="date" v-model="input.date" validation="required" />
         <FormKit label="Notes" placeholder="Enter Investment Notes." type="textarea" v-model="input.description"
           validation="required" />
       </FormKit>
@@ -66,7 +68,7 @@ const getInvestmentTypes = async () => {
   }
 };
 
-const updateInvestment = async () => {
+const createInvestment = async () => {
   try {
     const response = await apiClient.post('Investments', input);
 
@@ -85,13 +87,15 @@ const userID = localStorage.getItem("authUserID");
 
 const input = reactive({
   name: '',
-  statusID: '',
-  incomeID: '',
+  company: '',
+  Reference: '',
+  investTypeID: '',
   amount: '',
-  spentamount: 0,
-  remindon: '',
   description: '',
-  userID: userID
+  userId: userID,
+  currentAmount: 0,
+  percentage: 0,
+  date: '',
 });
 
 onMounted(() => {

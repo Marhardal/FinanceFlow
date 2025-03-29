@@ -108,11 +108,11 @@ namespace FinanceFlow.Server.DBContext
                 .OnDelete(DeleteBehavior.Cascade);
 
 
-            modelBuilder.Entity<InvestmentModel>()
-                .HasOne(s => s.Status)
-                .WithMany(e => e.Investments)
-                .HasForeignKey(s => s.StatusID)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<InvestmentModel>()
+            //    .HasOne(s => s.Status)
+            //    .WithMany(e => e.Investments)
+            //    .HasForeignKey(s => s.StatusID)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<InvestmentModel>()
                 .HasOne(i => i.investmentType)
