@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
+using System.Security.Claims;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -23,9 +24,29 @@ namespace FinanceFlow.Server.Controllers
 
         // GET: api/Investments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<InvestmentModel>>> GetInvestments()
+        public async Task<ActionResult<IEnumerable<InvestmentModel>>> GetInvestments(string search = null)
         {
-            return await _context.Investments.ToListAsync();
+            string userId = "1";
+            //string userId = HttpContext.User.Claims.FirstOrDefault(ClaimTypes.NameIdentifier.ToString())
+            if (userId is null)
+            {
+                return NoContent();
+            }
+            IQueryable<InvestmentModel> queryable = _context.Investments.Include(t => t.investmentType).Where(i => i.UserId == int.Parse(userId));
+            if (queryable is null)
+            {
+                return NoContent();
+            }
+            if (search is not null)
+            {
+                queryable = queryable.Where(i =>
+           i.Company.Contains(search) ||
+           i.Name.Contains(search) ||
+           i.Reference.Contains(search) ||
+           i.investmentType.name.Contains(search)
+       );
+            }
+            return await queryable.ToListAsync();
         }
 
         // GET: api/Investments/5

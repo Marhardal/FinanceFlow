@@ -29,9 +29,6 @@
                         Amount</th>
                       <th scope="col"
                         class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Status</th>
-                      <th scope="col"
-                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                         Category</th>
                       <th scope="col"
                         class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
@@ -44,14 +41,12 @@
                   <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
                     <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800" v-for="Investment in Investments"
                       :key="Investment.id">
-                      <!-- dark:text-neutral-200 -->
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ Investment.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm">
                       {{ Investment.currentAmount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
-
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {{ Investment.InvestmentCategory.name }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Investment.InvestmentType">
+                        {{ Investment.InvestmentType.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ dayjs(Investment.date).fromNow() }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
