@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -22,6 +23,7 @@ namespace FinanceFlow.Server.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: api/Investments
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InvestmentModel>>> GetInvestments(string search = null)
@@ -49,6 +51,7 @@ namespace FinanceFlow.Server.Controllers
             return await queryable.ToListAsync();
         }
 
+        [Authorize]
         // GET: api/Investments/5
         [HttpGet("{id}")]
         public async Task<ActionResult<InvestmentModel>> GetInvestmentModel(int id)
@@ -63,6 +66,7 @@ namespace FinanceFlow.Server.Controllers
             return investmentModel;
         }
 
+        [Authorize]
         // PUT: api/Investments/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -94,6 +98,7 @@ namespace FinanceFlow.Server.Controllers
             return NoContent();
         }
 
+        [Authorize]
         // POST: api/Investments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -105,6 +110,7 @@ namespace FinanceFlow.Server.Controllers
             return CreatedAtAction("GetInvestmentModel", new { id = investmentModel.id }, investmentModel);
         }
 
+        [Authorize]
         // DELETE: api/Investments/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInvestmentModel(int id)
