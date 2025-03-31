@@ -45,8 +45,8 @@
                         {{ Investment.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm">
                       {{ Investment.currentAmount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Investment.InvestmentType">
-                        {{ Investment.InvestmentType.name }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Investment.investmentType">
+                        {{ Investment.investmentType.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ dayjs(Investment.date).fromNow() }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">

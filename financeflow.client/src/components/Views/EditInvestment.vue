@@ -2,10 +2,10 @@
   <ContainerBg>
     <div class="mx-auto max-w-xl">
       <div class="text-start mb-8">
-        <h2 class="text-3xl md:text-4xl font-bold mb-2">Create an Investment</h2>
+        <h2 class="text-3xl md:text-4xl font-bold mb-2">Update an Investment</h2>
         <h2 class="text-2xl md:text-2xl text-neutral-600 font-semibold mb-2">Fill in all Fields.</h2>
       </div>
-      <FormKit type="form" submit-label="Create" @submit="createInvestment" :submit-attrs="{
+      <FormKit type="form" submit-label="Update" @submit="updateInvestment" :submit-attrs="{
         inputClass: 'py-3 px-4 block w-full border-gray-500 rounded text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-300 dark:border-gray-500 dark:text-neutral-700 dark:placeholder-neutral-500 dark:focus:ring-neutral-600',
         wrapperClass: 'space-y-5',
         'data-theme': `dark`,
@@ -37,12 +37,13 @@ import apiClient from '../../Others/apiClient'
 import { ref, onMounted, reactive } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const Statuses = ref([]);
 const InvestmentTypes = ref([]);
 const $toast = useToast();
 const router = useRouter();
+const id = useRoute().params.id;
 
 const getStatus = async () => {
   try {
@@ -68,12 +69,12 @@ const getInvestmentTypes = async () => {
   }
 };
 
-const createInvestment = async () => {
+const updateInvestment = async () => {
   try {
-    const response = await apiClient.post('Investments', input);
-
+    console.log(input);
+    const response = await apiClient.put(`Investments/${id}`, input);
     if (response.status === 201) {
-      $toast.success('You have successfully added a Investment!');
+      $toast.success('You have successfully Updated a Investment!');
       router.push('/Investment');
     }
   } catch (error) {
@@ -86,11 +87,12 @@ const createInvestment = async () => {
 const userID = localStorage.getItem("authUserID");
 
 const input = reactive({
+  id: id,
   name: '',
   company: '',
   Reference: '',
   investTypeID: '',
-  amount: '',
+  amount: 0,
   description: '',
   userId: userID,
   currentAmount: 0,
@@ -98,9 +100,28 @@ const input = reactive({
   date: '',
 });
 
+
+const getInvestment = async () => {
+  try {
+    const response = await apiClient.get('Investments/' + id)
+    console.log(response.data);
+    input.name = response.data.name;
+    input.company = response.data.company;
+    input.Reference = response.data.reference;
+    input.investTypeID = response.data.investTypeID;
+    input.currentAmount = response.data.currentAmount;
+    input.percentage = response.data.percentage;
+    input.date = new Date(response.data.date).toISOString().slice(0, 10);
+    input.description = response.data.description;
+  } catch (error) {
+    console.error("Error fetching Investments:", error);
+  }
+};
+
 onMounted(() => {
   getStatus(); // Ensure function is called properly
   getInvestmentTypes(); // Ensure function is called properly
+  getInvestment(id);
 });
 </script>
 
