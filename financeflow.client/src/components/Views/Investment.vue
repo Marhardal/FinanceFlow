@@ -43,12 +43,12 @@
                       :key="Investment.id">
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         {{ Investment.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       {{ Investment.currentAmount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Investment.investmentType">
                         {{ Investment.investmentType.name }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {{ dayjs(Investment.date).fromNow() }}</td>
+                        {{ dayjs(Investment.createdOn).fromNow() }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                         <router-link :to="{ path: 'Investment/edit/' + Investment.id }"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit

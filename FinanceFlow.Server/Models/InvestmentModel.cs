@@ -19,7 +19,7 @@ namespace FinanceFlow.Server.Models
         [Precision(18, 2)]
         public required decimal? CurrentAmount { get; set; }
 
-        public required decimal Percentage { get; set; }
+        public required string Percentage { get; set; }
 
         public required string Company { get; set; }
 
@@ -27,7 +27,7 @@ namespace FinanceFlow.Server.Models
 
         public string? Description { get; set; }
 
-        public required DateOnly Date { get; set; }
+        public string? Date { get; set; }
 
         public DateTime createdOn { get; set; } = DateTime.Now;
 

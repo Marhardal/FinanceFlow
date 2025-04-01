@@ -56,7 +56,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<InvestmentModel>> GetInvestmentModel(int id)
         {
-            var investmentModel = await _context.Investments.FindAsync(id);
+            var investmentModel = await _context.Investments.Include(t => t.investmentType).FirstOrDefaultAsync(i => i.id == id);
 
             if (investmentModel == null)
             {

@@ -21,9 +21,16 @@
           validation="required" />
         <FormKit label="Reference" placeholder="Enter Investment Reference." type="text" v-model="input.Reference"
           validation="required" />
-          <FormKit label="Percentage" placeholder="Enter Investment Percentage." type="number" v-model="input.percentage"
-          validation="required" />
-        <FormKit label="Date" placeholder="Enter Investment Date." type="date" v-model="input.date" validation="required" />
+          <FormKit
+  label="Percentage"
+  placeholder="Enter Investment Percentage (e.g., 15 or 17-20)"
+  type="text"
+  v-model="input.percentage"
+  validation="required|regex:/^\\d{1,3}(-\\d{1,3})?$/"
+  validation-messages="{ regex: 'Enter a valid percentage (e.g., 15 or 17-20).' }"
+  help="Enter a single number (e.g., 15) or a range (e.g., 17-20)."
+/>
+        <FormKit label="Date" placeholder="Enter Investment Date." type="number" min="1" max="31" v-model="input.date" validation="required" />
         <FormKit label="Notes" placeholder="Enter Investment Notes." type="textarea" v-model="input.description"
           validation="required" />
       </FormKit>
@@ -94,7 +101,7 @@ const input = reactive({
   description: '',
   userId: userID,
   currentAmount: 0,
-  percentage: 0,
+  percentage: '',
   date: '',
 });
 

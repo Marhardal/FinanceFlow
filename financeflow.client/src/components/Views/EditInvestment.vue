@@ -21,9 +21,9 @@
           validation="required" />
         <FormKit label="Reference" placeholder="Enter Investment Reference." type="text" v-model="input.Reference"
           validation="required" />
-          <FormKit label="Percentage" placeholder="Enter Investment Percentage." type="number" v-model="input.percentage"
+          <FormKit label="Percentage" placeholder="Enter Investment Percentage." type="text" v-model="input.percentage"
           validation="required" />
-        <FormKit label="Date" placeholder="Enter Investment Date." type="date" v-model="input.date" validation="required" />
+        <FormKit label="Date" placeholder="Enter Investment Date." type="number" min="1" max="31" v-model="input.date" validation="required" />
         <FormKit label="Notes" placeholder="Enter Investment Notes." type="textarea" v-model="input.description"
           validation="required" />
       </FormKit>
@@ -96,7 +96,7 @@ const input = reactive({
   description: '',
   userId: userID,
   currentAmount: 0,
-  percentage: 0,
+  percentage: '',
   date: '',
 });
 
@@ -111,7 +111,7 @@ const getInvestment = async () => {
     input.investTypeID = response.data.investTypeID;
     input.currentAmount = response.data.currentAmount;
     input.percentage = response.data.percentage;
-    input.date = new Date(response.data.date).toISOString().slice(0, 10);
+    input.date = response.data.date;
     input.description = response.data.description;
   } catch (error) {
     console.error("Error fetching Investments:", error);
