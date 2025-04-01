@@ -79,20 +79,114 @@
 
       <div class=" py-4">
         <div class="grid grid-cols-7 border-b border-gray-200">
-          <div class="col-span-5">
+          <div class="col-span-6">
             <h2 class="text-xl py-2 font-bold">Top-up Investments List</h2>
           </div>
           <div class="col-span-1">
-            <button type="button"
-              class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-gray-800 px-4 py-2"
-              @click="generatePDF(id)">Download</button>
-          </div>
-          <div class="col-span-1">
-            <router-link :to="{ path: '/Investment/' + Investment.id + '/expense/create' }"
+            <router-link :to="{ path: '/investment/' + Investment.id + '/invest/create' }"
               class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:text-black focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-blue-600 px-4 py-2 justify-end align-baseline">Create
             </router-link>
           </div>
         </div>
+      <div v-if="Invests !== null && Invests.length > 0">
+        <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+          <div class="flex flex-col">
+            <div class="-m-1.5 overflow-x-auto">
+              <div class="p-1.5 min-w-full inline-block align-middle">
+                <div class="overflow-hidden">
+                  <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                    <thead>
+                      <tr>
+                        <th scope="col"
+                          class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                          Item Name</th>
+                        <th scope="col"
+                          class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                          Quantity</th>
+                        <th scope="col"
+                          class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                          Price</th>
+                        <th scope="col"
+                          class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                          Expected Amount</th>
+                        <th scope="col"
+                          class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                          Amount</th>
+                        <th scope="col"
+                          class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                          Action</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                      <tr
+                        class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800"
+                        v-for="Invest in Invests" :key="Invest.id">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.item">
+                          {{ Invest.item.name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm ">{{ Invest.quantity }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm" v-if="Invest.item">{{
+                          Invest.item.measurement.toUpperCase() }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                          <div
+                            class="bg-green-300 rounded-full text-center inline-flex items-center p-1.5 px-4 hover:bg-green-600"
+                            v-if="Invest.expectedamount >= Invest.amount">
+                            <span class="inline-block text-center items-center">
+                              {{ Invest.expectedamount.toLocaleString('en-mw', {
+                                minimumFractionDigits: 2, style: 'currency', currency: 'MWK'
+                              }) }}
+                            </span>
+                            <CheckCircleIcon class="icon size-5 ml-2 text-sm" />
+                          </div>
+                          <div
+                            class="bg-red-500 rounded-full text-center inline-flex items-center p-1.5 px-4 hover:bg-red-900"
+                            v-else-if="Invest.expectedamount < Invest.amount">
+                            <span class="inline-block text-center items-center">
+                              {{ Invest.expectedamount.toLocaleString('en-mw', {
+                                minimumFractionDigits: 2, style: 'currency', currency: 'MWK'
+                              }) }}
+                            </span>
+                            <XCircleIcon class="icon size-5 ml-2 text-sm" />
+                          </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">{{
+                          Invest.amount.toLocaleString('en-mw', {
+                            minimumFractionDigits: 2, style: 'currency',
+                            currency: 'MWK'
+                          }) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                          <router-link :to="{ path: '/Budget/' + Budget.id + '/Invest/edit/' + Invest.id }"
+                            class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
+                            |</router-link>
+                          <button type="button"
+                            class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
+                            @click="deleteInvest(Invest.id)">Delete</button>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between ">
+          <span class="text-xs xs:text-sm text-gray-900">
+            Showing 1 to 4 of 50 Entries
+          </span>
+          <div class="inline-flex mt-2 xs:mt-0">
+            <button
+              class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
+              Prev
+            </button>
+            &nbsp; &nbsp;
+            <button
+              class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
 
       </div>
 
@@ -117,6 +211,7 @@ import dayjs from 'dayjs';
 dayjs.extend(relativeTime);
 const Investment = ref([]);
 const id = useRoute().params.id;
+const Invests = ref([]);
 // const $toast = useToast();
 // const router = useRouter();
 
@@ -131,15 +226,15 @@ const getInvestment = async (id) => {
   }
 };
 
-// // const getInvests = async (id) => {
-// //   try {
-// //     const response = await apiClient.get(`Expense/${id}`);
-// //     Expenses.value = response.data;
-// //     console.log(Expenses.value);
-// //   } catch (error) {
-// //     console.error("Error fetching Investment:", error);
-// //   }
-// // };
+const getInvests = async (id) => {
+  try {
+    const response = await apiClient.get(`Invests/${id}`);
+    Invests.value = response.data;
+    console.log(Invests.value);
+  } catch (error) {
+    console.error("Error fetching Investment:", error);
+  }
+};
 // const generatePDF = async (id) => {
 //   try {
 //     const response = await apiClient.get(`PDF/Generate?Investmentid=${id}`, {
@@ -150,7 +245,7 @@ const getInvestment = async (id) => {
 //     const blob = new Blob([response.data], { type: 'application/pdf' });
 //     const link = document.createElement('a');
 //     link.href = URL.createObjectURL(blob);
-//     link.download = `Investment_${id}_Expenses.pdf`;
+//     link.download = `Investment_${id}_Invests.pdf`;
 //     document.body.appendChild(link);
 //     link.click();
 //     document.body.removeChild(link);
@@ -167,15 +262,15 @@ const getInvestment = async (id) => {
 
 // const deleteInvestment = async (id) => {
 //   try {
-//     const response = await apiClient.delete(`Expense/${id}`);
+//     const response = await apiClient.delete(`Invest/${id}`);
 //     if (response.status === 200) {
-//       $toast.success('Investmented Expense Deleted Successfully!');
+//       $toast.success('Investmented Invest Deleted Successfully!');
 //       router.go(0);
 //       // window.location.reload();
 //     }
 //   } catch (error) {
 //     $toast.error('Failed to Deleted Investment!');
-//     console.error("Error deleting Expense:", error);
+//     console.error("Error deleting Invest:", error);
 //   }
 // };
 
@@ -219,7 +314,7 @@ const getNextInvestmentDate = (day) => {
 };
 onMounted(() => {
   getInvestment(id);
-  // getInvestmentExpenses(id);
+  getInvests(id);
 });
 </script>
 
