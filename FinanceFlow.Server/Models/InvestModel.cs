@@ -13,6 +13,9 @@ namespace FinanceFlow.Server.Models
         [ForeignKey("StatusID")]
         public required int StatusID { get; set; }
 
+        [ForeignKey("IncomeID")]
+        public required int IncomeID { get; set; }
+
         [Precision(18, 2)]
         public required decimal amount { get; set; }
 
@@ -24,6 +27,15 @@ namespace FinanceFlow.Server.Models
 
         public InvestmentModel? Investment { get; set; }
 
+        public ICollection<InvestmentModel>? Investments { get; set; }
+
         public StatusModel? Status { get; set; }
+
+        public ICollection<StatusModel>? Statuses { get; set; }
+
+        public IncomeModel? Income { get; set; }
+
+        public ICollection<IncomeModel>? Incomes { get; set; }
+
     }
 }

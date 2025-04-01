@@ -28,7 +28,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet("{investmentid}")]
         public async Task<ActionResult<IEnumerable<InvestModel>>> GetInvests(int investmentid, string search = null)
         {
-            IQueryable<InvestModel> invests = _context.Invests.Include(i => i.Status).Where(b => b.InvestmentId == investmentid);
+            IQueryable<InvestModel> invests = _context.Invests.Include(s => s.Status).Include(i => i.Income).Where(b => b.InvestmentId == investmentid);
             // Add additional logic to handle the search parameter and return the result
             if (invests is null)
             {
@@ -94,6 +94,10 @@ namespace FinanceFlow.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<InvestModel>> PostInvestModel(InvestModel investModel)
         {
+            if (investModel is null)
+            {
+                return NoContent();
+            }
             _context.Invests.Add(investModel);
             await _context.SaveChangesAsync();
 

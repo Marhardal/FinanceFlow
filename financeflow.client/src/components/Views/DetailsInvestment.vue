@@ -88,105 +88,84 @@
             </router-link>
           </div>
         </div>
-      <div v-if="Invests !== null && Invests.length > 0">
-        <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-          <div class="flex flex-col">
-            <div class="-m-1.5 overflow-x-auto">
-              <div class="p-1.5 min-w-full inline-block align-middle">
-                <div class="overflow-hidden">
-                  <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
-                    <thead>
-                      <tr>
-                        <th scope="col"
-                          class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                          Item Name</th>
-                        <th scope="col"
-                          class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                          Quantity</th>
-                        <th scope="col"
-                          class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                          Price</th>
-                        <th scope="col"
-                          class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                          Expected Amount</th>
-                        <th scope="col"
-                          class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                          Amount</th>
-                        <th scope="col"
-                          class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                          Action</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                      <tr
-                        class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800"
-                        v-for="Invest in Invests" :key="Invest.id">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.item">
-                          {{ Invest.item.name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm ">{{ Invest.quantity }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm" v-if="Invest.item">{{
-                          Invest.item.measurement.toUpperCase() }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
-                          <div
-                            class="bg-green-300 rounded-full text-center inline-flex items-center p-1.5 px-4 hover:bg-green-600"
-                            v-if="Invest.expectedamount >= Invest.amount">
-                            <span class="inline-block text-center items-center">
-                              {{ Invest.expectedamount.toLocaleString('en-mw', {
-                                minimumFractionDigits: 2, style: 'currency', currency: 'MWK'
-                              }) }}
-                            </span>
-                            <CheckCircleIcon class="icon size-5 ml-2 text-sm" />
-                          </div>
-                          <div
-                            class="bg-red-500 rounded-full text-center inline-flex items-center p-1.5 px-4 hover:bg-red-900"
-                            v-else-if="Invest.expectedamount < Invest.amount">
-                            <span class="inline-block text-center items-center">
-                              {{ Invest.expectedamount.toLocaleString('en-mw', {
-                                minimumFractionDigits: 2, style: 'currency', currency: 'MWK'
-                              }) }}
-                            </span>
-                            <XCircleIcon class="icon size-5 ml-2 text-sm" />
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">{{
-                          Invest.amount.toLocaleString('en-mw', {
-                            minimumFractionDigits: 2, style: 'currency',
-                            currency: 'MWK'
-                          }) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                          <router-link :to="{ path: '/investment/' + Investment.id + '/invest/edit/' + Invest.id }"
-                            class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
-                            |</router-link>
-                          <button type="button"
-                            class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
-                            @click="deleteInvest(Invest.id)">Delete</button>
-                        </td>
-                      </tr>
+        <div v-if="Invests !== null && Invests.length > 0">
+          <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+            <div class="flex flex-col">
+              <div class="-m-1.5 overflow-x-auto">
+                <div class="p-1.5 min-w-full inline-block align-middle">
+                  <div class="overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                      <thead>
+                        <tr>
+                          <th scope="col"
+                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                            Income Name</th>
+                          <th scope="col"
+                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                            Status</th>
+                          <th scope="col"
+                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                            Amount</th>
+                          <th scope="col"
+                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                            Date</th>
+                          <th scope="col"
+                            class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                            Action</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                        <tr
+                          class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800"
+                          v-for="Invest in Invests" :key="Invest.id">
+                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.income">
+                            {{ Invest.income.name }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.status">
+                            {{ Invest.status.name }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm ">{{ Invest.quantity }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm" v-if="Invest.item">{{
+                            Invest.item.measurement.toUpperCase() }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm">{{
+                            Invest.amount.toLocaleString('en-mw', {
+                              minimumFractionDigits: 2, style: 'currency',
+                              currency: 'MWK'
+                            }) }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm" v-if="Invest.date">{{
+                            Invest.date }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                            <router-link :to="{ path: '/investment/' + Investment.id + '/invest/edit/' + Invest.id }"
+                              class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
+                              |</router-link>
+                            <button type="button"
+                              class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
+                              @click="deleteInvest(Invest.id)">Delete</button>
+                          </td>
+                        </tr>
 
-                    </tbody>
-                  </table>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between ">
-          <span class="text-xs xs:text-sm text-gray-900">
-            Showing 1 to 4 of 50 Entries
-          </span>
-          <div class="inline-flex mt-2 xs:mt-0">
-            <button
-              class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
-              Prev
-            </button>
-            &nbsp; &nbsp;
-            <button
-              class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
-              Next
-            </button>
+          <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between ">
+            <span class="text-xs xs:text-sm text-gray-900">
+              Showing 1 to 4 of 50 Entries
+            </span>
+            <div class="inline-flex mt-2 xs:mt-0">
+              <button
+                class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
+                Prev
+              </button>
+              &nbsp; &nbsp;
+              <button
+                class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
+                Next
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
       </div>
 

@@ -38,6 +38,8 @@ namespace FinanceFlow.Server.Models
 
         public TransactionModel? Transaction { get; set; }
 
+        public InvestModel? Invest { get; set; }
+
         public UserModel? User { get; set; }
     }
 }

@@ -11,6 +11,8 @@
         'data-theme': `dark`,
         ignore: false
       }">
+      <FormKit type="select" label="Select Income" :options="Incomes" v-model="input.incomeID"
+      validation="required" />
         <FormKit type="select" label="Select Top-Up Status." :options="status" validation="required" v-model="input.statusId" />
         <FormKit label="Amount" placeholder="Enter Top-up Amount." type="number" validation="required" v-model="input.amount" />
         <FormKit label="Date" placeholder="Enter Top-up Amount." type="date" validation="required" v-model="input.date" />
@@ -34,9 +36,11 @@ const id = useRoute().params.id;
 const $toast = useToast();
 const router = useRouter();
 const status = ref([]);
+const Incomes = ref([]);
 
 const input = reactive({
   investmentId: id,
+  incomeID: '',
   statusId: '',
   date: '',
   amount: '',
@@ -44,6 +48,7 @@ const input = reactive({
 })
 
 const createInvest = async () => {
+  console.log(input)
   try {
     const response = await apiClient.post('/Invests', input);
     if (response.status === 201) {
@@ -55,6 +60,18 @@ const createInvest = async () => {
     $toast.error('Failed to create an Top-up!');
   }
 }
+
+const getIncomes = async () => {
+  try {
+    const response = await apiClient.get('Incomes')
+    Incomes.value =[{ value: '', label: 'Select Income.'}, ...response.data.map((income) => ({
+      value: income.id,
+      label: income.name,
+    }))]; // Log the actual data, not the ref object
+  } catch (error) {
+    console.error("Error fetching income:", error);
+  }
+};
 
 const getStatuses = async () => {
   try {
@@ -74,6 +91,7 @@ const getStatuses = async () => {
 
 onMounted(() => {
   getStatuses()
+  getIncomes()
 })
 </script>
 
