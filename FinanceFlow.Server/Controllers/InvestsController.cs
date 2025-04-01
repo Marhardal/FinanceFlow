@@ -75,6 +75,20 @@ namespace FinanceFlow.Server.Controllers
             }
 
             _context.Entry(investModel).State = EntityState.Modified;
+            if (investModel.InvestmentId != 0)
+            {
+                var investment = await _context.Investments.FindAsync(investModel.InvestmentId);
+                if (investModel.StatusID == 2)
+                {
+                    if (investment != null)
+                    {
+                        // Update the budget entity as needed
+                        investment.CurrentAmount += investModel.amount;
+                        _context.Investments.Update(investment);
+                    }
+                }
+            }
+
 
             try
             {
@@ -104,6 +118,16 @@ namespace FinanceFlow.Server.Controllers
             if (investModel is null)
             {
                 return NoContent();
+            }
+            var investment = await _context.Investments.FindAsync(investModel.InvestmentId);
+            if (investModel.StatusID == 2)
+            {
+                if (investment != null)
+                {
+                    // Update the budget entity as needed
+                    investment.CurrentAmount += investModel.amount;
+                    _context.Investments.Update(investment);
+                }
             }
             _context.Invests.Add(investModel);
             await _context.SaveChangesAsync();

@@ -16,7 +16,7 @@
         <FormKit type="select" label="Select Top-Up Status." :options="status" validation="required" v-model="input.statusId" />
         <FormKit label="Amount" placeholder="Enter Top-up Amount." type="number" validation="required" v-model="input.amount" />
         <FormKit label="Date" placeholder="Enter Top-up Amount." type="date" validation="required" v-model="input.date" />
-        <FormKit label="Description" placeholder="Enter Top-up description." type="textarea" validation="required" v-model="input.description" />
+        <!-- <FormKit label="Description" placeholder="Enter Top-up description." type="textarea" validation="required" v-model="input.description" /> -->
       </FormKit>
     </div>
 
