@@ -28,16 +28,23 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet("{investmentid}")]
         public async Task<ActionResult<IEnumerable<InvestModel>>> GetInvests(int investmentid, string search = null)
         {
-            IQueryable<InvestModel> invests = _context.Invests.Include(s => s.Status).Include(i => i.Income).Where(b => b.InvestmentId == investmentid);
-            // Add additional logic to handle the search parameter and return the result
-            if (invests is null)
+            IQueryable<InvestModel> invests = _context.Invests
+                .Include(s => s.Status)
+                .Include(i => i.Income)
+                .Where(b => b.InvestmentId == investmentid);
+
+            // Apply search filter if provided
+            if (!string.IsNullOrEmpty(search))
+            {
+                invests = invests.Where(i => i.Status.Name.Contains(search));
+            }
+
+            // Check if there are any results
+            if (!await invests.AnyAsync())
             {
                 return NoContent();
             }
-            if (search is not null)
-            {
-                invests.Where(i => i.Status.Name.Contains(search));
-            }
+
             return await invests.ToListAsync();
         }
 

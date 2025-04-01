@@ -120,6 +120,9 @@ namespace FinanceFlow.Server.DBContext
                 .HasForeignKey(i => i.investTypeID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<InvestModel>()
+                .HasOne(i => i.Income)
+                .WithOne(e => e.Invest);
 
             modelBuilder.Entity<InvestModel>()
                 .HasOne(s => s.Status)
@@ -132,6 +135,8 @@ namespace FinanceFlow.Server.DBContext
                 .WithMany(c => c.Invests)
                 .HasForeignKey(i => i.InvestmentId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
 
             //modelBuilder.Entity<UserModel>()
             //    .HasOne(u => u.Roles)

@@ -122,10 +122,7 @@
                             {{ Invest.income.name }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.status">
                             {{ Invest.status.name }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm ">{{ Invest.quantity }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm" v-if="Invest.item">{{
-                            Invest.item.measurement.toUpperCase() }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm">{{
+<td class="px-6 py-4 whitespace-nowrap text-sm">{{
                             Invest.amount.toLocaleString('en-mw', {
                               minimumFractionDigits: 2, style: 'currency',
                               currency: 'MWK'
@@ -180,9 +177,9 @@
 import ContainerBg from '../Components/ContainerBg.vue';
 import apiClient from '../../Others/apiClient'
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import relativeTime from 'dayjs/plugin/relativeTime';
-// import { useToast } from 'vue-toast-notification';
+import { useToast } from 'vue-toast-notification';
 // import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/solid';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import dayjs from 'dayjs';
@@ -191,8 +188,8 @@ dayjs.extend(relativeTime);
 const Investment = ref([]);
 const id = useRoute().params.id;
 const Invests = ref([]);
-// const $toast = useToast();
-// const router = useRouter();
+const $toast = useToast();
+const router = useRouter();
 
 const getInvestment = async (id) => {
   try {
@@ -239,19 +236,19 @@ const getInvests = async (id) => {
 
 
 
-// const deleteInvestment = async (id) => {
-//   try {
-//     const response = await apiClient.delete(`Invest/${id}`);
-//     if (response.status === 200) {
-//       $toast.success('Investmented Invest Deleted Successfully!');
-//       router.go(0);
-//       // window.location.reload();
-//     }
-//   } catch (error) {
-//     $toast.error('Failed to Deleted Investment!');
-//     console.error("Error deleting Invest:", error);
-//   }
-// };
+const deleteInvest = async (id) => {
+  try {
+    const response = await apiClient.delete(`Invests/${id}`);
+    if (response.status === 200) {
+      $toast.success('Top-up Deleted Successfully!');
+      router.go(0);
+      // window.location.reload();
+    }
+  } catch (error) {
+    $toast.error('Failed to Deleted Investment!');
+    console.error("Error deleting Invest:", error);
+  }
+};
 
 const formatInvestmentRange = (amount, percentage) => {
   if (!percentage) return ""; // Handle empty input

@@ -49,9 +49,9 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<FinanceDBContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),
+   ServiceLifetime.Scoped
+);
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

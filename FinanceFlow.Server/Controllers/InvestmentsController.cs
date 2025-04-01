@@ -34,7 +34,7 @@ namespace FinanceFlow.Server.Controllers
             {
                 return NoContent();
             }
-            IQueryable<InvestmentModel> queryable = _context.Investments.Include(t => t.investmentType).Include(i => i.Invests).Where(i => i.UserId == int.Parse(userId));
+            IQueryable<InvestmentModel> queryable = _context.Investments.Include(t => t.investmentType).Where(i => i.UserId == int.Parse(userId));
             if (queryable is null)
             {
                 return NoContent();
