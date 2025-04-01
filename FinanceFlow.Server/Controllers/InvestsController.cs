@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
+using FinanceFlow.Server.Migrations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -21,18 +23,30 @@ namespace FinanceFlow.Server.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: api/Invests
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<InvestModel>>> GetInvests()
+        [HttpGet("{investmentid}")]
+        public async Task<ActionResult<IEnumerable<InvestModel>>> GetInvests(int investmentid, string search = null)
         {
-            return await _context.Invests.ToListAsync();
+            IQueryable<InvestModel> invests = _context.Invests.Include(i => i.Status).Where(b => b.InvestmentId == investmentid);
+            // Add additional logic to handle the search parameter and return the result
+            if (invests is null)
+            {
+                return NoContent();
+            }
+            if (search is not null)
+            {
+                invests.Where(i => i.Status.Name.Contains(search));
+            }
+            return await invests.ToListAsync();
         }
 
+        [Authorize]
         // GET: api/Invests/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<InvestModel>> GetInvestModel(int id)
+        [HttpGet("{investid}/{investmentid}")]
+        public async Task<ActionResult<InvestModel>> GetInvestModel(int investid, int investmentid)
         {
-            var investModel = await _context.Invests.FindAsync(id);
+            var investModel = await _context.Invests.FindAsync(investid);
 
             if (investModel == null)
             {
@@ -42,6 +56,7 @@ namespace FinanceFlow.Server.Controllers
             return investModel;
         }
 
+        [Authorize]
         // PUT: api/Invests/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -73,6 +88,7 @@ namespace FinanceFlow.Server.Controllers
             return NoContent();
         }
 
+        [Authorize]
         // POST: api/Invests
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -84,6 +100,7 @@ namespace FinanceFlow.Server.Controllers
             return CreatedAtAction("GetInvestModel", new { id = investModel.Id }, investModel);
         }
 
+        [Authorize]
         // DELETE: api/Invests/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInvestModel(int id)
