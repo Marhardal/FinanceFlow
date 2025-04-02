@@ -23,6 +23,7 @@ import CreateInvestment from '@/components/Views/CreateInvestment.vue'
 import EditInvestment from '@/components/Views/EditInvestment.vue'
 import DetailsInvestment from '@/components/Views/DetailsInvestment.vue'
 import CreateTopup from '@/components/Views/CreateTopup.vue'
+import EditTopup from '@/components/Views/EditTopup.vue'
 
 
 function auth(to, from) {
@@ -59,7 +60,7 @@ const routes = [
       { path: '/investment/edit/:id', component: EditInvestment, beforeEnter: auth },
       { path: '/investment/details/:id', component: DetailsInvestment, beforeEnter: auth },
       { path: '/investment/:id/invest/create', component: CreateTopup, beforeEnter: auth },
-      { path: '/investment/:investmentId/invest/edit/:investId', component: EditExpense, beforeEnter: auth },
+      { path: '/investment/:investmentId/invest/edit/:investId', component: EditTopup, beforeEnter: auth },
       { path: '/register', component: Register, beforeEnter: guest},
       { path: '/login', component: Login, beforeEnter: guest},
 ];
