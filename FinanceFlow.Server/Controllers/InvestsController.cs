@@ -89,7 +89,6 @@ namespace FinanceFlow.Server.Controllers
                 }
             }
 
-
             try
             {
                 await _context.SaveChangesAsync();
@@ -104,6 +103,22 @@ namespace FinanceFlow.Server.Controllers
                 {
                     throw;
                 }
+            }
+
+            var transaction = _context.Transactions.Where(b => b.investid == investModel.Id).FirstOrDefault();
+
+            if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
+            {
+                TransactionModel transactions = new TransactionModel();
+
+                transactions.amount = Convert.ToDecimal(investModel.amount);
+                transactions.date = DateTime.Now;
+                transactions.investid = investModel.Id;
+                transactions.type = TransactionType.Invests;
+                transactions.createdon = DateTime.Now;
+                transactions.date = DateTime.Now;
+                _context.Transactions.Add(transactions);
+                await _context.SaveChangesAsync();
             }
 
             return NoContent();
@@ -131,6 +146,22 @@ namespace FinanceFlow.Server.Controllers
             }
             _context.Invests.Add(investModel);
             await _context.SaveChangesAsync();
+            
+            var transaction = _context.Transactions.Where(b => b.investid == investModel.Id).FirstOrDefault();
+
+            if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
+            {
+                TransactionModel transactions = new TransactionModel();
+
+                transactions.amount = Convert.ToDecimal(investModel.amount);
+                transactions.date = DateTime.Now;
+                transactions.investid = investModel.Id;
+                transactions.type = TransactionType.Invests;
+                transactions.createdon = DateTime.Now;
+                transactions.date = DateTime.Now;
+                _context.Transactions.Add(transactions);
+                await _context.SaveChangesAsync();
+            }
 
             return CreatedAtAction("GetInvestModel", new { id = investModel.Id }, investModel);
         }
