@@ -36,10 +36,14 @@
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-else-if="transition.type == 1">
                         Budgets</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-else-if="transition.type == 2">
+                          Invested</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.incomeName">{{
                         transition.incomeName }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.budgetName">{{
                         transition.budgetName }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.investmentName">{{
+                        transition.investmentName }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ transition.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ dayjs(transition.date).fromNow()
                       }}</td>
@@ -56,6 +60,10 @@
                           <router-link
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
                           :to="{ path: 'Budget/details/'+transition.budgetid }" v-if="transition.budgetid != null">Details
+                          |</router-link>
+                          <router-link
+                          class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
+                          :to="{ path: 'Investment/details/'+transition.investmentId }" v-if="transition.investmentId != null">Details
                           |</router-link>
                         <button type="button" @click="deleteTransaction(transition.id)"
                           class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">
