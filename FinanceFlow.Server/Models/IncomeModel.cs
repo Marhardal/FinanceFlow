@@ -23,7 +23,7 @@ namespace FinanceFlow.Server.Models
 
         public DateTime? Date { get; set; } = DateTime.UtcNow;
 
-        public DateTime? CreateDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreateDate { get; set; }
 
         // Navigation Properties
         [ForeignKey(nameof(StatusID))]  // Correct FK annotation
