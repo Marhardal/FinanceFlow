@@ -11,6 +11,11 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<FinanceDBContext>(options =>
+   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),
+   ServiceLifetime.Scoped
+);
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -47,11 +52,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
-builder.Services.AddDbContext<FinanceDBContext>(options =>
-   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),
-   ServiceLifetime.Scoped
-);
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

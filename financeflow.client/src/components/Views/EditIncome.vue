@@ -6,7 +6,7 @@
         <h2 class="text-2xl md:text-2xl text-neutral-600 font-semibold mb-2">Fill in all Fields.</h2>
       </div>
       <!-- <form action="" class="space-y-5"> -->
-      <FormKit type="form" submit-label="Update" @submit="updateIncome" :submit-attrs="{
+      <FormKit type="form" submit-label="Update" @submit="updateIncome(id)" :submit-attrs="{
         inputClass: 'py-3 px-4 block w-full border-gray-500 rounded text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-300 dark:border-gray-500 dark:text-neutral-700 dark:placeholder-neutral-500 dark:focus:ring-neutral-600',
         wrapperClass: 'space-y-5',
         'data-theme': `dark`,
@@ -71,8 +71,8 @@ const getIncome = async () => {
   try {
     const response = await apiClient.get('Incomes/' + id);
     input.name = response.data.name;
-    input.statusid = response.data.statusid;
-    input.incomeCategoryId = response.data.incomeCategoryId;
+    input.statusID = response.data.statusID;
+    input.incomeCategoryID = response.data.incomeCategoryID;
     input.amount = response.data.amount;
     input.date = new Date(response.data.date).toISOString().slice(0, 10);
     input.description = response.data.description;
@@ -81,10 +81,10 @@ const getIncome = async () => {
   }
 }
 
-const updateIncome = async () => {
+const updateIncome = async (id) => {
   console.log(input);
   try {
-    const response = await apiClient.put(`Incomes/${id}`, input);
+    const response = await apiClient.put('/Incomes/' + id, input);
 
     if (response.status === 201) {
       $toast.success('You have successfully updated an Income!');
@@ -96,15 +96,20 @@ const updateIncome = async () => {
     console.log(input);
   }
 }
+
+const userID = localStorage.getItem("authUserID");
+
 const input = reactive({
   id: id,
   name: '',
-  statusID: "",
-  incomeCategoryID: "",
-  amount: '',
+  statusID: 0,
+  incomeCategoryID: 0,
+  amount: 0,
   description: '',
   date: '',
+  userID: userID,
 });
+
 
 onMounted(() => {
   getIncome(id);

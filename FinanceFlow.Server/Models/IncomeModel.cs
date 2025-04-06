@@ -21,7 +21,7 @@ namespace FinanceFlow.Server.Models
         [Precision(18, 2)]
         public required decimal Amount { get; set; }
 
-        public DateTime? Date { get; set; } = DateTime.UtcNow;
+        public DateTime? Date { get; set; }
 
         public DateTime CreateDate { get; set; }
 
