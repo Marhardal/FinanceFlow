@@ -22,6 +22,8 @@ namespace FinanceFlow.Server.Models
 
         public required string Description { get; set; }
 
+        public DateTime date { get; set; }
+
         public DateTime createdate { get; set; } = DateTime.Now;
 
         public ItemsModel? Item { get; set; }

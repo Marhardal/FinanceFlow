@@ -17,7 +17,7 @@ namespace FinanceFlow.Server.DTOs
 
         public string? Password { get; set; } = null;
 
-        public DateOnly DOB { get; set; } = DateOnly.MinValue;
+        public DateTime DOB { get; set; } = DateTime.Now;
 
         public DateTime createat { get; set; } = DateTime.Now;
 

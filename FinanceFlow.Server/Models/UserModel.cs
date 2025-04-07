@@ -24,7 +24,7 @@ namespace FinanceFlow.Server.Models
         [Required]
         public string? PasswordHash { get; set; }
 
-        public DateOnly DOB { get; set; } = DateOnly.MinValue;
+        public DateTime DOB { get; set; } = DateTime.Now;
 
         public DateTime createat { get; set; } = DateTime.Now;
 

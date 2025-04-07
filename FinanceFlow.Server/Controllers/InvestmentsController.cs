@@ -28,7 +28,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InvestmentModel>>> GetInvestments(string search = null)
         {
-            string userId = "1";
+            string userId = "2";
             //string userId = HttpContext.User.Claims.FirstOrDefault(ClaimTypes.NameIdentifier.ToString())
             if (userId is null)
             {
@@ -48,7 +48,8 @@ namespace FinanceFlow.Server.Controllers
            i.investmentType.name.Contains(search)
        );
             }
-            return await queryable.ToListAsync();
+            List<InvestmentModel> investments = await queryable.ToListAsync();
+            return investments;
         }
 
         [Authorize]

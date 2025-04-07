@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
-using FinanceFlow.Server.Migrations;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FinanceFlow.Server.Controllers

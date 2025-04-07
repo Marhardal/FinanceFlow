@@ -14,8 +14,8 @@ namespace FinanceFlow.Server.Models
         public required string Name { get; set; }
 
         public required string? Measurement { get; set; } = null;
-        
-        public DateTime? Date { get; set; } = DateTime.UtcNow;
+
+        public DateOnly Date { get; set; }
 
         //[JsonIgnore]
         public ItemsCategoriesModel? ItemCategory { get; set; }
