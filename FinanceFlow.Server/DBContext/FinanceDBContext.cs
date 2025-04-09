@@ -185,6 +185,7 @@ namespace FinanceFlow.Server.DBContext
                 new ItemsModel { Id = 10, Name = "Eggs", ItemCategoryId = 3, Measurement = "Dozen" },
                 new ItemsModel { Id = 11, Name = "Vegetables", ItemCategoryId = 3, Measurement = "kg" },
                 new ItemsModel { Id = 12, Name = "Snacks", ItemCategoryId = 3, Measurement = "USD" },
+                new ItemsModel { Id = 57, Name = "Fruits", ItemCategoryId = 3, Measurement = "USD" },
 
                 // 4. Transportation
                 new ItemsModel { Id = 13, Name = "Gasoline", ItemCategoryId = 4, Measurement = "Liters" },
@@ -203,11 +204,12 @@ namespace FinanceFlow.Server.DBContext
                 new ItemsModel { Id = 22, Name = "Haircut", ItemCategoryId = 6, Measurement = "USD" },
                 new ItemsModel { Id = 23, Name = "Toothpaste", ItemCategoryId = 6, Measurement = "Tube" },
                 new ItemsModel { Id = 24, Name = "Perfume", ItemCategoryId = 6, Measurement = "Bottle" },
+                new ItemsModel { Id = 56, Name = "Body Lotion and Glycerine", ItemCategoryId = 6, Measurement = "Bottle" },
 
                 // 7. Clothing & Apparel
                 new ItemsModel { Id = 25, Name = "Shirts/T-shirts", ItemCategoryId = 7, Measurement = "Pair" },
                 //new ItemsModel { Id = 25, Name = "Shirts/T-shirts", ItemCategoryId = 7, Measurement = "Pair" },
-                //new ItemsModel { Id = 25, Name = "Trousers", ItemCategoryId = 7, Measurement = "Pair" },
+                new ItemsModel { Id = 55, Name = "Trousers", ItemCategoryId = 7, Measurement = "Pair" },
                 new ItemsModel { Id = 26, Name = "Coat", ItemCategoryId = 7, Measurement = "One-time" },
                 new ItemsModel { Id = 27, Name = "Shoes", ItemCategoryId = 7, Measurement = "Pair" },
                 new ItemsModel { Id = 28, Name = "Socks", ItemCategoryId = 7, Measurement = "Pack" },
