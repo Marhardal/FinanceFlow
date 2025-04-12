@@ -35,7 +35,7 @@
       <div class="col-span-1  bg-white border border-gray-300">
         <Pie />
       </div>
-      <div class="col-span-1  bg-white border border-gray-300">
+      <div class="col-span-3  bg-white border border-gray-300">
         <LineChart />
       </div>
     </div>

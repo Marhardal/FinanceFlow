@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
+using System.Globalization;
 using System.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -122,5 +123,141 @@ namespace FinanceFlow.Server.Controllers
             return Ok(headerDetails);
         }
 
+        [HttpGet("last12months")]
+        public async Task<IActionResult> GetTransactionChartData()
+        {
+            var endDate = DateTime.Now;
+            var startDate = endDate.AddMonths(-11);
+
+            // Get data grouped by month and type  
+            var transactions = await _context.Transactions
+                .Where(t => t.date >= startDate && t.date <= endDate)
+                .GroupBy(t => new { t.date.Year, t.date.Month, t.type })
+                .Select(g => new
+                {
+                    YearMonth = new DateTime(g.Key.Year, g.Key.Month, 1),
+                    Type = g.Key.type,
+                    Amount = g.Sum(t => t.amount ?? 0)
+                })
+                .ToListAsync();
+
+            // Filter months where the total amount is greater than zero  
+            var filteredMonths = transactions
+                .Where(t => t.Amount > 0)
+                .Select(t => t.YearMonth)
+                .Distinct()
+                .OrderBy(m => m)
+                .ToList();
+
+            // Process data for Chart.js  
+            var labels = filteredMonths
+                .Select(m => m.ToString("MMM yy"))
+                .ToArray();
+
+            // Define the three specific types we want  
+            var types = new[] { "Incomes", "Budgets", "Invests" };
+
+            var datasets = types.Select(type => new
+            {
+                Label = type,
+                Data = filteredMonths.Select(month =>
+                    transactions
+                        .Where(t => t.Type.ToString() == type &&
+                                   t.YearMonth.Year == month.Year &&
+                                   t.YearMonth.Month == month.Month)
+                        .Sum(t => t.Amount))
+                        .ToArray(),
+                BorderColor = GetColorForType(type),
+                BackgroundColor = GetColorForType(type, true)
+            }).ToList();
+
+            return Ok(new
+            {
+                Labels = labels,
+                Datasets = datasets
+            });
+        }
+        //public async Task<IActionResult> GetTransactionChartData()
+        //{
+        //    var endDate = DateTime.Now;
+        //    var startDate = endDate.AddMonths(-11);
+
+        //    // Get all months in range (for consistent x-axis)
+        //    var allMonths = Enumerable.Range(0, 12)
+        //        .Select(offset => startDate.AddMonths(offset))
+        //        .ToList();
+
+        //    // Get all transactions in date range
+        //    var transactions = await _context.Transactions
+        //        .Where(t => t.date >= startDate && t.date <= endDate)
+        //        .ToListAsync();
+
+        //    // Process data for each type
+        //    var typeData = new Dictionary<string, List<decimal>>
+        //    {
+        //        ["Income"] = new List<decimal>(),
+        //        ["Expense"] = new List<decimal>(),
+        //        ["Invest"] = new List<decimal>()
+        //    };
+
+        //    foreach (var month in allMonths)
+        //    {
+        //        // Income (directly named)
+        //        typeData["Income"].Add(transactions
+        //            .Where(t => t.type.ToString() == "Income" &&
+        //                       t.date.Year == month.Year &&
+        //                       t.date.Month == month.Month)
+        //            .Sum(t => t.amount ?? 0));
+
+        //        // Expense (mapped from Budgets)
+        //        typeData["Expense"].Add(transactions
+        //            .Where(t => t.type.ToString() == "Budgets" &&
+        //                       t.date.Year == month.Year &&
+        //                       t.date.Month == month.Month)
+        //            .Sum(t => t.amount ?? 0));
+
+        //        // Invest (mapped from Invests)
+        //        typeData["Invest"].Add(transactions
+        //            .Where(t => t.type.ToString() == "Invests" &&
+        //                       t.date.Year == month.Year &&
+        //                       t.date.Month == month.Month)
+        //            .Sum(t => t.amount ?? 0));
+        //    }
+
+        //    // Build datasets (only include types with data)
+        //    var datasets = new List<object>();
+
+        //    foreach (var type in typeData)
+        //    {
+        //        if (type.Value.Any(amount => amount > 0))
+        //        {
+        //            datasets.Add(new
+        //            {
+        //                Label = type.Key,
+        //                Data = type.Value.ToArray(),
+        //                BorderColor = GetColorForType(type.Key),
+        //                BackgroundColor = GetColorForType(type.Key, true)
+        //            });
+        //        }
+        //    }
+
+        //    return Ok(new
+        //    {
+        //        Labels = allMonths.Select(m => m.ToString("MMM yy")).ToArray(),
+        //        Datasets = datasets
+        //    });
+        //}
+
+        private string GetColorForType(string type, bool transparent = false)
+        {
+            string color = type switch
+            {
+                "Incomes" => "#4bc0c0",
+                "Budgets" => "#ff6384",
+                "Invests" => "#9966ff",
+                _ => "#36a2eb"
+            };
+            return transparent ? color + "40" : color;
+        }
     }
 }
