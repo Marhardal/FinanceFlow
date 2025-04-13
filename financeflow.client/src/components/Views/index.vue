@@ -38,6 +38,9 @@
       <div class="col-span-3  bg-white border border-gray-300">
         <LineChart />
       </div>
+      <div class="col-span-1 bg-white border border-gray-300">
+        <RecentTransactions/>
+      </div>
     </div>
   </ContainerBg>
 </template>
@@ -52,6 +55,7 @@ import ContainerBg from '../Components/ContainerBg.vue';
 import BarChart from '../Components/Charts/BarChart.vue';
 import Pie from '../Components/Charts/Pie.vue';
 import LineChart from '../Components/Charts/lineChart.vue';
+import RecentTransactions from '../Components/recentTransactions.vue';
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
