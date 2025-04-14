@@ -343,6 +343,26 @@ namespace FinanceFlow.Server.Controllers
             return Ok(recent);
         }
 
+        [HttpGet("GetRecentandUpcomingInvests")]
+        public async Task<IActionResult> getRecentandUpcominginvets()
+        {
+            List<InvestModel> recent = await _context.Invests
+                .OrderByDescending(t => t.Date)
+                .Take(5)
+                .Select(t => new InvestModel
+                {
+                    InvestmentId = t.InvestmentId, // Fix: Set the required member
+                    StatusID = t.StatusID, // Fix: Ensure required member is set
+                    IncomeID = t.IncomeID, // Fix: Set the required member
+                    Date = t.Date,
+                    amount = t.amount,
+                })
+                .ToListAsync();
+
+            return Ok(recent);
+        }
+
+
         private string GetCategoryColor(string category)
         {
             // Customize based on your categories
