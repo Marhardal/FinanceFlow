@@ -363,6 +363,26 @@ namespace FinanceFlow.Server.Controllers
         }
 
 
+        [HttpGet("GetUpcomingEvents")]
+        public async Task<IActionResult> GetUpcomingEvents()
+        {
+            var upcoming = await (from Budget in _context.Budgets
+                                  join Invest in _context.Invests on new { Month = Budget.remindon.Month, Year = Budget.remindon.Year }
+                                  equals new { Month = Invest.Date.Month, Year = Invest.Date.Year }
+                                  where Budget.statusID == 1 && Invest.StatusID == 1
+                                  orderby Budget.remindon ascending
+                                  select new
+                                  {
+                                      Name = Budget.Name != null ? Budget.Name : Invest.Investment.Name ,
+                                      Type = Budget.Name != null ? "Budget" : (Invest.description != null ? "Investment" : "Unknown"),
+                                      Amount = (float)Budget.Amount > 0 ? (float)Invest.amount : 0, // Fix: Corrected the conditional expression
+                                      RemindOn = Budget.remindon != null ? Invest.Date : DateTime.UtcNow,
+                                  }).ToListAsync();
+
+            return Ok(upcoming);
+        }
+
+
         private string GetCategoryColor(string category)
         {
             // Customize based on your categories
