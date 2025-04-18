@@ -4,8 +4,9 @@ import { ref } from "vue";
 
 export const useStore = defineStore("store", {
   state: () => ({
-    authUser: ref([]),
+    authUserID: ref([]),
     authToken: ref([]),
+    authRefreshToken: ref([]),
     authRole: ref([]),
     authErrors: ref([]),
   }),
@@ -19,11 +20,15 @@ export const useStore = defineStore("store", {
           username,
           password,
         });
-        console.log(data.data.user)
-        this.authUser = data.data.user;
-        this.authToken = data.data.token;
+        console.log(data.data)
+        this.authToken = data.data.accessToken;
+        this.authUserID = data.data.userID;
+        this.authRole = data.data.roleID;
+        this.authRefreshToken = data.data.refrshToken;
         localStorage.setItem("authToken", this.authToken);
-        localStorage.setItem("authUser", this.authUser);
+        localStorage.setItem("authUserID", this.authUserID);
+        localStorage.setItem("authRole", this.authRole);
+        localStorage.setItem("authRefreshToken", this.authRefreshToken);
 
         return true;
       } catch (error) {

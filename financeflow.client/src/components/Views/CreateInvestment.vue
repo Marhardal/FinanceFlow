@@ -2,27 +2,36 @@
   <ContainerBg>
     <div class="mx-auto max-w-xl">
       <div class="text-start mb-8">
-        <h2 class="text-3xl md:text-4xl font-bold mb-2">Create a Budget</h2>
+        <h2 class="text-3xl md:text-4xl font-bold mb-2">Create an Investment</h2>
         <h2 class="text-2xl md:text-2xl text-neutral-600 font-semibold mb-2">Fill in all Fields.</h2>
       </div>
-      <FormKit type="form" submit-label="Create" @submit="updateBudget" :submit-attrs="{
+      <FormKit type="form" submit-label="Create" @submit="createInvestment" :submit-attrs="{
         inputClass: 'py-3 px-4 block w-full border-gray-500 rounded text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-gray-300 dark:border-gray-500 dark:text-neutral-700 dark:placeholder-neutral-500 dark:focus:ring-neutral-600',
         wrapperClass: 'space-y-5',
         'data-theme': `dark`,
         ignore: false
       }">
-        <FormKit label="Name" placeholder="Enter a Budget Name." type="text" v-model="input.name"
+        <FormKit label="Name" placeholder="Enter a Investment Name." type="text" v-model="input.name"
           validation="required" />
-        <FormKit type="select" label="Select Status" :options="Statuses" v-model="input.statusID"
+        <FormKit type="select" label="Select Investment Type." :options="InvestmentTypes" v-model="input.investTypeID"
           validation="required" />
-        <FormKit type="select" label="Select Income" :options="Incomes" v-model="input.incomeID"
+        <FormKit label="Amount" placeholder="Enter Investment Amount." type="number" v-model="input.currentAmount"
           validation="required" />
-        <FormKit label="Amount" placeholder="Enter Budget Amount." type="number" v-model="input.amount"
+        <FormKit label="Company" placeholder="Enter Investment Company." type="text" v-model="input.company"
           validation="required" />
-        <!-- <FormKit label="Spent Amount" placeholder="Enter the Spent Amount on the Budget." type="number" v-model="input.spentamount"
-          validation="required" /> -->
-        <FormKit label="Date" placeholder="Enter Budget Date." type="date" v-model="input.remindon" validation="required" />
-        <FormKit label="Notes" placeholder="Enter Budget Notes." type="textarea" v-model="input.description"
+        <FormKit label="Reference" placeholder="Enter Investment Reference." type="text" v-model="input.Reference"
+          validation="required" />
+          <FormKit
+  label="Percentage"
+  placeholder="Enter Investment Percentage (e.g., 15 or 17-20)"
+  type="text"
+  v-model="input.percentage"
+  validation="required|regex:/^\\d{1,3}(-\\d{1,3})?$/"
+  validation-messages="{ regex: 'Enter a valid percentage (e.g., 15 or 17-20).' }"
+  help="Enter a single number (e.g., 15) or a range (e.g., 17-20)."
+/>
+        <FormKit label="Date" placeholder="Enter Investment Date." type="number" min="1" max="31" v-model="input.date" validation="required" />
+        <FormKit label="Notes" placeholder="Enter Investment Notes." type="textarea" v-model="input.description"
           validation="required" />
       </FormKit>
     </div>
@@ -38,7 +47,7 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 import { useRouter } from 'vue-router';
 
 const Statuses = ref([]);
-const Incomes = ref([]);
+const InvestmentTypes = ref([]);
 const $toast = useToast();
 const router = useRouter();
 
@@ -54,25 +63,25 @@ const getStatus = async () => {
   }
 };
 
-const getIncomes = async () => {
+const getInvestmentTypes = async () => {
   try {
-    const response = await apiClient.get('Incomes')
-    Incomes.value =[{ value: '', label: 'Select Income.'}, ...response.data.map((income) => ({
-      value: income.id,
-      label: income.name,
+    const response = await apiClient.get('InvestmentTypes')
+    InvestmentTypes.value =[{ value: '', label: 'Select Investment Type.'}, ...response.data.map((invest) => ({
+      value: invest.id,
+      label: invest.name,
     }))]; // Log the actual data, not the ref object
   } catch (error) {
-    console.error("Error fetching income:", error);
+    console.error("Error fetching Investment Types:", error);
   }
 };
 
-const updateBudget = async () => {
+const createInvestment = async () => {
   try {
-    const response = await apiClient.post('Budgets', input);
+    const response = await apiClient.post('Investments', input);
 
     if (response.status === 201) {
-      $toast.success('You have successfully added a Budget!');
-      router.push('/Budgets');
+      $toast.success('You have successfully added a Investment!');
+      router.push('/Investment');
     }
   } catch (error) {
     $toast.error('An error occurred. Please try again.');
@@ -85,18 +94,20 @@ const userID = localStorage.getItem("authUserID");
 
 const input = reactive({
   name: '',
-  statusID: '',
-  incomeID: '',
+  company: '',
+  Reference: '',
+  investTypeID: '',
   amount: '',
-  spentamount: 0,
-  remindon: '',
   description: '',
-  userID: userID
+  userId: userID,
+  currentAmount: 0,
+  percentage: '',
+  date: '',
 });
 
 onMounted(() => {
   getStatus(); // Ensure function is called properly
-  getIncomes(); // Ensure function is called properly
+  getInvestmentTypes(); // Ensure function is called properly
 });
 </script>
 

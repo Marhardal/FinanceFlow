@@ -16,4 +16,28 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
+instance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      const authUserID = localStorage.getItem("authUserID");
+      const refreshToken = localStorage.getItem("authRefreshToken");
+      console.log(authUserID + " " + refreshToken);
+      originalRequest._retry = true;
+      const res = await instance.post("/user/refresh-Token", {
+        authUserID,
+        refreshToken
+      });
+      if (res.status === 200) {
+        localStorage.setItem("authToken", res.data.accessToken);
+        return instance(originalRequest);
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default instance;

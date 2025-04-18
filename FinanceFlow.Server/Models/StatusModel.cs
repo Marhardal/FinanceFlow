@@ -13,5 +13,9 @@ namespace FinanceFlow.Server.Models
         public ICollection<IncomeModel>? Incomes { get; set; }
 
         public ICollection<BudgetModel>? Budgets { get; set; }
+     
+        public ICollection<InvestmentModel>? Investments { get; set; }
+        
+        public ICollection<InvestModel>? Invests { get; set; }
     }
 }

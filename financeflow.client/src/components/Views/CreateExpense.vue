@@ -11,7 +11,7 @@
         'data-theme': `dark`,
         ignore: false
       }">
-        <FormKit type="select" label="Select an Item Name." :options="items" validation="required" v-model="input.itemID" />
+        <FormKit type="select" label="Select an Item Name." searchable :options="items" validation="required" v-model="input.itemID" />
         <FormKit label="Quantity" placeholder="Enter Item Quantity." type="number" validation="required" v-model="input.quantity" />
         <FormKit label="Expected Amount" placeholder="Enter the Expected Amount." type="number" v-model="input.Expectedamount" />
         <FormKit label="Amount" placeholder="Enter Item Amount." type="number" validation="required" v-model="input.amount" />

@@ -37,6 +37,8 @@ const $toast = useToast();
 const router = useRouter();
 const items = ref([]);
 
+const userID = localStorage.getItem("authUserID");
+
 const input = reactive({
   id: expenseID,
   budgetID: budgetID,
@@ -44,7 +46,8 @@ const input = reactive({
   quantity: '',
   amount: '',
   expectedamount: '',
-  description: ''
+  description: '',
+  userID: userID,
 })
 
 const updateExpense = async (expenseID) => {

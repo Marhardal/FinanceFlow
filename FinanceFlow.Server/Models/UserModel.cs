@@ -4,8 +4,10 @@ namespace FinanceFlow.Server.Models
 {
     public class UserModel
     {
-        public Guid id { get; set; }
+        public int id { get; set; }
 
+        [ForeignKey("ReleId")]
+        public int RoleId { get; set; }
         [Required]
         public string? FirstName { get; set; }
 
@@ -21,7 +23,7 @@ namespace FinanceFlow.Server.Models
         [Required]
         public string? PasswordHash { get; set; }
 
-        public DateOnly DOB { get; set; } = DateOnly.MinValue;
+        public DateTime DOB { get; set; } = DateTime.Now;
 
         public DateTime createat { get; set; } = DateTime.Now;
 

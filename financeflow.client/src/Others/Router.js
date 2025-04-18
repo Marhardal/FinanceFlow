@@ -18,6 +18,12 @@ import DetailsBudget from '@/components/Views/DetailsBudget.vue'
 import EditExpense from '@/components/Views/EditExpense.vue'
 import Register from '@/components/Views/Register.vue'
 import Login from '@/components/Views/Login.vue'
+import Investment from '@/components/Views/Investment.vue'
+import CreateInvestment from '@/components/Views/CreateInvestment.vue'
+import EditInvestment from '@/components/Views/EditInvestment.vue'
+import DetailsInvestment from '@/components/Views/DetailsInvestment.vue'
+import CreateTopup from '@/components/Views/CreateTopup.vue'
+import EditTopup from '@/components/Views/EditTopup.vue'
 
 
 function auth(to, from) {
@@ -33,7 +39,7 @@ function guest(to, from) {
 }
 
 const routes = [
-  { path: '/', component: index },
+  { path: '/', component: index, beforeEnter: auth },
       { path: '/transactions', component: Transactions, beforeEnter: auth },
       { path: '/incomes', component: Incomes, beforeEnter: auth },
       { path: '/income/create', component: CreateIncome, beforeEnter: auth },
@@ -49,6 +55,12 @@ const routes = [
       { path: '/Budget/create', component: CreateBudget, beforeEnter: auth },
       { path: '/Budget/edit/:id', component: EditBudget, beforeEnter: auth },
       { path: '/Budget/details/:id', component: DetailsBudget, beforeEnter: auth },
+      { path: '/investment', component: Investment, beforeEnter: auth},
+      { path: '/investment/Create', component: CreateInvestment, beforeEnter: auth},
+      { path: '/investment/edit/:id', component: EditInvestment, beforeEnter: auth },
+      { path: '/investment/details/:id', component: DetailsInvestment, beforeEnter: auth },
+      { path: '/investment/:id/invest/create', component: CreateTopup, beforeEnter: auth },
+      { path: '/investment/:investmentId/invest/edit/:investId', component: EditTopup, beforeEnter: auth },
       { path: '/register', component: Register, beforeEnter: guest},
       { path: '/login', component: Login, beforeEnter: guest},
 ];

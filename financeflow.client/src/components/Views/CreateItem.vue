@@ -39,10 +39,10 @@ const router = useRouter();
 const getCategories = async () => {
   try {
     const response = await apiClient.get('ItemCategory')
-    Categories.value = response.data.map((category) => ({
+    Categories.value =  [{ value: '', label: 'Select Item Category.' }, ...response.data.map((category) => ({
       value: category.id,
       label: category.name,
-    }));
+    }))];
     console.log(Categories); // Log the actual data, not the ref object
   } catch (error) {
     console.error("Error fetching Categories:", error);

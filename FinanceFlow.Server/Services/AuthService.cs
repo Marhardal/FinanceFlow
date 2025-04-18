@@ -36,27 +36,30 @@ namespace FinanceFlow.Server.Services
             {
                 Token = claim
             };
-            //userDTO.FirstName = user.FirstName;
-            //userDTO.Surname = user.Surname;
-            //userDTO.Username = user.Username;
-            //userDTO.Email = user.Email;
-            //userDTO.DOB = user.DOB;
 
-
-            return await createTokenResponce(user);
+            //return userDTO;
+            return await createTokenResponce(user, claim);
         }
 
-        private async Task<TokenRefresh>  createTokenResponce(UserModel user)
+        private async Task<TokenRefresh>  createTokenResponce(UserModel user, string token)
         {
+            if (token is null)
+            {
+                token = generateToken();
+            }
             return new TokenRefresh
             {
-                AccessToken = generateToken(),
-                RefrshToken = await generateAndSaveRefreshTokenasync(user)
+                AccessToken = token,
+                RefrshToken = await generateAndSaveRefreshTokenasync(user),
+                UserID = user.id,
+                RoleID = user.RoleId
             };
         }
 
         public async Task<TokenRefresh> RefreshTokensAsync(RefreshTokenDTO request)
         {
+            request.UserId = 1;
+
             var token = ValidateRefreshTokenAsync(request.UserId, request.refreshToken);
 
             if (token is null)
@@ -64,9 +67,9 @@ namespace FinanceFlow.Server.Services
                 return null;
             }
 
-            var user = await context.Users.FindAsync(request.UserId);
+            var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.id == request.UserId);
 
-            return await createTokenResponce(user);
+            return await createTokenResponce(user, null);
         }
 
         private string Claim(UserModel user)
@@ -83,7 +86,7 @@ namespace FinanceFlow.Server.Services
                 issuer: configuration.GetValue<string>("AppSettings:Issuer"),
                 audience: configuration.GetValue<string>("AppSettings:Audience"),
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
@@ -91,15 +94,15 @@ namespace FinanceFlow.Server.Services
 
         public string generateToken()
         {
-            var randomNumber = new byte[32];
+            var randomNumber = new byte[64];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
         }
 
-        private async Task<UserModel?> ValidateRefreshTokenAsync(Guid UserId, string refreshToken)
+        private async Task<UserModel?> ValidateRefreshTokenAsync(int UserId, string refreshToken)
         {
-            var user = await context.Users.FindAsync(UserId);
+            var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.id == UserId);
             if (user is null || user.refreshToken != refreshToken || user.refreshTokenExpirelyToken <= DateTime.UtcNow)
             {
                 return null;

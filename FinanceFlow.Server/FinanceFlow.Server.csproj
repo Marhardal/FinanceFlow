@@ -7,6 +7,7 @@
     <SpaRoot>..\financeflow.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:53386</SpaProxyServerUrl>
+    <UserSecretsId>66e64d08-5ae6-4c03-954e-3253e5f6a186</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

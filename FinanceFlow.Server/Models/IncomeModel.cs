@@ -10,7 +10,7 @@ namespace FinanceFlow.Server.Models
         public required string Name { get; set; }
 
         [ForeignKey("UserID")]
-        public required Guid UserID { get; set; }
+        public required int UserID { get; set; }
 
         public required int StatusID { get; set; }  // Foreign key property
 
@@ -21,9 +21,9 @@ namespace FinanceFlow.Server.Models
         [Precision(18, 2)]
         public required decimal Amount { get; set; }
 
-        public DateTime? Date { get; set; } = DateTime.UtcNow;
+        public DateTime? Date { get; set; }
 
-        public DateTime? CreateDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreateDate { get; set; }
 
         // Navigation Properties
         [ForeignKey(nameof(StatusID))]  // Correct FK annotation
@@ -37,6 +37,8 @@ namespace FinanceFlow.Server.Models
         public ICollection<IncomePaymentModel>? IncomePayment { get; set; } = new List<IncomePaymentModel>();
 
         public TransactionModel? Transaction { get; set; }
+
+        public InvestModel? Invest { get; set; }
 
         public UserModel? User { get; set; }
     }

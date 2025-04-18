@@ -62,7 +62,7 @@ namespace FinanceFlow.Server.Controllers
             {
                 return NoContent();
             }
-            items.Date = DateTime.UtcNow;
+            //items.Date = DateTime.UtcNow;
             _dbContext.Items.Add(items);
             await _dbContext.SaveChangesAsync();
             return CreatedAtAction(nameof(Get), new { id = items.Id }, items);
