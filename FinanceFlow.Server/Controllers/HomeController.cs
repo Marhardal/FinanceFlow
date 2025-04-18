@@ -343,6 +343,46 @@ namespace FinanceFlow.Server.Controllers
             return Ok(recent);
         }
 
+        [HttpGet("GetRecentandUpcomingInvests")]
+        public async Task<IActionResult> getRecentandUpcominginvets()
+        {
+            List<InvestModel> recent = await _context.Invests
+                .OrderByDescending(t => t.Date)
+                .Take(5)
+                .Select(t => new InvestModel
+                {
+                    InvestmentId = t.InvestmentId, // Fix: Set the required member
+                    StatusID = t.StatusID, // Fix: Ensure required member is set
+                    IncomeID = t.IncomeID, // Fix: Set the required member
+                    Date = t.Date,
+                    amount = t.amount,
+                })
+                .ToListAsync();
+
+            return Ok(recent);
+        }
+
+
+        [HttpGet("GetUpcomingEvents")]
+        public async Task<IActionResult> GetUpcomingEvents()
+        {
+            var upcoming = await (from Budget in _context.Budgets
+                                  join Invest in _context.Invests on new { Month = Budget.remindon.Month, Year = Budget.remindon.Year }
+                                  equals new { Month = Invest.Date.Month, Year = Invest.Date.Year }
+                                  where Budget.statusID == 1 && Invest.StatusID == 1
+                                  orderby Budget.remindon ascending
+                                  select new
+                                  {
+                                      Name = Budget.Name != null ? Budget.Name : Invest.Investment.Name ,
+                                      Type = Budget.Name != null ? "Budget" : (Invest.description != null ? "Investment" : "Unknown"),
+                                      Amount = (float)Budget.Amount > 0 ? (float)Invest.amount : 0, // Fix: Corrected the conditional expression
+                                      RemindOn = Budget.remindon != null ? Invest.Date : DateTime.UtcNow,
+                                  }).ToListAsync();
+
+            return Ok(upcoming);
+        }
+
+
         private string GetCategoryColor(string category)
         {
             // Customize based on your categories
