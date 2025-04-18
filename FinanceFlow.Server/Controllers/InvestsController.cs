@@ -82,7 +82,28 @@ namespace FinanceFlow.Server.Controllers
                     if (investment != null)
                     {
                         // Update the budget entity as needed
-                        investment.CurrentAmount += investModel.amount;
+                        //investment.CurrentAmount += investModel.amount;
+                        // Replace the following line in the PutInvestModel method:
+                        //investment.CurrentAmount += investModel.amount;
+
+                        // With this:
+                        investment.CurrentAmount = (investment.CurrentAmount ?? 0) + Convert.ToDecimal(investModel.amount);
+
+                        // Replace the following line in the PostInvestModel method:
+                        //investment.CurrentAmount += investModel.amount;
+
+                        // With this:
+                        investment.CurrentAmount = (investment.CurrentAmount ?? 0) + Convert.ToDecimal(investModel.amount);
+                        // Update the budget entity as needed
+                        if (investment.CurrentAmount.HasValue)
+                        {
+                            investment.CurrentAmount += Convert.ToDecimal(investModel.amount);
+                        }
+                        else
+                        {
+                            investment.CurrentAmount = Convert.ToDecimal(investModel.amount);
+                        }
+                        _context.Investments.Update(investment);
                         _context.Investments.Update(investment);
                     }
                 }
@@ -139,7 +160,8 @@ namespace FinanceFlow.Server.Controllers
                 if (investment != null)
                 {
                     // Update the budget entity as needed
-                    investment.CurrentAmount += investModel.amount;
+                    //investment.CurrentAmount += investModel.amount;
+                    investment.CurrentAmount = (investment.CurrentAmount ?? 0) + Convert.ToDecimal(investModel.amount);
                     _context.Investments.Update(investment);
                 }
             }
