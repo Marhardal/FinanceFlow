@@ -154,6 +154,8 @@ namespace FinanceFlow.Server.Controllers
             {
                 return NoContent();
             }
+            _context.Invests.Add(investModel);
+            await _context.SaveChangesAsync();
             var investment = await _context.Investments.FindAsync(investModel.InvestmentId);
             if (investModel.StatusID == 2)
             {
@@ -163,26 +165,27 @@ namespace FinanceFlow.Server.Controllers
                     //investment.CurrentAmount += investModel.amount;
                     investment.CurrentAmount = (investment.CurrentAmount ?? 0) + Convert.ToDecimal(investModel.amount);
                     _context.Investments.Update(investment);
+
+
+                    var transaction = _context.Transactions.Where(b => b.investid == investModel.InvestmentId).FirstOrDefault();
+
+                    if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
+                    {
+                        TransactionModel transactions = new TransactionModel();
+
+                        transactions.amount = Convert.ToDecimal(investModel.amount);
+                        transactions.date = DateTime.Now;
+                        transactions.investid = investModel.InvestmentId;
+                        transactions.type = TransactionType.Invests;
+                        transactions.createdon = DateTime.Now;
+                        transactions.date = DateTime.Now;
+                        _context.Transactions.Add(transactions);
+                    }
+
                 }
             }
-            _context.Invests.Add(investModel);
-            await _context.SaveChangesAsync();
             
-            var transaction = _context.Transactions.Where(b => b.investid == investModel.Id).FirstOrDefault();
-
-            if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
-            {
-                TransactionModel transactions = new TransactionModel();
-
-                transactions.amount = Convert.ToDecimal(investModel.amount);
-                transactions.date = DateTime.Now;
-                transactions.investid = investModel.Id;
-                transactions.type = TransactionType.Invests;
-                transactions.createdon = DateTime.Now;
-                transactions.date = DateTime.Now;
-                _context.Transactions.Add(transactions);
-                await _context.SaveChangesAsync();
-            }
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetInvestModel", new { id = investModel.Id }, investModel);
         }

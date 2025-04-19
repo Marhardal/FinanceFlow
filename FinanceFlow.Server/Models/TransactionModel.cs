@@ -26,7 +26,7 @@ namespace FinanceFlow.Server.Models
 
         public BudgetModel? Budget { get; set; }
 
-        public InvestModel? Invest { get; set; }
+        public InvestmentModel? investment { get; set; }
     }
 
     public enum TransactionType
