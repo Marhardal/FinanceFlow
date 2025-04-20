@@ -12,8 +12,7 @@ namespace FinanceFlow.Server.Models
         public int? incomeid { get; set; }
 
         public int? budgetid { get; set; }
-
-        public int? investid { get; set; }
+        public int? investId { get; set; }
 
         [Precision(18, 2)]
         public decimal? amount { get; set; }
@@ -26,13 +25,13 @@ namespace FinanceFlow.Server.Models
 
         public BudgetModel? Budget { get; set; }
 
-        public InvestmentModel? investment { get; set; }
+        public InvestModel? Invest { get; set; }
     }
 
     public enum TransactionType
     {
         Incomes,
         Budgets,
-        Invests
+        Investment
     }
 }

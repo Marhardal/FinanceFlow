@@ -13,9 +13,9 @@ namespace FinanceFlow.Server.DBContext
 
         }
 
-        public DbSet<ItemsCategoriesModel> itemCategories { get; set; }
-
         public DbSet<IncomeCategoryModel> incomeCategories { get; set; }
+
+        public DbSet<ItemsCategoriesModel> itemCategories { get; set; }
 
         public DbSet<PaymentMethodModel> paymentMethods { get; set; }
 
@@ -25,23 +25,22 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<ExpenseModel> Expenses { get; set; }
 
-        public DbSet<BudgetModel> Budgets { get; set; }
-
-        public DbSet<IncomeModel> Incomes { get; set; }
-
         public DbSet<IncomePaymentModel> incomePayment { get; set; }
-
-        public DbSet<TransactionModel> Transactions { get; set; }
+        public DbSet<RolesModel> Roles { get; set; }
 
         public DbSet<UserModel> Users { get; set; }
-
-        public DbSet<RolesModel> Roles { get; set; }
+        
+        public DbSet<InvestModel> Invests { get; set; }
 
         public DbSet<InvestmentTypeModel> investmentTypes { get; set; } 
 
         public DbSet<InvestmentModel> Investments { get; set; }
-        
-        public DbSet<InvestModel> Invests { get; set; }
+
+        public DbSet<BudgetModel> Budgets { get; set; }
+
+        public DbSet<IncomeModel> Incomes { get; set; }
+
+        public DbSet<TransactionModel> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -101,6 +100,11 @@ namespace FinanceFlow.Server.DBContext
                 .HasOne(b => b.Budget)
                 .WithOne(t => t.Transaction)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TransactionModel>()
+                .HasOne(t => t.Invest)
+                .WithOne(i => i.Transaction)
+                .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction
 
             modelBuilder.Entity<IncomeModel>()
                 .HasOne(i => i.User)

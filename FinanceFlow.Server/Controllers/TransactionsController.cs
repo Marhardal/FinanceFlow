@@ -30,7 +30,8 @@ namespace FinanceFlow.Server.Controllers
             var transactions = await _context.Transactions
         .Include(t => t.Income)  // Properly include Income
         .Include(t => t.Budget)  // Properly include Budget
-        .Include(t => t.investment)
+        .Include(t => t.Invest)
+        .ThenInclude(i => i.Investments)
         .Select(t => new
         {
             t.id,
@@ -41,7 +42,7 @@ namespace FinanceFlow.Server.Controllers
             t.budgetid,
             IncomeName = t.Income != null ? t.Income.Name : null,   // Get Income Name if available
             BudgetName = t.Budget != null ? t.Budget.Name : null,   // Get Budget Name if available
-            InvestmentName = t.investment != null ? t.investment.Name : null,
+            InvestmentName = t.Invest.Investment.Name != null ? t.Invest.Investment.Name : null,
         }).ToListAsync();
 
             if (!transactions.Any())

@@ -125,7 +125,7 @@ namespace FinanceFlow.Server.Controllers
                 }
             }
 
-            var transaction = _context.Transactions.Where(b => b.investid == investModel.Id).FirstOrDefault();
+            var transaction = _context.Transactions.Where(b => b.investId == investModel.Id).FirstOrDefault();
 
             if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
             {
@@ -133,8 +133,8 @@ namespace FinanceFlow.Server.Controllers
 
                 transactions.amount = Convert.ToDecimal(investModel.amount);
                 transactions.date = DateTime.Now;
-                transactions.investid = investModel.Id;
-                transactions.type = TransactionType.Invests;
+                transactions.investId = investModel.Id;
+                transactions.type = TransactionType.Investment;
                 transactions.createdon = DateTime.Now;
                 transactions.date = DateTime.Now;
                 _context.Transactions.Add(transactions);
@@ -167,7 +167,7 @@ namespace FinanceFlow.Server.Controllers
                     _context.Investments.Update(investment);
 
 
-                    var transaction = _context.Transactions.Where(b => b.investid == investModel.InvestmentId).FirstOrDefault();
+                    var transaction = _context.Transactions.Where(b => b.investId == investModel.InvestmentId).FirstOrDefault();
 
                     if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
                     {
@@ -175,8 +175,8 @@ namespace FinanceFlow.Server.Controllers
 
                         transactions.amount = Convert.ToDecimal(investModel.amount);
                         transactions.date = DateTime.Now;
-                        transactions.investid = investModel.InvestmentId;
-                        transactions.type = TransactionType.Invests;
+                        transactions.investId = investModel.InvestmentId;
+                        transactions.type = TransactionType.Investment;
                         transactions.createdon = DateTime.Now;
                         transactions.date = DateTime.Now;
                         _context.Transactions.Add(transactions);

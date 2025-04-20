@@ -5,6 +5,7 @@ using FinanceFlow.Server.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,7 +15,7 @@ namespace FinanceFlow.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(IAuthService service) : ControllerBase
+    public class UserController(FinanceDBContext context, IAuthService service) : ControllerBase
     {
 
         [HttpPost("register")]
@@ -33,6 +34,8 @@ namespace FinanceFlow.Server.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<TokenRefresh>> Login(UserDTO userDTO)
         {
+            var user = await context.Users.ToListAsync();
+
             var token = await service.AuthenticateAsync(userDTO);
 
             if (token is null)

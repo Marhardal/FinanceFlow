@@ -43,5 +43,4 @@ namespace FinanceFlow.Server.Models
 
         public TransactionModel? Transaction { get; set; }
     }
-
 }
