@@ -32,6 +32,7 @@ namespace FinanceFlow.Server.Controllers
         .Include(t => t.Budget)  // Properly include Budget
         .Include(t => t.Invest)
         .ThenInclude(i => i.Investments)
+        .OrderByDescending(i => i.date)
         .Select(t => new
         {
             t.id,

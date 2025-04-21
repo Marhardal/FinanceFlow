@@ -28,7 +28,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BudgetModel>>> GetBudgets(string search = null)
         {
-            IQueryable<BudgetModel> query = _context.Budgets.Include(s => s.status).Include(i => i.Income);
+            IQueryable<BudgetModel> query = _context.Budgets.Include(s => s.status).Include(i => i.Income).OrderByDescending(b => b.createdon);
             if (search is not null)
             {
                 query = query.Where(b => b.Name.Contains(search)).Where(i => i.Income.Name.Contains(search)).Where(s => s.status.Name.Contains(search));

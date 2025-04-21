@@ -53,7 +53,7 @@ const createExpense = async () => {
     const response = await apiClient.post('Expense', input);
     if (response.status === 201) {
       $toast.success('You Created an Expense Sucessfully!');
-      router.push(`Budget/details/${id}`);
+      router.push(`Budget/details/`+ id);
     }
   } catch (error) {
     console.error("Error creating Item:", error);

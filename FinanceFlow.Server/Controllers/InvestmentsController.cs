@@ -28,7 +28,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InvestmentModel>>> GetInvestments(string search = null)
         {
-            string userId = "3";
+            string userId = "1";
             //string userId = HttpContext.User.Claims.FirstOrDefault(ClaimTypes.NameIdentifier.ToString())
             if (userId is null)
             {
