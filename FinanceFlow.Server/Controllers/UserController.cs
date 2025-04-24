@@ -46,6 +46,18 @@ namespace FinanceFlow.Server.Controllers
             return Ok(token);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetUser(int userid = 1)
+        {
+            var user = await context.Users.FindAsync(userid);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            return Ok(user);
+        }
 
         [HttpPost("refresh-token")]
         public async Task<ActionResult<TokenRefresh>> RefreshToken(RefreshTokenDTO request)

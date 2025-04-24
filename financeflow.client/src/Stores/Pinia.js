@@ -9,6 +9,7 @@ export const useStore = defineStore("store", {
     authRefreshToken: ref([]),
     authRole: ref([]),
     authErrors: ref([]),
+    authUser: ref([]),
   }),
 
   getters: {},
@@ -32,12 +33,30 @@ export const useStore = defineStore("store", {
 
         return true;
       } catch (error) {
-        this.authErrors = error.response;
+        this.authErrors.value = error.response;
+        return false;
+      }
+    },
+    async getUser() {
+      try {
+        const userId = localStorage.getItem("authUserID");
+        if (!userId) {
+          console.warn("No userId found in localStorage");
+          return null;
+        }
+
+        const response = await apiClient.get(`/User/${userId}`);
+        this.authUser.value = response.data;
+        return true;
+        // }
+      }
+      catch (error) {
+        this.authErrors.value = error.response;
         return false;
       }
     },
     logout() {
-      this.authUser = null;
+      this.authUser.value = null;
       this.authToken = null;
       localStorage.removeItem("authToken");
       localStorage.removeItem("authUser");
