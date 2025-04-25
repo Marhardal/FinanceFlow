@@ -9,14 +9,12 @@
         <!-- <span v-else-if="timePeriod === 'evening'">🌇 Good Evening!</span> -->
         <!-- <span v-else>🌙 Good Night!</span> -->
       </div>
-      <DashMincard v-if="currentMonth.income != 0" title="Balance"
+      <DashMincard v-if="currentMonth.income != 0" title="Income"
         :subtitle="'Your total income is ' + currentMonth.income + '.'">
-
       </DashMincard>
       <DashMincard title="Income"
         v-else-if="fallBack.income && fallBack.income.month && fallBack.income.amount && currentMonth.income == 0"
         :subtitle="'Your total income from ' + fallBack.income.month + ' was ' + fallBack.income.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) + '.'">
-
       </DashMincard>
 
       <DashMincard v-if="currentMonth.budget != 0" title="Budgeted"
@@ -90,6 +88,7 @@ const headerBars = async () => {
   const response = await apiClient.get('/Home/Header');
   if (response.status === 200) {
     fallBack.budget = response.data.fallbacks.budget;
+    currentMonth.budget = response.data.current.budget;
     currentMonth.Investment = response.data.current.Investment;
     fallBack.Investment = response.data.fallbacks.investments;
     currentMonth.income = response.data.current.income;

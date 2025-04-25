@@ -2,6 +2,7 @@
 using FinanceFlow.Server.DTOs;
 using FinanceFlow.Server.Models;
 using FinanceFlow.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -46,11 +47,15 @@ namespace FinanceFlow.Server.Controllers
             return Ok(token);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetUser(int userid = 1)
         {
             var user = await context.Users.FindAsync(userid);
-
+            var identity = (ClaimsIdentity)User.Identity;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // Or if you used a custom claim:
+            //var userId = User.FindFirst("userId")?.Value;
             if (user == null)
             {
                 return NotFound("User not found.");
