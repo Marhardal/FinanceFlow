@@ -50,6 +50,9 @@
       <div class="col-span-1 bg-white border border-gray-300">
         <RecentTransactions />
       </div>
+      <div class="col-span-2 bg-white border border-gray-300">
+        <upcomingEvents />
+      </div>
     </div>
   </ContainerBg>
 </template>
@@ -65,6 +68,7 @@ import BarChart from '../Components/Charts/BarChart.vue';
 import Pie from '../Components/Charts/Pie.vue';
 import LineChart from '../Components/Charts/lineChart.vue';
 import RecentTransactions from '../Components/recentTransactions.vue';
+import upcomingEvents from '../Components/upcomingEvents.vue';
 import { useStore } from '@/Stores/Pinia';
 
 const authUseStore = useStore();
