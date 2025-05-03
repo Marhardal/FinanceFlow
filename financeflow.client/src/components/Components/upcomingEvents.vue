@@ -7,7 +7,7 @@
       <div class="col-span-6 flex justify-end">
         <router-link
           class="bg-indigo-600 px-4 py-2 my-4 rounded-md text-white font-semibold tracking-wide cursor-pointer"
-          :to="transactions">Transactions</router-link>
+          :to="events">events</router-link>
       </div>
     </div>
   </div>
@@ -22,6 +22,9 @@
                   <tr>
                     <th scope="col"
                       class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                      Name</th>
+                    <th scope="col"
+                      class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                       Type</th>
                     <th scope="col"
                       class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
@@ -31,23 +34,17 @@
                       Date</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200 dark:divide-neutral-700" v-if="Transactions != null">
-                  <tr class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-for="transition in Transactions"
-                    :key="transition.id">
+                <tbody class="divide-y divide-gray-200 dark:divide-neutral-700" v-if="events != null">
+                  <tr class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-for="event in events"
+                    :key="event.id">
                     <!-- dark:text-neutral-200 -->
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="transition.type == 0">Incomes
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-else-if="transition.type == 1">
-                      Budgets</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" v-else-if="transition.type == 2">
-                      Invested</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{
-                      transition.amount.toLocaleString('en-mw', {
-                        minimumFractionDigits: 2, style: 'currency',
-                        currency: 'MWK'
-                      }) }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ dayjs(transition.date).fromNow()
-                    }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{{ event.name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="event.type != null">{{ event.type }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ event.amount.toLocaleString('en-mw', {
+                              minimumFractionDigits: 2, style: 'currency',
+                              currency: 'MWK'
+                            }) }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ dayjs(event.remindOn).fromNow() }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -62,7 +59,10 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import apiClient from '../../Others/apiClient';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import dayjs from 'dayjs';
 
+dayjs.extend(relativeTime);
 const events = ref([]);
 const fetchEvents = async () => {
   try {

@@ -122,7 +122,7 @@
                             {{ Invest.income.name }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.status">
                             {{ Invest.status.name }}</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm">{{
+                          <td class="px-6 py-4 whitespace-nowrap text-sm">{{
                             Invest.amount.toLocaleString('en-mw', {
                               minimumFractionDigits: 2, style: 'currency',
                               currency: 'MWK'
@@ -178,10 +178,10 @@ import ContainerBg from '../Components/ContainerBg.vue';
 import apiClient from '../../Others/apiClient'
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { useToast } from 'vue-toast-notification';
 // import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/solid';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from 'dayjs';
 
 dayjs.extend(relativeTime);
