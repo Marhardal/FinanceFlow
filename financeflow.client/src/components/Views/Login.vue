@@ -58,7 +58,8 @@ const Login = async () => {
     $toast.error("Error logging in. Please try again.");
     return;
   }
-  router.push({ path: '/' })
+  router.replace('/').then(() => window.location.reload())
+  // router.push({ path: '/' })
   // $toast.success("Logged in successfully.");
 }
 
