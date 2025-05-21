@@ -104,7 +104,6 @@ namespace FinanceFlow.Server.Controllers
                             investment.CurrentAmount = Convert.ToDecimal(investModel.amount);
                         }
                         _context.Investments.Update(investment);
-                        _context.Investments.Update(investment);
                     }
                 }
             }

@@ -9,8 +9,8 @@ namespace FinanceFlow.Server.Models
     public class NotificationModel
     {
         public int Id { get; set; }
-        
-        public int reminderCount { get; set; }
+
+        public int reminderCount { get; set; } = 0;
 
         //[ForeignKey("userID")]
 

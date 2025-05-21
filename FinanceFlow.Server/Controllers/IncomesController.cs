@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -106,6 +107,15 @@ namespace FinanceFlow.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<IncomeModel>> PostIncomeModel(IncomeModel incomeModel)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // OR if using a custom claim name:
+            //var userId = User.FindFirst("userID")?.Value;
+
+            if (userId is null)
+            {
+                return NoContent();
+            }
+            incomeModel.UserID = Convert.ToInt32(userId);
             if (incomeModel is null)
             {
                 return NoContent();
@@ -142,6 +152,24 @@ namespace FinanceFlow.Server.Controllers
                 _context.Transactions.Add(transactions);
                 await _context.SaveChangesAsync();
             }
+
+            //Add Notification
+            // Fix for the problematic line in the PostIncomeModel method
+            if (incomeModel.Date >= DateTime.Now.Date && incomeModel.StatusID == 1)
+            {
+                NotificationModel notification = new NotificationModel
+                {
+                    userID = incomeModel.UserID,
+                    StatusID = 1,
+                    IncomeID = incomeModel.Id,
+                    DueDate = (DateTime)incomeModel.Date,
+                    isrecurring = false,
+                };
+
+                _context.Notification.Add(notification);
+                await _context.SaveChangesAsync();
+            }
+
             return CreatedAtAction("GetIncomeModel", new { id = incomeModel.Id }, incomeModel);
         }
 

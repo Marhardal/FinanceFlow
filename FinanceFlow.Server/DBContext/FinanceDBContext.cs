@@ -30,10 +30,10 @@ namespace FinanceFlow.Server.DBContext
         public DbSet<RolesModel> Roles { get; set; }
 
         public DbSet<UserModel> Users { get; set; }
-        
+
         public DbSet<InvestModel> Invests { get; set; }
 
-        public DbSet<InvestmentTypeModel> investmentTypes { get; set; } 
+        public DbSet<InvestmentTypeModel> investmentTypes { get; set; }
 
         public DbSet<InvestmentModel> Investments { get; set; }
 
@@ -144,22 +144,22 @@ namespace FinanceFlow.Server.DBContext
                 .HasForeignKey(i => i.InvestmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-//            modelBuilder.Entity<NotificationModel>()
-//                .HasOne(i => i.Invest)
-//                .WithOne(n => n.Notification)
-//                .HasForeignKey<NotificationModel>(i => i.InvestID)
-//.OnDelete(DeleteBehavior.NoAction); 
+            //            modelBuilder.Entity<NotificationModel>()
+            //                .HasOne(i => i.Invest)
+            //                .WithOne(n => n.Notification)
+            //                .HasForeignKey<NotificationModel>(i => i.InvestID)
+            //.OnDelete(DeleteBehavior.NoAction); 
 
             modelBuilder.Entity<NotificationModel>()
                 .HasOne(s => s.Status)
                 .WithOne(n => n.Notification)
                 .HasForeignKey<NotificationModel>(s => s.StatusID)
-.OnDelete(DeleteBehavior.NoAction); 
+.OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<NotificationModel>()
                 .HasOne(i => i.Income)
                 .WithOne(n => n.Notification)
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<NotificationModel>()
                 .HasOne(b => b.Budget)
@@ -171,7 +171,7 @@ namespace FinanceFlow.Server.DBContext
                 .HasOne(n => n.User)
                 .WithOne(u => u.Notification)
                 .HasForeignKey<NotificationModel>(n => n.userID)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
 
             //modelBuilder.Entity<UserModel>()
             //    .HasOne(u => u.Roles)
@@ -363,7 +363,7 @@ namespace FinanceFlow.Server.DBContext
                 new InvestmentTypeModel { id = 8, name = "Agriculture" }
                 );
 
-           
+
         }
 
 
