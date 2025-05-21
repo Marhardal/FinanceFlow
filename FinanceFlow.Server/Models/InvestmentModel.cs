@@ -40,6 +40,7 @@ namespace FinanceFlow.Server.Models
         public ICollection<InvestModel> Invests { get; set; } = new List<InvestModel>();
 
         public UserModel? User { get; set; }
-    }
 
+        public TransactionModel? Transaction { get; set; }
+    }
 }

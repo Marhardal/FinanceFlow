@@ -14,9 +14,9 @@ namespace FinanceFlow.Server.DBContext
 
         }
 
-        public DbSet<ItemsCategoriesModel> itemCategories { get; set; }
-
         public DbSet<IncomeCategoryModel> incomeCategories { get; set; }
+
+        public DbSet<ItemsCategoriesModel> itemCategories { get; set; }
 
         public DbSet<PaymentMethodModel> paymentMethods { get; set; }
 
@@ -26,23 +26,22 @@ namespace FinanceFlow.Server.DBContext
 
         public DbSet<ExpenseModel> Expenses { get; set; }
 
-        public DbSet<BudgetModel> Budgets { get; set; }
-
-        public DbSet<IncomeModel> Incomes { get; set; }
-
         public DbSet<IncomePaymentModel> incomePayment { get; set; }
-
-        public DbSet<TransactionModel> Transactions { get; set; }
+        public DbSet<RolesModel> Roles { get; set; }
 
         public DbSet<UserModel> Users { get; set; }
-
-        public DbSet<RolesModel> Roles { get; set; }
+        
+        public DbSet<InvestModel> Invests { get; set; }
 
         public DbSet<InvestmentTypeModel> investmentTypes { get; set; } 
 
         public DbSet<InvestmentModel> Investments { get; set; }
-        
-        public DbSet<InvestModel> Invests { get; set; }
+
+        public DbSet<BudgetModel> Budgets { get; set; }
+
+        public DbSet<IncomeModel> Incomes { get; set; }
+
+        public DbSet<TransactionModel> Transactions { get; set; }
 
         public DbSet<NotificationModel> Notification { get; set; }
 
@@ -104,6 +103,11 @@ namespace FinanceFlow.Server.DBContext
                 .HasOne(b => b.Budget)
                 .WithOne(t => t.Transaction)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TransactionModel>()
+                .HasOne(t => t.Invest)
+                .WithOne(i => i.Transaction)
+                .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.NoAction
 
             modelBuilder.Entity<IncomeModel>()
                 .HasOne(i => i.User)
@@ -173,29 +177,30 @@ namespace FinanceFlow.Server.DBContext
             //    .HasOne(u => u.Roles)
             //    .WithOne(r => r.User);
             modelBuilder.Entity<ItemsCategoriesModel>().HasData(
-    // Essential Living
-    new ItemsCategoriesModel { Id = 1, Name = "Housing" },
-    new ItemsCategoriesModel { Id = 2, Name = "Utilities" },
-    new ItemsCategoriesModel { Id = 3, Name = "Groceries" },
-    new ItemsCategoriesModel { Id = 4, Name = "Transportation" },
-    new ItemsCategoriesModel { Id = 5, Name = "Healthcare" },
+                // Essential Living
+                new ItemsCategoriesModel { Id = 1, Name = "Housing" },
+                new ItemsCategoriesModel { Id = 2, Name = "Utilities" },
+                new ItemsCategoriesModel { Id = 3, Name = "Groceries" },
+                new ItemsCategoriesModel { Id = 4, Name = "Transportation" },
+                new ItemsCategoriesModel { Id = 5, Name = "Healthcare" },
 
-    // Personal & Lifestyle
-    new ItemsCategoriesModel { Id = 6, Name = "Personal Care" },
-    new ItemsCategoriesModel { Id = 7, Name = "Clothing & Apparel" },
-    new ItemsCategoriesModel { Id = 8, Name = "Entertainment" },
-    new ItemsCategoriesModel { Id = 9, Name = "Education" },
+                // Personal & Lifestyle
+                new ItemsCategoriesModel { Id = 6, Name = "Personal Care" },
+                new ItemsCategoriesModel { Id = 7, Name = "Clothing & Apparel" },
+                new ItemsCategoriesModel { Id = 8, Name = "Entertainment" },
+                new ItemsCategoriesModel { Id = 9, Name = "Education" },
 
-    // Financial
-    new ItemsCategoriesModel { Id = 10, Name = "Debt Payments" },
+                // Financial
+                new ItemsCategoriesModel { Id = 10, Name = "Debt Payments" },
 
-    // Occasional/Other
-    new ItemsCategoriesModel { Id = 11, Name = "Gifts & Donations" },
-    new ItemsCategoriesModel { Id = 12, Name = "Travel" },
-    new ItemsCategoriesModel { Id = 13, Name = "Home Maintenance" },
-    new ItemsCategoriesModel { Id = 14, Name = "Subscriptions" },
-    new ItemsCategoriesModel { Id = 15, Name = "Miscellaneous" }
-);
+                // Occasional/Other
+                new ItemsCategoriesModel { Id = 11, Name = "Gifts & Donations" },
+                new ItemsCategoriesModel { Id = 12, Name = "Travel" },
+                new ItemsCategoriesModel { Id = 13, Name = "Home Maintenance" },
+                new ItemsCategoriesModel { Id = 14, Name = "Subscriptions" },
+                new ItemsCategoriesModel { Id = 15, Name = "Miscellaneous" }
+            );
+
             #region
             modelBuilder.Entity<ItemsModel>().HasData(
                 // 1. Housing
@@ -209,13 +214,21 @@ namespace FinanceFlow.Server.DBContext
                 new ItemsModel { Id = 6, Name = "Water Bill", ItemCategoryId = 2, Measurement = "Gallons" },
                 new ItemsModel { Id = 7, Name = "Internet", ItemCategoryId = 2, Measurement = "Monthly" },
                 new ItemsModel { Id = 8, Name = "Mobile Plan", ItemCategoryId = 2, Measurement = "Monthly" },
+                new ItemsModel { Id = 58, Name = "Voice Bundle", ItemCategoryId = 2, Measurement = "One-time" },
 
                 // 3. Groceries
-                new ItemsModel { Id = 9, Name = "Milk", ItemCategoryId = 3, Measurement = "Liters" },
-                new ItemsModel { Id = 10, Name = "Eggs", ItemCategoryId = 3, Measurement = "Dozen" },
-                new ItemsModel { Id = 11, Name = "Vegetables", ItemCategoryId = 3, Measurement = "kg" },
+                new ItemsModel { Id = 9, Name = "Grains & Staples", ItemCategoryId = 3, Measurement = "Liters" },
+                new ItemsModel { Id = 10, Name = "Meat & Seafood", ItemCategoryId = 3, Measurement = "Dozen" },
+                new ItemsModel { Id = 11, Name = "Fruits and Vegetables", ItemCategoryId = 3, Measurement = "kg" },
                 new ItemsModel { Id = 12, Name = "Snacks", ItemCategoryId = 3, Measurement = "USD" },
-                new ItemsModel { Id = 57, Name = "Fruits", ItemCategoryId = 3, Measurement = "USD" },
+                new ItemsModel { Id = 59, Name = "Condiments & Spices", ItemCategoryId = 3, Measurement = "USD" },
+                new ItemsModel { Id = 60, Name = "Household & Cleaning", ItemCategoryId = 3, Measurement = "USD" },
+                new ItemsModel { Id = 61, Name = "Baby Products", ItemCategoryId = 3, Measurement = "USD" },
+                new ItemsModel { Id = 62, Name = "Beverages", ItemCategoryId = 3, Measurement = "USD" },
+                new ItemsModel { Id = 63, Name = "Dairy & Protein", ItemCategoryId = 3, Measurement = "USD" },
+                new ItemsModel { Id = 64, Name = "Produce", ItemCategoryId = 3, Measurement = "USD" },
+                new ItemsModel { Id = 65, Name = "Snacks & Processed", ItemCategoryId = 3, Measurement = "USD" },
+                new ItemsModel { Id = 66, Name = "Canned & Preserved", ItemCategoryId = 3, Measurement = "USD" },
 
                 // 4. Transportation
                 new ItemsModel { Id = 13, Name = "Gasoline", ItemCategoryId = 4, Measurement = "Liters" },
@@ -237,12 +250,11 @@ namespace FinanceFlow.Server.DBContext
                 new ItemsModel { Id = 56, Name = "Body Lotion and Glycerine", ItemCategoryId = 6, Measurement = "Bottle" },
 
                 // 7. Clothing & Apparel
-                new ItemsModel { Id = 25, Name = "Shirts/T-shirts", ItemCategoryId = 7, Measurement = "Pair" },
-                //new ItemsModel { Id = 25, Name = "Shirts/T-shirts", ItemCategoryId = 7, Measurement = "Pair" },
-                new ItemsModel { Id = 55, Name = "Trousers", ItemCategoryId = 7, Measurement = "Pair" },
-                new ItemsModel { Id = 26, Name = "Coat", ItemCategoryId = 7, Measurement = "One-time" },
-                new ItemsModel { Id = 27, Name = "Shoes", ItemCategoryId = 7, Measurement = "Pair" },
-                new ItemsModel { Id = 28, Name = "Socks", ItemCategoryId = 7, Measurement = "Pack" },
+                new ItemsModel { Id = 25, Name = "Tops", ItemCategoryId = 7, Measurement = "Pair" },
+                new ItemsModel { Id = 55, Name = "Bottoms", ItemCategoryId = 7, Measurement = "Pair" },
+                new ItemsModel { Id = 26, Name = "Full-body", ItemCategoryId = 7, Measurement = "One-time" },
+                new ItemsModel { Id = 27, Name = "Footwear", ItemCategoryId = 7, Measurement = "Pair" },
+                new ItemsModel { Id = 28, Name = "Accessories", ItemCategoryId = 7, Measurement = "Pack" },
 
                 // 8. Entertainment
                 new ItemsModel { Id = 29, Name = "Netflix", ItemCategoryId = 8, Measurement = "Monthly" },
@@ -253,7 +265,7 @@ namespace FinanceFlow.Server.DBContext
                 // 9. Education
                 new ItemsModel { Id = 33, Name = "Online Course", ItemCategoryId = 9, Measurement = "USD" },
                 new ItemsModel { Id = 34, Name = "Textbook", ItemCategoryId = 9, Measurement = "USD" },
-                new ItemsModel { Id = 35, Name = "Workshop", ItemCategoryId = 9, Measurement = "USD"},
+                new ItemsModel { Id = 35, Name = "Workshop", ItemCategoryId = 9, Measurement = "USD" },
                 new ItemsModel { Id = 36, Name = "Software License", ItemCategoryId = 9, Measurement = "Yearly" },
 
                 // 10. Debt Payments
@@ -262,14 +274,14 @@ namespace FinanceFlow.Server.DBContext
                 new ItemsModel { Id = 39, Name = "Car Loan", ItemCategoryId = 10, Measurement = "Monthly" },
 
                 // 11. Gifts & Donations
-                new ItemsModel { Id = 40, Name = "Birthday Gift", ItemCategoryId = 11, Measurement = "USD" },
-                new ItemsModel { Id = 41, Name = "Charity Donation", ItemCategoryId = 11, Measurement = "USD" },
-                new ItemsModel { Id = 42, Name = "Wedding Gift", ItemCategoryId = 11, Measurement = "USD" },
+                new ItemsModel { Id = 40, Name = "Gift", ItemCategoryId = 11, Measurement = "USD" },
+                new ItemsModel { Id = 41, Name = "Donation", ItemCategoryId = 11, Measurement = "USD" },
+                new ItemsModel { Id = 42, Name = "Offering", ItemCategoryId = 11, Measurement = "USD" },
 
                 // 12. Travel
                 new ItemsModel { Id = 43, Name = "Flight Ticket", ItemCategoryId = 12, Measurement = "USD" },
                 new ItemsModel { Id = 44, Name = "Hotel Stay", ItemCategoryId = 12, Measurement = "Nights" },
-                new ItemsModel { Id = 45, Name = "Travel Insurance", ItemCategoryId = 12, Measurement = "Trip" },
+                new ItemsModel { Id = 45, Name = "Travel", ItemCategoryId = 12, Measurement = "Trip" },
 
                 // 13. Home Maintenance
                 new ItemsModel { Id = 46, Name = "Lightbulbs", ItemCategoryId = 13, Measurement = "Pack" },
@@ -279,12 +291,12 @@ namespace FinanceFlow.Server.DBContext
                 // 14. Subscriptions
                 new ItemsModel { Id = 49, Name = "Spotify", ItemCategoryId = 14, Measurement = "Monthly" },
                 new ItemsModel { Id = 50, Name = "Cloud Storage", ItemCategoryId = 14, Measurement = "Monthly" },
-                new ItemsModel { Id = 51, Name = "Magazine", ItemCategoryId = 14, Measurement = "Yearly"},
+                new ItemsModel { Id = 51, Name = "Magazine", ItemCategoryId = 14, Measurement = "Yearly" },
 
                 // 15. Miscellaneous
                 new ItemsModel { Id = 52, Name = "Pet Food", ItemCategoryId = 15, Measurement = "kg" },
                 new ItemsModel { Id = 53, Name = "Postage Stamps", ItemCategoryId = 15, Measurement = "Pack" },
-                new ItemsModel { Id = 54, Name = "Umbrella", ItemCategoryId = 15, Measurement = "One-time"}
+                new ItemsModel { Id = 54, Name = "Umbrella", ItemCategoryId = 15, Measurement = "One-time" }
             );
             #endregion
             //
@@ -295,6 +307,7 @@ namespace FinanceFlow.Server.DBContext
                 new StatusModel { id = 2, Name = "Approved" },
                 new StatusModel { id = 3, Name = "Rejected" }
             );
+
 
             modelBuilder.Entity<IncomeCategoryModel>().HasData(
                 new IncomeCategoryModel { id = 1, name = "Salary"/*, Description = "Monthly salary from employment" */},

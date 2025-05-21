@@ -19,7 +19,7 @@
             <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
             <span class="ml-2 text-sm text-gray-600">Remember me</span>
           </label>
-          <Router-Link to="/register" class="text-sm text-indigo-600 hover:text-indigo-500">Forgot password?</Router-Link>
+          <Router-Link to="/resetpassword" class="text-sm text-indigo-600 hover:text-indigo-500">Forgot password?</Router-Link>
         </div>
 
         <!--
@@ -58,7 +58,8 @@ const Login = async () => {
     $toast.error("Error logging in. Please try again.");
     return;
   }
-  router.push({ path: '/' })
+  router.replace('/').then(() => window.location.reload())
+  // router.push({ path: '/' })
   // $toast.success("Logged in successfully.");
 }
 

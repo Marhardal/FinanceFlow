@@ -24,6 +24,7 @@ import EditInvestment from '@/components/Views/EditInvestment.vue'
 import DetailsInvestment from '@/components/Views/DetailsInvestment.vue'
 import CreateTopup from '@/components/Views/CreateTopup.vue'
 import EditTopup from '@/components/Views/EditTopup.vue'
+import ResetPassword from '@/components/Views/ResetPassword.vue'
 
 
 function auth(to, from) {
@@ -63,6 +64,8 @@ const routes = [
       { path: '/investment/:investmentId/invest/edit/:investId', component: EditTopup, beforeEnter: auth },
       { path: '/register', component: Register, beforeEnter: guest},
       { path: '/login', component: Login, beforeEnter: guest},
+      { path: '/resetpassword', component: ResetPassword, beforeEnter: guest},
+
 ];
 
 const router = createRouter({

@@ -2,6 +2,7 @@
   <!-- component -->
   <div class="bg-white p-8 rounded-md w-full">
     <ListHeader Header="Transactions" SubHeader="Transactions List" Navigate="" />
+    <button @click="Logout">Logout</button>
     <div>
       <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div class="flex flex-col">
@@ -109,6 +110,29 @@ import { useRouter } from 'vue-router';
 
 const $toast = useToast();
 const router = useRouter();
+
+const Logout = async () => {
+    console.log("Logout");
+
+    localStorage.removeItem('authUserID');
+    localStorage.removeItem('authRefreshToken');
+    localStorage.removeItem('authRole');
+    localStorage.removeItem('authToken');
+
+  // const success = await authuseStore.logout();
+  // if (!success) {
+  //   $toast.error("Error logging out. Please try again.");
+  //   return;
+  // }
+  router.push({ path: '/login' })
+
+  const authUserID = localStorage.getItem('authUserID');
+  if (authUserID == null) {
+    router.push({ path: '/login' })
+  }
+  // $toast.success("Logged in successfully.");
+}
+
 
 dayjs.extend(relativeTime);
 const Transactions = ref([]);

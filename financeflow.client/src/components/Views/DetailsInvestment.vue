@@ -122,13 +122,13 @@
                             {{ Invest.income.name }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.status">
                             {{ Invest.status.name }}</td>
-<td class="px-6 py-4 whitespace-nowrap text-sm">{{
+                          <td class="px-6 py-4 whitespace-nowrap text-sm">{{
                             Invest.amount.toLocaleString('en-mw', {
                               minimumFractionDigits: 2, style: 'currency',
                               currency: 'MWK'
                             }) }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-sm" v-if="Invest.date">{{
-                            Invest.date }}</td>
+                            dayjs(Invest.date).fromNow() }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                             <router-link :to="{ path: '/investment/' + Investment.id + '/invest/edit/' + Invest.id }"
                               class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
@@ -178,10 +178,10 @@ import ContainerBg from '../Components/ContainerBg.vue';
 import apiClient from '../../Others/apiClient'
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { useToast } from 'vue-toast-notification';
 // import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/24/solid';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from 'dayjs';
 
 dayjs.extend(relativeTime);

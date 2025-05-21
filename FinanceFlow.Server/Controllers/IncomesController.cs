@@ -26,9 +26,8 @@ namespace FinanceFlow.Server.Controllers
         // GET: api/Incomes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<IncomeModel>>> GetIncomeModel(string search = null)
-        {
-            
-            IQueryable<IncomeModel> query = _context.Incomes.Include(s => s.Status).Include(c => c.IncomeCategory);
+        {   
+            IQueryable<IncomeModel> query = _context.Incomes.Include(s => s.Status).Include(c => c.IncomeCategory).OrderByDescending(i => i.Date);
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(i => i.Name.Contains(search) || i.Status.Name.Contains(search) || i.IncomeCategory.name.Contains(search));

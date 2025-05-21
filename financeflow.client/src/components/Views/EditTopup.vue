@@ -44,9 +44,9 @@ const input = reactive({
   incomeID: '',
   statusId: '',
   date: '',
-  amount: ''
+  amount: '',
+  investmentId: investmentId
 })
-
 
 const getinvest = async (id) => {
   try {
@@ -65,14 +65,14 @@ const getinvest = async (id) => {
 const updateInvest = async () => {
   console.log(input)
   try {
-    const response = await apiClient.put('/Invests', input);
+    const response = await apiClient.put('Invests/'+id, input);
     if (response.status === 201) {
       $toast.success('You Toped-up Investment Successfully!');
       router.push(`Budget/details/${id}`);
     }
   } catch (error) {
     console.error("Error creating Top-up:", error);
-    $toast.error('Failed to create an Top-up!');
+    $toast.error('Failed to update a Top-up!');
   }
 }
 

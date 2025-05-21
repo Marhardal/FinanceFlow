@@ -27,7 +27,7 @@ namespace FinanceFlow.Server.Models
 
         // Navigation Properties
         [ForeignKey(nameof(StatusID))]  // Correct FK annotation
-        public StatusModel? Status { get; set; }
+        public StatusModel? Status {get; set; }
 
         [ForeignKey(nameof(IncomeCategoryID))]  // Correct FK annotation
         public IncomeCategoryModel? IncomeCategory { get; set; }

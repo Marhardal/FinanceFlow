@@ -2,9 +2,11 @@
 using FinanceFlow.Server.DTOs;
 using FinanceFlow.Server.Models;
 using FinanceFlow.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,7 +16,7 @@ namespace FinanceFlow.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController(IAuthService service) : ControllerBase
+    public class UserController(FinanceDBContext context, IAuthService service) : ControllerBase
     {
 
         [HttpPost("register")]
@@ -33,6 +35,8 @@ namespace FinanceFlow.Server.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<TokenRefresh>> Login(UserDTO userDTO)
         {
+            var user = await context.Users.ToListAsync();
+
             var token = await service.AuthenticateAsync(userDTO);
 
             if (token is null)
@@ -43,6 +47,22 @@ namespace FinanceFlow.Server.Controllers
             return Ok(token);
         }
 
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetUser(int userid = 1)
+        {
+            var user = await context.Users.FindAsync(userid);
+            var identity = (ClaimsIdentity)User.Identity;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // Or if you used a custom claim:
+            //var userId = User.FindFirst("userId")?.Value;
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            return Ok(user);
+        }
 
         [HttpPost("refresh-token")]
         public async Task<ActionResult<TokenRefresh>> RefreshToken(RefreshTokenDTO request)

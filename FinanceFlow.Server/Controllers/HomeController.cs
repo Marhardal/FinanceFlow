@@ -21,7 +21,8 @@ namespace FinanceFlow.Server.Controllers
         {
             _context = context;
         }
-        //[Authorize]
+        
+        [Authorize]
         [HttpGet("Header")]
         public async Task<ActionResult> getHeader()
         {
@@ -30,7 +31,7 @@ namespace FinanceFlow.Server.Controllers
                 .Where(
                 i => i.Date.Value.Month == DateTime.Now.Month &&
                      i.Date.Value.Year == DateTime.Now.Year &&
-                     i.StatusID == 2 && i.UserID == 2
+                     i.StatusID == 2 && i.UserID == 1
                 )
                 .SumAsync(i => (double?)i.Amount);
 
@@ -38,13 +39,14 @@ namespace FinanceFlow.Server.Controllers
                 .Where(i => i.statusID == 2 &&
                         i.remindon.Month == DateTime.Now.Month &&
                         i.remindon.Year == DateTime.Now.Year &&
-                        i.UserID == 2
+                        i.UserID == 1
                             )
                 .SumAsync(i => (double?)i.spentAmount) ?? 0);
 
             double investments = (double)await _context.Invests
                 .Where(i => i.createdOn.Month == DateTime.Now.Month &&
-                            i.createdOn.Year == DateTime.Now.Year && i.Investment.UserId == 2)
+                            i.createdOn.Year == DateTime.Now.Year
+                            && i.Investment.UserId == 1)
                 .SumAsync(i => (double?)i.amount);
 
             // Define fallback placeholders
@@ -55,7 +57,7 @@ namespace FinanceFlow.Server.Controllers
             if (Income is 0)
             {
                 fallbackIncome = await _context.Incomes
-    .Where(i => i.StatusID == 2 && i.Date.HasValue && i.UserID == 2)
+    .Where(i => i.StatusID == 2 && i.Date.HasValue && i.UserID == 1)
     .GroupBy(i => new { i.Date.Value.Month, i.Date.Value.Year })
     .OrderByDescending(g => g.Key.Year)
     .ThenByDescending(g => g.Key.Month)
@@ -71,7 +73,7 @@ namespace FinanceFlow.Server.Controllers
             {
 
                 fallbackExpense = await _context.Budgets
-.Where(i => i.statusID == 2 && i.UserID == 2)
+.Where(i => i.statusID == 2 && i.UserID == 1)
 .GroupBy(i => new { i.remindon.Month, i.remindon.Year })
 .OrderByDescending(g => g.Key.Year)
 .ThenByDescending(g => g.Key.Month)
@@ -88,7 +90,7 @@ namespace FinanceFlow.Server.Controllers
             if (investments == 0)
             {
                 fallbackInvestment = await _context.Invests
-.Where(i => i.StatusID == 2 && i.Investment.UserId == 2)
+.Where(i => i.StatusID == 2 && i.Investment.UserId == 1)
 .GroupBy(i => new { i.Date.Month, i.Date.Year })
 .OrderByDescending(g => g.Key.Year)
 .ThenByDescending(g => g.Key.Month)
@@ -123,6 +125,7 @@ namespace FinanceFlow.Server.Controllers
             return Ok(headerDetails);
         }
 
+        [Authorize]
         [HttpGet("last12months")]
         public async Task<IActionResult> GetTransactionChartData()
         {
@@ -248,6 +251,7 @@ namespace FinanceFlow.Server.Controllers
         //    });
         //}
 
+        [Authorize]
         [HttpGet("TopBudgetCategories")]
         public async Task<IActionResult> GetTopBudgetCategories([FromQuery] int topCount = 5)
         {
@@ -325,6 +329,7 @@ namespace FinanceFlow.Server.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("GetRecentTransactions")]
         public async Task<IActionResult> getRecentTransactions()
         {
@@ -343,6 +348,47 @@ namespace FinanceFlow.Server.Controllers
             return Ok(recent);
         }
 
+        [Authorize]
+        [HttpGet("GetRecentandUpcomingInvests")]
+        public async Task<IActionResult> getRecentandUpcominginvets()
+        {
+            List<InvestModel> recent = await _context.Invests
+                .OrderByDescending(t => t.Date)
+                .Take(5)
+                .Select(t => new InvestModel
+                {
+                    InvestmentId = t.InvestmentId, // Fix: Set the required member
+                    StatusID = t.StatusID, // Fix: Ensure required member is set
+                    IncomeID = t.IncomeID, // Fix: Set the required member
+                    Date = t.Date,
+                    amount = t.amount,
+                })
+                .ToListAsync();
+
+            return Ok(recent);
+        }
+
+        [Authorize]
+        [HttpGet("GetUpcomingEvents")]
+        public async Task<IActionResult> GetUpcomingEvents()
+        {
+            var upcoming = await (from Budget in _context.Budgets
+                                  join Invest in _context.Invests on new { Month = Budget.remindon.Month, Year = Budget.remindon.Year }
+                                  equals new { Month = Invest.Date.Month, Year = Invest.Date.Year }
+                                  where Budget.statusID == 1 && Invest.StatusID == 1
+                                  orderby Budget.remindon ascending
+                                  select new
+                                  {
+                                      Name = Budget.Name != null ? Budget.Name : Invest.Investment.Name ,
+                                      Type = Budget.Name != null ? "Budget" : (Invest.description != null ? "Investment" : "Unknown"),
+                                      Amount = (float)Budget.Amount > 0 ? (float)Invest.amount : 0, // Fix: Corrected the conditional expression
+                                      RemindOn = Budget.remindon != null ? Invest.Date : DateTime.UtcNow,
+                                  }).ToListAsync();
+
+            return Ok(upcoming);
+        }
+
+        [Authorize]
         private string GetCategoryColor(string category)
         {
             // Customize based on your categories
