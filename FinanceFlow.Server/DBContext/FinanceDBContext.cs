@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Options;
+using NuGet.Packaging.Signing;
 
 namespace FinanceFlow.Server.DBContext
 {
@@ -42,6 +43,8 @@ namespace FinanceFlow.Server.DBContext
         public DbSet<InvestmentModel> Investments { get; set; }
         
         public DbSet<InvestModel> Invests { get; set; }
+
+        public DbSet<NotificationModel> Notification { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -137,7 +140,34 @@ namespace FinanceFlow.Server.DBContext
                 .HasForeignKey(i => i.InvestmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+//            modelBuilder.Entity<NotificationModel>()
+//                .HasOne(i => i.Invest)
+//                .WithOne(n => n.Notification)
+//                .HasForeignKey<NotificationModel>(i => i.InvestID)
+//.OnDelete(DeleteBehavior.NoAction); 
 
+            modelBuilder.Entity<NotificationModel>()
+                .HasOne(s => s.Status)
+                .WithOne(n => n.Notification)
+                .HasForeignKey<NotificationModel>(s => s.StatusID)
+.OnDelete(DeleteBehavior.NoAction); 
+
+            modelBuilder.Entity<NotificationModel>()
+                .HasOne(i => i.Income)
+                .WithOne(n => n.Notification)
+                .OnDelete(DeleteBehavior.NoAction); 
+
+            modelBuilder.Entity<NotificationModel>()
+                .HasOne(b => b.Budget)
+                .WithOne(b => b.Notification)
+                .HasForeignKey<NotificationModel>(n => n.BudgetID)
+                .OnDelete(DeleteBehavior.NoAction); ;
+
+            modelBuilder.Entity<NotificationModel>()
+                .HasOne(n => n.User)
+                .WithOne(u => u.Notification)
+                .HasForeignKey<NotificationModel>(n => n.userID)
+                .OnDelete(DeleteBehavior.Restrict); 
 
             //modelBuilder.Entity<UserModel>()
             //    .HasOne(u => u.Roles)
@@ -319,6 +349,8 @@ namespace FinanceFlow.Server.DBContext
                 new InvestmentTypeModel { id = 7, name = "Pension Funds" },
                 new InvestmentTypeModel { id = 8, name = "Agriculture" }
                 );
+
+           
         }
 
 

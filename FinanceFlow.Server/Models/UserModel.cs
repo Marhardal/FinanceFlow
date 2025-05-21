@@ -36,6 +36,8 @@ namespace FinanceFlow.Server.Models
 
         public RolesModel? Roles { get; set; }
 
+        public NotificationModel? Notification { get; set; }
+
 
     }
 }

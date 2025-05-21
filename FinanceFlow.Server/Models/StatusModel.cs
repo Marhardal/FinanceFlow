@@ -17,5 +17,7 @@ namespace FinanceFlow.Server.Models
         public ICollection<InvestmentModel>? Investments { get; set; }
         
         public ICollection<InvestModel>? Invests { get; set; }
+
+        public NotificationModel? Notification { get; set; }
     }
 }

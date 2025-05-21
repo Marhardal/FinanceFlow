@@ -41,5 +41,7 @@ namespace FinanceFlow.Server.Models
         public InvestModel? Invest { get; set; }
 
         public UserModel? User { get; set; }
+
+        public NotificationModel? Notification { get; set; }
     }
 }

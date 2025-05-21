@@ -1,32 +1,52 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NuGet.Packaging.Signing;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinanceFlow.Server.Models
 {
     public class NotificationModel
     {
         public int Id { get; set; }
+        
+        public int reminderCount { get; set; }
 
-        public NotifyType Type { get; set; }
+        //[ForeignKey("userID")]
 
-        [ForeignKey("IncomeID")]
-        public int IncomeID { get; set; }
+        [Required]
+        public int userID { get; set; }
 
-        [ForeignKey("BudgetID")]
-        public int BudgetID { get; set; }
+        //[ForeignKey("StatusID")]
+        public int? StatusID { get; set; }
 
-        public string? Message { get; set; }
+        //[ForeignKey("IncomeID")]
+        public int? IncomeID { get; set; }
 
-        public DateTime Date { get; set; }
+        //[ForeignKey("BudgetID")]
+        public int? BudgetID { get; set; }
 
-        public DateTime createdOn { get; set; } = DateTime.UtcNow;
+        //[ForeignKey("InvestID")]
+        //public int? InvestID { get; set; }
+
+        public DateTime DueDate { get; set; }
+
+        public DateTime completedat { get; set; }
+
+        public bool isrecurring { get; set; }
+
+        public DateTime createdAt { get; set; } = DateTime.Now;
+
+        public DateTime updatedAt { get; set; } = DateTime.UtcNow;
+
+        public StatusModel? Status { get; set; }
+
+        //public InvestModel? Invest { get; set; }
+
+        public BudgetModel? Budget { get; set; }
 
         public IncomeModel? Income { get; set; }
 
-        public BudgetModel? Budget { get; set; }
-        public enum NotifyType
-        {
-            Income,
-            Budget,
-        }
+        public UserModel? User { get; set; }
     }
 }
