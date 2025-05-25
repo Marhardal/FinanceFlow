@@ -28,7 +28,7 @@ namespace FinanceFlow.Server.Services
                 smtp.Host = "smtp.gmail.com"; //Or Your SMTP Server Address
                 smtp.Port = 587;
                 //smtp.UseDefaultCredentials = true;
-                smtp.Credentials = new System.Net.NetworkCredential("finflow.noreply@gmail.com", "?*fin%^20@<25@-flow");
+                smtp.Credentials = new System.Net.NetworkCredential("financeflow.noreply@gmail.com", "evni djbn qhat fqvm");
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.EnableSsl = true;
                 //////System.Net.ServicePointManager.SecurityProtocol = (SecurityProtocolType)(0xc0 | 0x300 | 0xc00);

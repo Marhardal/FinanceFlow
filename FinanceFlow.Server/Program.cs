@@ -16,6 +16,8 @@ builder.Services.AddDbContext<FinanceDBContext>(options =>
    ServiceLifetime.Scoped
 );
 
+builder.Services.AddHostedService<CheckNotifications>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
