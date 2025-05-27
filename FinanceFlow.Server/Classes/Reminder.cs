@@ -15,19 +15,21 @@ namespace FinanceFlow.Server.Classes
             _dbContext = dbContext;
         }
 
-        public async void IncomeReminder(int id)
+        public void IncomeReminder(int id)
         {
-            var income = await _dbContext.Incomes.FindAsync(id);
+            var incomeTask = _dbContext.Incomes.FindAsync(id);
+
+            var income = incomeTask.Result; // Await or access the result of the ValueTask
             if (income is not null)
             {
-                var user = await _dbContext.Users.FindAsync(income.UserID);
-                if (user is not null) // Ensure user and Email are not null
+                var user = _dbContext.Users.Find(income.UserID);
+                if (user is not null)
                 {
                     string body = @"Hello " + user.Username + @", <br>
-                            This is a friendly reminder that your income " + income.Name + @" is due today.<br/>
-                            Amount: MK " + income.Amount.ToString("#,###0.00") + @"
-                            You're receiving this email because you have notifications enabled in FinanceFlow.<br/>
-                            Manage notification preferences";
+                                    This is a friendly reminder that your income " + income.Name + @" is due today.<br/>
+                                    Amount: MK " + income.Amount.ToString("#,###0.00") + @"
+                                    You're receiving this email because you have notifications enabled in FinanceFlow.<br/>
+                                    Manage notification preferences";
                     Utilities.SendMail(user.Email, "💰 Income Reminder: Action Required", body);
                 }
             }
@@ -38,16 +40,25 @@ namespace FinanceFlow.Server.Classes
             var invest = await _dbContext.Invests.FindAsync(id);
             if (invest is not null)
             {
-                //var user = await _dbContext.Users.FindAsync(userId);
-                //if (user is not null) // Ensure user and Email are not null
-                //{
-                string body = @"Hello " + invest.Investment.User.Username + @", <br>
-                            This is a friendly reminder that your invest " + invest.Income + @" is due today.<br/>
-                            Amount: MK " + invest.amount.ToString("#,###0.00") + @"
-                            You're receiving this email because you have notifications enabled in FinanceFlow.<br/>
-                            Manage notification preferences";
-                Utilities.SendMail(invest.Investment.User.Email, "💰 Income Reminder: Action Required", body);
-                //}
+                string userid = string.Empty; // Initialize userid to avoid CS0165
+                if (invest.Investment is not null)
+                {
+                    userid = invest.Investment.UserId.ToString();
+                }
+
+                if (!string.IsNullOrEmpty(userid)) // Ensure userid is not empty before parsing
+                {
+                    var user = await _dbContext.Users.FindAsync(int.Parse(userid));
+                    if (user is not null) // Ensure user and Email are not null
+                    {
+                        string body = @"Hello " + invest.Investment.User.Username + @", <br>
+                                This is a friendly reminder that your invest " + invest.Incomes.Name + @" is due today.<br/>
+                                Amount: MK " + invest.amount.ToString("#,###0.00") + @"
+                                You're receiving this email because you have notifications enabled in FinanceFlow.<br/>
+                                Manage notification preferences";
+                        Utilities.SendMail(invest.Investment.User.Email, "💰 Income Reminder: Action Required", body);
+                    }
+                }
             }
         }
 

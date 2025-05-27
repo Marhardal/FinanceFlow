@@ -33,12 +33,12 @@ namespace FinanceFlow.Server.Models
 
         public ICollection<StatusModel>? Statuses { get; set; }
 
-        public IncomeModel? Income { get; set; }
+        //public IncomeModel? Income { get; set; }
 
-        public ICollection<IncomeModel>? Incomes { get; set; }
+        public IncomeModel? Incomes { get; set; }
 
         public TransactionModel? Transaction { get; set; }
 
-        public NotificationModel? Notification { get; set; }
+        public ICollection<NotificationModel>? Notification { get; set; }
     }
 }

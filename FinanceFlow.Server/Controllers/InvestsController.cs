@@ -30,7 +30,7 @@ namespace FinanceFlow.Server.Controllers
         {
             IQueryable<InvestModel> invests = _context.Invests
                 .Include(s => s.Status)
-                .Include(i => i.Income)
+                .Include(i => i.Incomes)
                 .Where(b => b.InvestmentId == investmentid);
 
             // Apply search filter if provided

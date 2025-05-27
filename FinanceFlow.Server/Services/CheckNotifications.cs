@@ -42,11 +42,11 @@ namespace FinanceFlow.Server.Services
                     {
                         Reminder reminder = new Reminder(dbContext);
 
-                        if (task.Income is not null)
+                        if (task.IncomeID is not null)
                         {
                             reminder.IncomeReminder(task.IncomeID.Value);
                         }
-                        else if (task.Invest is not null)
+                        else if (task.InvestID is not null)
                         {
                             reminder.InvestReminder(task.InvestID.Value);
                         }

@@ -129,10 +129,10 @@ namespace FinanceFlow.Server.DBContext
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<InvestModel>()
-                .HasOne(i => i.Income)
+                .HasOne(i => i.Incomes)
                 .WithMany(e => e.Invest)
                 .HasForeignKey(i => i.IncomeID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<InvestModel>()
                 .HasOne(s => s.Status)
@@ -148,8 +148,8 @@ namespace FinanceFlow.Server.DBContext
 
             modelBuilder.Entity<NotificationModel>()
                 .HasOne(i => i.Invest)
-                .WithOne(n => n.Notification)
-                .HasForeignKey<NotificationModel>(i => i.InvestID)
+                .WithMany(n => n.Notification)
+                .HasForeignKey(i => i.InvestID)
 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<NotificationModel>()
