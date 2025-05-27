@@ -36,9 +36,9 @@ namespace FinanceFlow.Server.Models
 
         public ICollection<IncomePaymentModel>? IncomePayment { get; set; } = new List<IncomePaymentModel>();
 
+        public ICollection<InvestModel>? Invest { get; set; }
+        
         public TransactionModel? Transaction { get; set; }
-
-        public InvestModel? Invest { get; set; }
 
         public UserModel? User { get; set; }
 

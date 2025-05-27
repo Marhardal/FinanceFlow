@@ -130,7 +130,9 @@ namespace FinanceFlow.Server.DBContext
 
             modelBuilder.Entity<InvestModel>()
                 .HasOne(i => i.Income)
-                .WithOne(e => e.Invest);
+                .WithMany(e => e.Invest)
+                .HasForeignKey(i => i.IncomeID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<InvestModel>()
                 .HasOne(s => s.Status)
