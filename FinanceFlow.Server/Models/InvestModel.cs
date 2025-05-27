@@ -39,6 +39,6 @@ namespace FinanceFlow.Server.Models
 
         public TransactionModel? Transaction { get; set; }
 
-        //public NotificationModel? Notification { get; set; }
+        public NotificationModel? Notification { get; set; }
     }
 }

@@ -80,7 +80,24 @@ namespace FinanceFlow.Server.Controllers
                     throw; 
                 }
             }
+            var notify = _context.Notification.Where(i => i.IncomeID == incomeModel.Id);
+            if (!notify.Any())
+            {
+                if (incomeModel.Date >= DateTime.Now.Date && incomeModel.StatusID == 1)
+                {
+                    NotificationModel notification = new NotificationModel
+                    {
+                        userID = incomeModel.UserID,
+                        StatusID = incomeModel.StatusID,
+                        IncomeID = incomeModel.Id,
+                        DueDate = (DateTime)incomeModel.Date,
+                        isrecurring = false,
+                    };
 
+                    _context.Notification.Add(notification);
+                    await _context.SaveChangesAsync();
+                } 
+            }
             var transaction = _context.Transactions.Where(b => b.incomeid == incomeModel.Id).FirstOrDefault();
 
             if (transaction is null && (incomeModel.Status != null || incomeModel.StatusID == 2))
@@ -160,7 +177,7 @@ namespace FinanceFlow.Server.Controllers
                 NotificationModel notification = new NotificationModel
                 {
                     userID = incomeModel.UserID,
-                    StatusID = 1,
+                    StatusID = incomeModel.StatusID,
                     IncomeID = incomeModel.Id,
                     DueDate = (DateTime)incomeModel.Date,
                     isrecurring = false,

@@ -34,10 +34,9 @@ namespace FinanceFlow.Server.Models
 
         public ICollection<IncomeModel>? Incomes { get; set; }
 
+        public ICollection<NotificationModel>? Notification { get; set; }
+
         public RolesModel? Roles { get; set; }
-
-        public NotificationModel? Notification { get; set; }
-
 
     }
 }

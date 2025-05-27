@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -81,20 +82,6 @@ namespace FinanceFlow.Server.Controllers
                 {
                     if (investment != null)
                     {
-                        // Update the budget entity as needed
-                        //investment.CurrentAmount += investModel.amount;
-                        // Replace the following line in the PutInvestModel method:
-                        //investment.CurrentAmount += investModel.amount;
-
-                        // With this:
-                        investment.CurrentAmount = (investment.CurrentAmount ?? 0) + Convert.ToDecimal(investModel.amount);
-
-                        // Replace the following line in the PostInvestModel method:
-                        //investment.CurrentAmount += investModel.amount;
-
-                        // With this:
-                        investment.CurrentAmount = (investment.CurrentAmount ?? 0) + Convert.ToDecimal(investModel.amount);
-                        // Update the budget entity as needed
                         if (investment.CurrentAmount.HasValue)
                         {
                             investment.CurrentAmount += Convert.ToDecimal(investModel.amount);
@@ -149,7 +136,11 @@ namespace FinanceFlow.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<InvestModel>> PostInvestModel(InvestModel investModel)
         {
-            if (investModel is null)
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            // OR if using a custom claim name:
+            //var userId = User.FindFirst("userID")?.Value;
+
+            if (investModel is null && userId is null)
             {
                 return NoContent();
             }
@@ -160,12 +151,19 @@ namespace FinanceFlow.Server.Controllers
             {
                 if (investment != null)
                 {
-                    // Update the budget entity as needed
-                    //investment.CurrentAmount += investModel.amount;
-                    investment.CurrentAmount = (investment.CurrentAmount ?? 0) + Convert.ToDecimal(investModel.amount);
-                    _context.Investments.Update(investment);
-
-
+                    if (investModel.StatusID == 2)
+                    {
+                        if (investment.CurrentAmount.HasValue)
+                        {
+                            investment.CurrentAmount += Convert.ToDecimal(investModel.amount);
+                        }
+                        else
+                        {
+                            investment.CurrentAmount = Convert.ToDecimal(investModel.amount);
+                        }
+                        _context.Investments.Update(investment);
+                    }
+                    
                     var transaction = _context.Transactions.Where(b => b.investId == investModel.InvestmentId).FirstOrDefault();
 
                     if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
@@ -185,6 +183,21 @@ namespace FinanceFlow.Server.Controllers
             }
             
             await _context.SaveChangesAsync();
+
+            if (investModel.Date >= DateTime.Now.Date && investModel.StatusID == 1)
+            {
+                NotificationModel notification = new NotificationModel
+                {
+                    userID = int.Parse(userId),
+                    StatusID = 1,
+                    InvestID = investModel.Id,
+                    DueDate = (DateTime)investModel.Date,
+                    isrecurring = false,
+                };
+
+                _context.Notification.Add(notification);
+                await _context.SaveChangesAsync();
+            }
 
             return CreatedAtAction("GetInvestModel", new { id = investModel.Id }, investModel);
         }

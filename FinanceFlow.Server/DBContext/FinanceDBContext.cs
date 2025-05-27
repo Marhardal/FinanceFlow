@@ -144,17 +144,17 @@ namespace FinanceFlow.Server.DBContext
                 .HasForeignKey(i => i.InvestmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //            modelBuilder.Entity<NotificationModel>()
-            //                .HasOne(i => i.Invest)
-            //                .WithOne(n => n.Notification)
-            //                .HasForeignKey<NotificationModel>(i => i.InvestID)
-            //.OnDelete(DeleteBehavior.NoAction); 
+            modelBuilder.Entity<NotificationModel>()
+                .HasOne(i => i.Invest)
+                .WithOne(n => n.Notification)
+                .HasForeignKey<NotificationModel>(i => i.InvestID)
+.OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<NotificationModel>()
                 .HasOne(s => s.Status)
-                .WithOne(n => n.Notification)
-                .HasForeignKey<NotificationModel>(s => s.StatusID)
-.OnDelete(DeleteBehavior.NoAction);
+                .WithMany(n => n.Notification)
+                .HasForeignKey(s => s.StatusID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<NotificationModel>()
                 .HasOne(i => i.Income)
@@ -165,12 +165,12 @@ namespace FinanceFlow.Server.DBContext
                 .HasOne(b => b.Budget)
                 .WithOne(b => b.Notification)
                 .HasForeignKey<NotificationModel>(n => n.BudgetID)
-                .OnDelete(DeleteBehavior.NoAction); ;
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<NotificationModel>()
                 .HasOne(n => n.User)
-                .WithOne(u => u.Notification)
-                .HasForeignKey<NotificationModel>(n => n.userID)
+                .WithMany(u => u.Notification)
+                .HasForeignKey(n => n.userID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //modelBuilder.Entity<UserModel>()
