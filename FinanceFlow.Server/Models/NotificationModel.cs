@@ -27,7 +27,7 @@ namespace FinanceFlow.Server.Models
         public int? BudgetID { get; set; }
 
         //[ForeignKey("InvestID")]
-        //public int? InvestID { get; set; }
+        public int? InvestID { get; set; }
 
         public DateTime DueDate { get; set; }
 
@@ -41,7 +41,7 @@ namespace FinanceFlow.Server.Models
 
         public StatusModel? Status { get; set; }
 
-        //public InvestModel? Invest { get; set; }
+        public InvestModel? Invest { get; set; }
 
         public BudgetModel? Budget { get; set; }
 
