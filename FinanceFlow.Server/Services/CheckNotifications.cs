@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using static System.Net.Mime.MediaTypeNames;
 using System.Drawing;
+using FinanceFlow.Server.Classes;
 
 namespace FinanceFlow.Server.Services
 {
@@ -39,17 +40,20 @@ namespace FinanceFlow.Server.Services
 
                     foreach (var task in upcomingnotifications)
                     {
-                        var income = await dbContext.Incomes.FindAsync(task.IncomeID);
-                        var user = await dbContext.Users.FindAsync(task.userID);
-                        string body = @"Hello " + user.Username + @", <br>
-                        This is a friendly reminder that your income " + income.Name + @" is due today.<br/>
-                        Amount: MK " + income.Amount.ToString("#,###0.00") + @"
-                        You're receiving this email because you have notifications enabled in FinanceFlow.<br/>
-                        Manage notification preferences";
-                        Utilities.SendMail(user.Email, "💰 Income Reminder: Action Required", body);
-                        //task.LastReminderSentAt = DateTime.UtcNow;
-                        //task.ReminderCount++;
-                        //await dbContext.SaveChangesAsync();
+                        Reminder reminder = new Reminder(dbContext);
+
+                        if (task.Income is not null)
+                        {
+                            reminder.IncomeReminder(task.IncomeID.Value);
+                        }
+                        else if (task.Invest is not null)
+                        {
+                            reminder.InvestReminder(task.InvestID.Value);
+                        }
+                        else
+                        {
+                            reminder.BudgetReminder(task.BudgetID.Value);
+                        }
                     }
                     await Task.Delay(span, stoppingToken);
                 }
