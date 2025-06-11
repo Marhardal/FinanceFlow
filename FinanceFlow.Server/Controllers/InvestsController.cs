@@ -112,6 +112,9 @@ namespace FinanceFlow.Server.Controllers
             }
 
             var transaction = _context.Transactions.Where(b => b.investId == investModel.Id).FirstOrDefault();
+            
+            var lasttransaction = _context.Transactions
+.OrderByDescending(t => t.createdon).Last()?.balance ?? 0;
 
             if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
             {
@@ -124,6 +127,8 @@ namespace FinanceFlow.Server.Controllers
                 transactions.createdon = DateTime.Now;
                 transactions.date = DateTime.Now;
                 _context.Transactions.Add(transactions);
+                transactions.balance = lasttransaction - Convert.ToDecimal(investModel.amount);
+
                 await _context.SaveChangesAsync();
             }
 
@@ -165,6 +170,8 @@ namespace FinanceFlow.Server.Controllers
                     }
                     
                     var transaction = _context.Transactions.Where(b => b.investId == investModel.InvestmentId).FirstOrDefault();
+                    var lasttransaction = _context.Transactions
+.OrderByDescending(t => t.createdon).Last()?.balance ?? 0;
 
                     if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
                     {
@@ -176,6 +183,8 @@ namespace FinanceFlow.Server.Controllers
                         transactions.type = TransactionType.Investment;
                         transactions.createdon = DateTime.Now;
                         transactions.date = DateTime.Now;
+                        transactions.balance = lasttransaction - Convert.ToDecimal(investModel.amount);
+
                         _context.Transactions.Add(transactions);
                     }
 

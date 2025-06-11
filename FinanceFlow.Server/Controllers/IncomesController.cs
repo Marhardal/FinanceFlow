@@ -100,6 +100,8 @@ namespace FinanceFlow.Server.Controllers
             }
             var transaction = _context.Transactions.Where(b => b.incomeid == incomeModel.Id).FirstOrDefault();
 
+            var lasttransaction = _context.Transactions
+.OrderByDescending(t => t.createdon).Last()?.balance ?? 0;
             if (transaction is null && (incomeModel.Status != null || incomeModel.StatusID == 2))
             {
                 TransactionModel transactions = new TransactionModel();
@@ -111,6 +113,7 @@ namespace FinanceFlow.Server.Controllers
                 transactions.createdon = DateTime.Now;
                 transactions.date = DateTime.Now;
                 transactions.incomeid = incomeModel.Id;
+                transactions.balance = lasttransaction - Convert.ToDecimal(incomeModel.Amount);
 
                 _context.Transactions.Add(transactions);
                 await _context.SaveChangesAsync();
@@ -153,6 +156,8 @@ namespace FinanceFlow.Server.Controllers
             await _context.SaveChangesAsync();
 
             var transaction = _context.Transactions.Where(b => b.incomeid == incomeModel.Id);
+            var lasttransaction = _context.Transactions
+.OrderByDescending(t => t.createdon).Last()?.balance ?? 0;
 
             if (incomeModel.Status != null || incomeModel.StatusID == 2)
             {
@@ -165,6 +170,7 @@ namespace FinanceFlow.Server.Controllers
                 transactions.createdon = DateTime.Now;
                 transactions.date = DateTime.Now;
                 transactions.incomeid = incomeModel.Id;
+                transactions.balance = lasttransaction + Convert.ToDecimal(incomeModel.Amount);
 
                 _context.Transactions.Add(transactions);
                 await _context.SaveChangesAsync();
