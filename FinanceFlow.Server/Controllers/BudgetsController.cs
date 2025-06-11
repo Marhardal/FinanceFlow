@@ -91,14 +91,14 @@ namespace FinanceFlow.Server.Controllers
                 TransactionModel transactions = new TransactionModel();
 
                 transactions.debit = Convert.ToDecimal(budgetModel.Amount);
-                transactions.date = DateTime.Now;
+                transactions.date = budgetModel.createdon;
                 transactions.budgetid = budgetModel.Id;
                 transactions.type = TransactionType.Budgets;
-                transactions.createdon = DateTime.Now;
-                transactions.date = DateTime.Now;
+                //transactions.createdon = DateTime.Now;
+                //transactions.valuedate = DateTime.Now;
                 transactions.balance = lasttransaction - Convert.ToDecimal(budgetModel.Amount);
 
-                _context.Transactions.Add(transactions);
+                _context.Transactions.Update(transactions);
                 await _context.SaveChangesAsync();
 
             }
@@ -126,11 +126,10 @@ namespace FinanceFlow.Server.Controllers
                 TransactionModel transactions = new TransactionModel();
 
                 transactions.debit = Convert.ToDecimal(budgetModel.Amount);
-                transactions.date = DateTime.Now;
+                transactions.date = budgetModel.createdon;
                 transactions.budgetid = budgetModel.Id;
                 transactions.type = TransactionType.Budgets;
                 transactions.createdon = DateTime.Now;
-                transactions.date = DateTime.Now;
                 transactions.balance = lasttransaction - Convert.ToDecimal(budgetModel.Amount);
 
                 _context.Transactions.Add(transactions);

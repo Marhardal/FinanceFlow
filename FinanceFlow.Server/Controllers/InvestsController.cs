@@ -112,23 +112,22 @@ namespace FinanceFlow.Server.Controllers
             }
 
             var transaction = _context.Transactions.Where(b => b.investId == investModel.Id).FirstOrDefault();
-            
+
             var lasttransaction = _context.Transactions
 .OrderByDescending(t => t.createdon).Last()?.balance ?? 0;
 
-            if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
+            if (transaction is not null)
             {
                 TransactionModel transactions = new TransactionModel();
-
+                transactions.id = transaction.id;
                 transactions.debit = Convert.ToDecimal(investModel.amount);
-                transactions.date = DateTime.Now;
+                transactions.date = investModel.Date;
                 transactions.investId = investModel.Id;
                 transactions.type = TransactionType.Investment;
-                transactions.createdon = DateTime.Now;
+                //transactions.createdon = DateTime.Now;
                 transactions.date = DateTime.Now;
-                _context.Transactions.Add(transactions);
                 transactions.balance = lasttransaction - Convert.ToDecimal(investModel.amount);
-
+                _context.Update(transactions);
                 await _context.SaveChangesAsync();
             }
 
@@ -178,11 +177,10 @@ namespace FinanceFlow.Server.Controllers
                         TransactionModel transactions = new TransactionModel();
 
                         transactions.debit = Convert.ToDecimal(investModel.amount);
-                        transactions.date = DateTime.Now;
+                        transactions.date = investModel.Date;
                         transactions.investId = investModel.InvestmentId;
                         transactions.type = TransactionType.Investment;
                         transactions.createdon = DateTime.Now;
-                        transactions.date = DateTime.Now;
                         transactions.balance = lasttransaction - Convert.ToDecimal(investModel.amount);
 
                         _context.Transactions.Add(transactions);

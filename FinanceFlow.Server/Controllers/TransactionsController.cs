@@ -35,11 +35,11 @@ namespace FinanceFlow.Server.Controllers
         .OrderByDescending(i => i.date)
         .Select(t => new
         {
-            t.id,
+             t.id,
             t.type,
-            t.debit,
-            t.credit,
-            t.balance,
+            //t.debit,
+            //t.credit,
+            //t.balance,
             t.date,
             t.incomeid,
             t.budgetid,
