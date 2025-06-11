@@ -37,7 +37,9 @@ namespace FinanceFlow.Server.Controllers
         {
             t.id,
             t.type,
-            t.amount,
+            t.debit,
+            t.credit,
+            t.balance,
             t.date,
             t.incomeid,
             t.budgetid,

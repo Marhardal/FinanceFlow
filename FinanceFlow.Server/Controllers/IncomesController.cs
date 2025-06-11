@@ -104,7 +104,7 @@ namespace FinanceFlow.Server.Controllers
             {
                 TransactionModel transactions = new TransactionModel();
 
-                transactions.amount = incomeModel.Amount;
+                transactions.credit = incomeModel.Amount;
                 transactions.date = DateTime.Now;
                 transactions.incomeid = incomeModel.Id;
                 transactions.type = TransactionType.Incomes;
@@ -158,7 +158,7 @@ namespace FinanceFlow.Server.Controllers
             {
                 TransactionModel transactions = new TransactionModel();
 
-                transactions.amount = incomeModel.Amount;
+                transactions.credit = incomeModel.Amount;
                 transactions.date = DateTime.Now;
                 transactions.incomeid = incomeModel.Id;
                 transactions.type = TransactionType.Incomes;

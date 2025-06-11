@@ -88,7 +88,7 @@ namespace FinanceFlow.Server.Controllers
             {
                 TransactionModel transactions = new TransactionModel();
 
-                transactions.amount = Convert.ToDecimal(budgetModel.Amount);
+                transactions.debit = Convert.ToDecimal(budgetModel.Amount);
                 transactions.date = DateTime.Now;
                 transactions.budgetid = budgetModel.Id;
                 transactions.type = TransactionType.Budgets;
@@ -120,7 +120,7 @@ namespace FinanceFlow.Server.Controllers
             {
                 TransactionModel transactions = new TransactionModel();
 
-                transactions.amount = Convert.ToDecimal(budgetModel.Amount);
+                transactions.debit = Convert.ToDecimal(budgetModel.Amount);
                 transactions.date = DateTime.Now;
                 transactions.budgetid = budgetModel.Id;
                 transactions.type = TransactionType.Budgets;

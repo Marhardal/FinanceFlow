@@ -140,7 +140,7 @@ namespace FinanceFlow.Server.Controllers
                 {
                     YearMonth = new DateTime(g.Key.Year, g.Key.Month, 1),
                     Type = g.Key.type,
-                    Amount = g.Sum(t => t.amount ?? 0)
+                    Amount = g.Sum(t => t.credit ?? 0)
                 })
                 .ToListAsync();
 
@@ -339,7 +339,7 @@ namespace FinanceFlow.Server.Controllers
                 .Select(t => new TransactionModel
                 {
                     type = t.type,
-                    amount = t.amount,
+                    //amount = t.amount,
                     date = t.date,
                     createdon = t.createdon,
                  })

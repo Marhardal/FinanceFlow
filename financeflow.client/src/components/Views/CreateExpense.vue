@@ -16,7 +16,10 @@
         <FormKit label="Expected Amount" placeholder="Enter the Expected Amount." type="number" v-model="input.Expectedamount" />
         <FormKit label="Amount" placeholder="Enter Item Amount." type="number" validation="required" v-model="input.amount" />
         <FormKit label="Description" placeholder="Enter Item description." type="textarea" validation="required" v-model="input.description" />
-      </FormKit>
+      </FormKit><router-link class="text-blue-500 hover:text-blue-700" :to="{ path: '/Budget/details/' + id }">
+  Back to Budget Details
+</router-link>
+
     </div>
 
   </ContainerBg>
