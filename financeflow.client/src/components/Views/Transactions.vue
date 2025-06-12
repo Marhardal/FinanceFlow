@@ -20,7 +20,13 @@
                         Reference</th>
                       <th scope="col"
                         class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                        Amount</th>
+                        Debit</th>
+                        <th scope="col"
+                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        Credit</th>
+                        <th scope="col"
+                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        balance</th>
                       <th scope="col"
                         class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                         Date</th>
@@ -45,8 +51,12 @@
                         transition.budgetName }}</td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.investmentName">{{
                         transition.investmentName }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ transition.amount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ dayjs(transition.date).fromNow()
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.debit">{{ transition.debit.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-else></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.credit">{{ transition.credit.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-else></td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 " v-if="transition.balance">{{ transition.balance.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 ">{{ dayjs(transition.valuedate).fromNow()
                       }}</td>
 
                       <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
@@ -71,7 +81,6 @@
                           Delete</button>
                       </td>
                     </tr>
-
                   </tbody>
                 </table>
               </div>

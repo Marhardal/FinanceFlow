@@ -107,11 +107,11 @@ namespace FinanceFlow.Server.Controllers
                 TransactionModel transactions = new TransactionModel();
                 transactions.id = transaction.id; // Use null-coalescing operator to handle null case
                 transactions.credit = incomeModel.Amount;
-                transactions.vdate = incomeModel.Date.Value;
+                transactions.valuedate = incomeModel.Date.Value;
                 transactions.incomeid = incomeModel.Id;
                 transactions.type = TransactionType.Incomes;
                 //transactions.createdon = DateTime.Now;
-                transactions.vdate = DateTime.Now;
+                //transactions.date = DateTime.Now;
                 transactions.incomeid = incomeModel.Id;
                 transactions.balance = lasttransaction - Convert.ToDecimal(incomeModel.Amount);
 
@@ -164,11 +164,11 @@ namespace FinanceFlow.Server.Controllers
                 TransactionModel transactions = new TransactionModel();
 
                 transactions.credit = incomeModel.Amount;
-                transactions.vdate = incomeModel.Date.Value;
+                transactions.valuedate = incomeModel.Date.Value;
                 transactions.incomeid = incomeModel.Id;
                 transactions.type = TransactionType.Incomes;
                 transactions.createdon = DateTime.Now;
-                transactions.vdate = DateTime.Now;
+                //transactions.date = DateTime.Now;
                 transactions.incomeid = incomeModel.Id;
                 transactions.balance = lasttransaction + Convert.ToDecimal(incomeModel.Amount);
 
