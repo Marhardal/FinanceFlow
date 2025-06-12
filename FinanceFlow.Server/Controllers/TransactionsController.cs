@@ -45,7 +45,7 @@ namespace FinanceFlow.Server.Controllers
             t.budgetid,
             IncomeName = t.Income != null ? t.Income.Name : null,   // Get Income Name if available
             BudgetName = t.Budget != null ? t.Budget.Name : null,   // Get Budget Name if available
-            InvestmentName = t.Invest.Investment.Name != null ? t.Invest.Investment.Name : null,
+            InvestmentName = t.Invest.Investment.Name ?? null,
         }).ToListAsync();
 
             if (!transactions.Any())
