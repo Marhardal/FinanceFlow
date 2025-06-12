@@ -121,11 +121,11 @@ namespace FinanceFlow.Server.Controllers
                 TransactionModel transactions = new TransactionModel();
                 transactions.id = transaction.id;
                 transactions.debit = Convert.ToDecimal(investModel.amount);
-                transactions.date = investModel.Date;
+                transactions.vdate = investModel.Date;
                 transactions.investId = investModel.Id;
                 transactions.type = TransactionType.Investment;
                 //transactions.createdon = DateTime.Now;
-                transactions.date = DateTime.Now;
+                transactions.vdate = DateTime.Now;
                 transactions.balance = lasttransaction - Convert.ToDecimal(investModel.amount);
                 _context.Update(transactions);
                 await _context.SaveChangesAsync();
@@ -177,7 +177,7 @@ namespace FinanceFlow.Server.Controllers
                         TransactionModel transactions = new TransactionModel();
 
                         transactions.debit = Convert.ToDecimal(investModel.amount);
-                        transactions.date = investModel.Date;
+                        transactions.vdate = investModel.Date;
                         transactions.investId = investModel.InvestmentId;
                         transactions.type = TransactionType.Investment;
                         transactions.createdon = DateTime.Now;

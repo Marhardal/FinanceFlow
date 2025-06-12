@@ -32,15 +32,15 @@ namespace FinanceFlow.Server.Controllers
         .Include(t => t.Budget)  // Properly include Budget
         .Include(t => t.Invest)
         .ThenInclude(i => i.Investments)
-        .OrderByDescending(i => i.date)
+        .OrderByDescending(i => i.vdate)
         .Select(t => new
         {
              t.id,
             t.type,
-            //t.debit,
-            //t.credit,
-            //t.balance,
-            t.date,
+            t.debit,
+            t.credit,
+            t.balance,
+            t.vdate,
             t.incomeid,
             t.budgetid,
             IncomeName = t.Income != null ? t.Income.Name : null,   // Get Income Name if available

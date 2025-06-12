@@ -134,8 +134,8 @@ namespace FinanceFlow.Server.Controllers
 
             // Get data grouped by month and type  
             var transactions = await _context.Transactions
-                .Where(t => t.date >= startDate && t.date <= endDate)
-                .GroupBy(t => new { t.date.Year, t.date.Month, t.type })
+                .Where(t => t.vdate >= startDate && t.vdate <= endDate)
+                .GroupBy(t => new { t.vdate.Year, t.vdate.Month, t.type })
                 .Select(g => new
                 {
                     YearMonth = new DateTime(g.Key.Year, g.Key.Month, 1),
@@ -334,13 +334,13 @@ namespace FinanceFlow.Server.Controllers
         public async Task<IActionResult> getRecentTransactions()
         {
             List<TransactionModel> recent = await _context.Transactions
-                .OrderByDescending(t => t.date)
+                .OrderByDescending(t => t.vdate)
                 .Take(5)
                 .Select(t => new TransactionModel
                 {
                     type = t.type,
                     //amount = t.amount,
-                    date = t.date,
+                    vdate = t.vdate,
                     createdon = t.createdon,
                  })
                 .ToListAsync();

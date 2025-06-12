@@ -91,7 +91,7 @@ namespace FinanceFlow.Server.Controllers
                 TransactionModel transactions = new TransactionModel();
 
                 transactions.debit = Convert.ToDecimal(budgetModel.Amount);
-                transactions.date = budgetModel.createdon;
+                transactions.vdate = budgetModel.createdon;
                 transactions.budgetid = budgetModel.Id;
                 transactions.type = TransactionType.Budgets;
                 //transactions.createdon = DateTime.Now;
@@ -126,7 +126,7 @@ namespace FinanceFlow.Server.Controllers
                 TransactionModel transactions = new TransactionModel();
 
                 transactions.debit = Convert.ToDecimal(budgetModel.Amount);
-                transactions.date = budgetModel.createdon;
+                transactions.vdate = budgetModel.createdon;
                 transactions.budgetid = budgetModel.Id;
                 transactions.type = TransactionType.Budgets;
                 transactions.createdon = DateTime.Now;

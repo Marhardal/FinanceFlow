@@ -23,7 +23,7 @@ namespace FinanceFlow.Server.Models
         [Precision(18, 2)]
         public decimal? balance { get; set; }
 
-        public DateTime date { get; set; } = DateTime.Now;
+        public DateTime vdate { get; set; } = DateTime.Now;
 
         public DateTime createdon { get; set; } = DateTime.Now;
     
