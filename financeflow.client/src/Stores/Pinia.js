@@ -25,11 +25,11 @@ export const useStore = defineStore("store", {
         this.authToken = data.data.accessToken;
         this.authUserID = data.data.userID;
         this.authRole = data.data.roleID;
-        this.authRefreshToken = data.data.refrshToken;
+        this.authRefreshToken = data.data.refreshToken;
         localStorage.setItem("authToken", data.data.accessToken);
         localStorage.setItem("authUserID", data.data.userID);
         localStorage.setItem("authRole", data.data.roleID);
-        localStorage.setItem("authRefreshToken", data.data.refrshToken);
+        localStorage.setItem("authRefreshToken", data.data.refreshToken);
 
         return true;
       } catch (error) {

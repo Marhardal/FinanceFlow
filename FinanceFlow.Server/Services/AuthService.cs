@@ -58,8 +58,6 @@ namespace FinanceFlow.Server.Services
 
         public async Task<TokenRefresh> RefreshTokensAsync(RefreshTokenDTO request)
         {
-            request.UserId = 1;
-
             var token = ValidateRefreshTokenAsync(request.UserId, request.refreshToken);
 
             if (token is null)
