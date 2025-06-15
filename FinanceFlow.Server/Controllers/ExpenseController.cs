@@ -68,7 +68,7 @@ namespace FinanceFlow.Server.Controllers
             {
                 return NoContent();
             }
-            
+
             if (expenseModel.BudgetID != 0)
             {
                 var budget = await _context.Budgets.FindAsync(expenseModel.BudgetID);
@@ -77,8 +77,28 @@ namespace FinanceFlow.Server.Controllers
                     // Update the budget entity as needed
                     budget.spentAmount = _context.Expenses.Where(e => e.BudgetID == expenseModel.BudgetID).Sum(e => e.amount);
                     _context.Budgets.Update(budget);
+                    var transaction = _context.Transactions.Where(b => b.budgetid == expenseModel.BudgetID).FirstOrDefault();
+
+                    var lasttransaction = _context.Transactions
+        .OrderByDescending(t => t.createdon).Last()?.balance ?? 0;
+
+                    if (transaction is not null)
+                    {
+                        TransactionModel transactions = new TransactionModel();
+                        transactions.debit = Convert.ToDecimal(expenseModel.amount);
+                        transactions.valuedate = DateTime.Now;
+                        transactions.investId = expenseModel.BudgetID;
+                        transactions.type = TransactionType.Budgets;
+                        //transactions.createdon = DateTime.Now;
+                        //transactions.date = DateTime.Now;
+                        transactions.balance = lasttransaction - Convert.ToDecimal(expenseModel.amount);
+                        _context.Update(transactions);
+                    }
                 }
             }
+
+
+            
 
             try
             {
