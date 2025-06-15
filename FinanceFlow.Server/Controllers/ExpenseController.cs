@@ -85,6 +85,7 @@ namespace FinanceFlow.Server.Controllers
                     if (transaction is not null)
                     {
                         TransactionModel transactions = new TransactionModel();
+                        transactions.id = transaction.id;
                         transactions.debit = Convert.ToDecimal(expenseModel.amount);
                         transactions.valuedate = DateTime.Now;
                         transactions.investId = expenseModel.BudgetID;
@@ -93,6 +94,7 @@ namespace FinanceFlow.Server.Controllers
                         //transactions.date = DateTime.Now;
                         transactions.balance = lasttransaction - Convert.ToDecimal(expenseModel.amount);
                         _context.Update(transactions);
+
                     }
                 }
             }
