@@ -21,16 +21,18 @@ const getAuthUserID = () => {
 const Logout = async () => {
   console.log("Logout");
 
+  localStorage.clear();
+
   localStorage.removeItem('authUserID');
   localStorage.removeItem('authRefreshToken');
   localStorage.removeItem('authRole');
   localStorage.removeItem('authToken');
 
-  const success = await authuseStore.logout();
-  if (!success) {
-    $toast.error("Error logging out. Please try again.");
-    return;
-  }
+  // const success = await authuseStore.logout();
+  // if (!success) {
+  //   $toast.error("Error logging out. Please try again.");
+  //   return;
+  // }
   router.push({ path: '/login' })
 
   if (authUserID.value == null) {
@@ -56,9 +58,7 @@ const handleClickOutside = (event) => {
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
   getAuthUserID();
-  if (authUserID.value == null) {
-    router.push({ path: '/login' })
-  }
+
   // console.log("Auth User ID:", authUserID.value);
 });
 

@@ -62,4 +62,5 @@ export const useStore = defineStore("store", {
       localStorage.removeItem("authUser");
     },
   },
+  persist: true
 });

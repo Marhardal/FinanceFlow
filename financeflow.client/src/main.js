@@ -4,6 +4,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 import router from './Others/Router.js'
 import formkitconfig from './Others/formkit.config'
@@ -16,6 +17,8 @@ import 'vue-toast-notification/dist/theme-bootstrap.css';
 const app = createApp(App);
 
 const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+
 app.use(pinia);
 
 app.use(plugin, defaultConfig(formkitconfig));
