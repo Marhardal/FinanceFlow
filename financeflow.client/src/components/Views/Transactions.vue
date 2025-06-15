@@ -1,8 +1,8 @@
 <template>
   <!-- component -->
   <div class="bg-white p-8 rounded-md w-full">
-    <ListHeader Header="Transactions" SubHeader="Transactions List" Navigate="" />
-    <button @click="Logout">Logout</button>
+    <ListHeader Header="Transactions" SubHeader="Transactions List" />
+    <!-- <button @click="Logout">Logout</button> -->
     <div>
       <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div class="flex flex-col">
@@ -160,7 +160,7 @@ const deleteTransaction = async (id) => {
   if (response.status === 200) {
       getTransactions();
       $toast.success('Income Deleted Successfully!');
-      router.push('/incomes');
+      router.push('/transactions');
     }
     console.log(response.status);
   } catch (error) {

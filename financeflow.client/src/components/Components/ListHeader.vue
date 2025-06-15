@@ -10,7 +10,7 @@
       <div class="col-span-5">
         <slot></slot>
       </div>
-      <div class="col-span-1 space-x-8 py-2">
+      <div class="col-span-1 space-x-8 py-2" v-if="props.Navigate">
         <router-link class="bg-indigo-600 px-4 py-2 my-4 rounded-md text-white font-semibold tracking-wide cursor-pointer" :to="props.Navigate">Create</router-link>
       </div>
     </div>
