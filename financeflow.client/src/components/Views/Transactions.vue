@@ -120,29 +120,6 @@ import { useRouter } from 'vue-router';
 const $toast = useToast();
 const router = useRouter();
 
-const Logout = async () => {
-    console.log("Logout");
-
-    localStorage.removeItem('authUserID');
-    localStorage.removeItem('authRefreshToken');
-    localStorage.removeItem('authRole');
-    localStorage.removeItem('authToken');
-
-  // const success = await authuseStore.logout();
-  // if (!success) {
-  //   $toast.error("Error logging out. Please try again.");
-  //   return;
-  // }
-  router.push({ path: '/login' })
-
-  const authUserID = localStorage.getItem('authUserID');
-  if (authUserID == null) {
-    router.push({ path: '/login' })
-  }
-  // $toast.success("Logged in successfully.");
-}
-
-
 dayjs.extend(relativeTime);
 const Transactions = ref([]);
 
