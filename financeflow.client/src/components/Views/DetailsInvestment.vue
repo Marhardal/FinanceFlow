@@ -99,7 +99,7 @@
                         <tr>
                           <th scope="col"
                             class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
-                            Income Name</th>
+                            Source</th>
                           <th scope="col"
                             class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
                             Status</th>
@@ -118,8 +118,8 @@
                         <tr
                           class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800"
                           v-for="Invest in Invests" :key="Invest.id">
-                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.income">
-                            {{ Invest.income.name }}</td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.incomes">
+                            {{ Invest.incomes.name }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.status">
                             {{ Invest.status.name }}</td>
                           <td class="px-6 py-4 whitespace-nowrap text-sm">{{

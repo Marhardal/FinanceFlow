@@ -19,14 +19,14 @@ const getAuthUserID = () => {
 }
 
 const Logout = async () => {
-  console.log("Logout");
+  //console.log("Logout");
 
-  localStorage.clear();
+  //localStorage.clear();
 
-  localStorage.removeItem('authUserID');
-  localStorage.removeItem('authRefreshToken');
-  localStorage.removeItem('authRole');
-  localStorage.removeItem('authToken');
+  //localStorage.removeItem('authUserID');
+  //localStorage.removeItem('authRefreshToken');
+  //localStorage.removeItem('authRole');
+  //localStorage.removeItem('authToken');
 
   // const success = await authuseStore.logout();
   // if (!success) {
