@@ -41,7 +41,7 @@ namespace FinanceFlow.Server.Services
             return await createTokenResponce(user, claim);
         }
 
-        private async Task<TokenRefresh>  createTokenResponce(UserModel user, string token)
+        private async Task<TokenRefresh> createTokenResponce(UserModel user, string token)
         {
             if (token is null)
             {
@@ -124,7 +124,7 @@ namespace FinanceFlow.Server.Services
                 return null;
             }
             //var user = await _context.Users.FindAsync(id);
-            
+
             var user = new UserModel
             {
                 FirstName = request.FirstName,
@@ -141,6 +141,18 @@ namespace FinanceFlow.Server.Services
 
             context.Users.Add(user);
             await context.SaveChangesAsync();
+            string link = "<a class='' href='https://localhost:53386'>Dashboard</a>";
+            string message = "Hi " + request.Username + ",<br><br>Thank you for registering with Fin-Flow! We’re excited to help you manage your income, " +
+                "investments, and budgets smarter and more efficiently.<br>Here’s what you can do with your new account:<br>✅ Track your income and expenses" +
+                "<br>" +
+                "✅  Set smart budgets" +
+                "<br>  ✅ Get reminders for upcoming investments<br>" +
+                "  ✅ Receive financial insights and alerts<br><br>🔐 Your login details:" +
+                "<br>- Username: " + request.Username + "<br>- Registered On: "+DateTime.Now.ToString()+ "<br><br>To get started, log in to your dashboard:<br>👉 " +link +
+                "<br><br>Need help setting things up? Visit our help center or contact our support team anytime.<br><br>Welcome aboard " +
+                "and here’s to better money management!<br><br>— The Fin-Flow Team";
+
+            Utilities.SendMail(request.Email, "🎉 Welcome to Fin-Flow — Let’s Take Control of Your Finances!", message);
 
             return user;
         }
