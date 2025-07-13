@@ -64,6 +64,30 @@
             </div>
           </div>
         </div>
+        <PaginateVue :total-items="items.length" :items-per-page="5"
+  :max-pages-shown="10"
+  @click="onClickHandler" />
+  <!-- Hide Breakpoint Buttons -->
+
+<vue-awesome-paginate
+  :total-items="50"
+  v-model="currentPage"
+  :items-per-page="5"
+  :max-pages-shown="5"
+  :show-breakpoint-buttons="false"
+  @click="onClickHandler"
+/>
+
+<!-- Disable Breakpoint Buttons -->
+
+<vue-awesome-paginate
+  :total-items="50"
+  v-model="currentPage"
+  :items-per-page="5"
+  :max-pages-shown="5"
+  @click="onClickHandler"
+  :disable-breakpoint-buttons="true"
+/>
         <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between ">
           <span class="text-xs xs:text-sm text-gray-900">
             Showing 1 to 4 of 50 Entries
@@ -74,10 +98,11 @@
               Prev
             </button>
             &nbsp; &nbsp;
-            <button
+            
+            <RouterLink
               class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
-              Next
-            </button>
+              <nuxt-link :to="{path: `/`, query: {page, previousPage} }">Next</nuxt-link>
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -88,15 +113,38 @@
 <script setup>
 import ListHeader from '../Components/ListHeader.vue';
 import apiClient from '../../Others/apiClient'
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useToast } from 'vue-toast-notification';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import PaginateVue from '../PaginateVue.vue';
 
 const items = ref([]);
 const $toast = useToast();
 const router = useRouter();
 
 const search = ref('');
+
+const route = useRoute();
+
+const page = computed(() => Number(route.query.page) || 1)
+
+const offset = computed(() => (page.value - 1) * 15)
+
+const totalpages = computed(() => Math.ceil(items.value.length / 15))
+
+const nextPage = computed(()  => {
+  if (page.value < totalpages.value) {
+    return page.value + 1
+  }
+  return totalpages.value
+});
+
+const previousPage = computed(() => {
+  if (page.value > totalpages.value) {
+    return page.value - 1
+  }
+  return false
+});
 
 const getItems = async () => {
   try {

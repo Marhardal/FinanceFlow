@@ -1,9 +1,9 @@
 <template>
   <!-- component -->
   <div class="min-h-full flex items-center justify-center">
-    <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-      <div class="svg-container h-55 flex w-full object-cover">
-        <img src="../../assets/personal-finance-45.svg" class="mb-6 w-full"
+    <div class="w-full max-w-sm sm:max-w-md md:max-w-sm lg:max-w-sm bg-white rounded-xl shadow-lg px-6 py-8">
+      <div class="mb-6">
+        <img src="../../assets/personal-finance-45.svg" class="w-full h-auto mx-auto"
           alt="Person standing confidently with financial documents and charts, surrounded by abstract shapes and soft colors, conveying a sense of organization and calm in a modern financial environment. No visible text." />
       </div>
       <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Finance Flow</h2>
