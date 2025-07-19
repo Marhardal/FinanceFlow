@@ -1,19 +1,19 @@
 <template>
   <!-- component -->
-  <div class="bg-white p-8 rounded-md w-full">
+  <div class="w-full p-8 bg-white rounded-md">
     <ListHeader Header="Investment" SubHeader="Investments List" Navigate="investment/Create">
-      <div class="flex bg-gray-50 items-center p-2 rounded-md outline-2 w-full">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+      <div class="flex items-center w-full p-2 rounded-md bg-gray-50 outline-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd"
             d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
             clip-rule="evenodd" />
         </svg>
-        <input class="bg-gray-50 ml-1 block outline-none flex-grow" type="text" name="" id=""
+        <input class="flex-grow block ml-1 outline-none bg-gray-50" type="text" name="" id=""
           placeholder="Search for Investments." v-model="search" @keyup="getSearchedInvestments()">
       </div>
     </ListHeader>
     <div>
-      <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+      <div class="px-4 py-4 -mx-4 overflow-x-auto sm:-mx-8 sm:px-8">
         <div class="flex flex-col">
           <div class="-m-1.5 overflow-x-auto">
             <div class="p-1.5 min-w-full inline-block align-middle">
@@ -22,42 +22,42 @@
                   <thead>
                     <tr>
                       <th scope="col"
-                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
                         Name</th>
                       <th scope="col"
-                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
                         Amount</th>
                       <th scope="col"
-                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
                         Category</th>
                       <th scope="col"
-                        class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
                         Date</th>
                       <th scope="col"
-                        class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                        class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-end dark:text-neutral-500">
                         Action</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800" v-for="Investment in Investments"
+                    <tr class="text-gray-800 hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white" v-for="Investment in Investments"
                       :key="Investment.id">
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
                         {{ Investment.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
                       {{ Investment.currentAmount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Investment.investmentType">
+                      <td class="px-6 py-4 text-sm font-medium whitespace-nowrap" v-if="Investment.investmentType">
                         {{ Investment.investmentType.name }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
                         {{ dayjs(Investment.createdOn).fromNow() }}</td>
-                      <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                      <td class="px-6 py-4 text-sm font-medium whitespace-nowrap text-end">
                         <router-link :to="{ path: 'Investment/edit/' + Investment.id }"
-                          class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
+                          class="inline-flex items-center pr-1 text-sm font-semibold text-blue-600 border border-transparent rounded-lg gap-x-2 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
                           |</router-link>
                         <router-link :to="{ path: 'Investment/details/'+ Investment.id }"
-                          class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
+                          class="inline-flex items-center pr-1 text-sm font-semibold text-blue-600 border border-transparent rounded-lg gap-x-2 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
                           |</router-link>
                         <button type="button" @click="deleteInvestment(Investment.id)"
-                          class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">
+                          class="inline-flex items-center text-sm font-semibold text-blue-600 border border-transparent rounded-lg gap-x-2 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">
                           Delete</button>
                       </td>
                     </tr>
@@ -67,18 +67,18 @@
             </div>
           </div>
         </div>
-        <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between ">
-          <span class="text-xs xs:text-sm text-gray-900">
+        <div class="flex flex-col items-center px-5 py-5 bg-white border-t xs:flex-row xs:justify-between ">
+          <span class="text-xs text-gray-900 xs:text-sm">
             Showing 1 to 4 of 50 Entries
           </span>
           <div class="inline-flex mt-2 xs:mt-0">
             <button
-              class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
+              class="px-4 py-2 text-sm font-semibold transition duration-150 bg-indigo-600 rounded-l text-indigo-50 hover:bg-indigo-500">
               Prev
             </button>
             &nbsp; &nbsp;
             <button
-              class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
+              class="px-4 py-2 text-sm font-semibold transition duration-150 bg-indigo-600 rounded-r text-indigo-50 hover:bg-indigo-500">
               Next
             </button>
           </div>
@@ -109,6 +109,7 @@ const getInvestments = async () => {
   try {
     const response = await apiClient.get('Investments')
     Investments.value = response.data;
+    // console.log(Investments.value);
   } catch (error) {
     console.error("Error fetching Investments:", error);
   }

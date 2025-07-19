@@ -58,6 +58,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutIncomeModel(int id, IncomeModel incomeModel)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (id != incomeModel.Id)
             {
                 return BadRequest();
@@ -77,7 +78,7 @@ namespace FinanceFlow.Server.Controllers
                 }
                 else
                 {
-                    throw; 
+                    throw;
                 }
             }
             var notify = _context.Notification.Where(i => i.IncomeID == incomeModel.Id);
@@ -96,26 +97,68 @@ namespace FinanceFlow.Server.Controllers
 
                     _context.Notification.Add(notification);
                     await _context.SaveChangesAsync();
-                } 
+                }
             }
-            var transaction = _context.Transactions.Where(b => b.incomeid == incomeModel.Id).FirstOrDefault();
+            //var transaction = _context.Transactions.Where(b => b.incomeid == incomeModel.Id && b.UserId == int.Parse(userId)).FirstOrDefault();
+            //decimal credit = (decimal)_context.Transactions.Where(b => b.UserId == int.Parse(userId)).Sum(selector: b => b.credit);
+            //decimal debit = (decimal)_context.Transactions.Where(b => b.UserId == int.Parse(userId)).Sum(selector: b => b.debit);
+            //decimal balance = credit - debit;
 
-            var lasttransaction = _context.Transactions
-.OrderByDescending(t => t.createdon).Last()?.balance ?? 0;
-            if (transaction is not null)
+            //var transaction = _context.Transactions.Where(b => b.UserId == int.Parse(userId));
+            //decimal balance = 0;
+
+            //if (transaction is not null)
+            //{
+
+
+            //    decimal credit = (decimal)transaction.Sum(b => b.credit);
+            //    decimal debit = (decimal)transaction.Sum(b => b.debit);
+            //    balance = credit - debit;
+            //    var transactionid = transaction.Where(b => b.incomeid == incomeModel.Id).FirstOrDefault();
+            //    TransactionModel transactions = new TransactionModel();
+            //    transactions.id = transactionid.id; // Use null-coalescing operator to handle null case
+            //    transactions.credit = incomeModel.Amount;
+            //    transactions.valuedate = incomeModel.Date.Value;
+            //    transactions.incomeid = incomeModel.Id;
+            //    transactions.type = TransactionType.Incomes;
+            //    //transactions.createdon = DateTime.Now;
+            //    //transactions.date = DateTime.Now;
+            //    transactions.incomeid = incomeModel.Id;
+            //    transactions.balance = balance;
+
+            //    _context.Transactions.Update(transactions);
+            //    await _context.SaveChangesAsync();
+            //}
+            var userIdInt = int.Parse(userId);
+            var transactionsQuery = _context.Transactions.Where(b => b.UserId == userIdInt);
+
+            decimal credit = transactionsQuery.Sum(b => b.credit ?? 0);
+            decimal debit = transactionsQuery.Sum(b => b.debit ?? 0);
+            decimal balance = credit - debit;
+
+            var transactionToUpdate = transactionsQuery.FirstOrDefault(b => b.incomeid == incomeModel.Id);
+
+            if (transactionToUpdate != null)
+            {
+                transactionToUpdate.credit = incomeModel.Amount;
+                transactionToUpdate.valuedate = incomeModel.Date.Value;
+                transactionToUpdate.incomeid = incomeModel.Id;
+                transactionToUpdate.balance = balance;
+
+                _context.Transactions.Update(transactionToUpdate);
+                await _context.SaveChangesAsync();
+            }
+            else
             {
                 TransactionModel transactions = new TransactionModel();
-                transactions.id = transaction.id; // Use null-coalescing operator to handle null case
                 transactions.credit = incomeModel.Amount;
                 transactions.valuedate = incomeModel.Date.Value;
                 transactions.incomeid = incomeModel.Id;
                 transactions.type = TransactionType.Incomes;
-                //transactions.createdon = DateTime.Now;
-                //transactions.date = DateTime.Now;
                 transactions.incomeid = incomeModel.Id;
-                transactions.balance = lasttransaction - Convert.ToDecimal(incomeModel.Amount);
-
-                _context.Transactions.Update(transactions);
+                transactions.balance = balance + incomeModel.Amount;
+                transactions.UserId = int.Parse(userId);
+                _context.Transactions.Add(transactions);
                 await _context.SaveChangesAsync();
             }
             return NoContent();
@@ -156,9 +199,8 @@ namespace FinanceFlow.Server.Controllers
             await _context.SaveChangesAsync();
 
             var transaction = _context.Transactions.Where(b => b.incomeid == incomeModel.Id);
-            var lasttransaction = _context.Transactions
-.OrderByDescending(t => t.createdon).Last()?.balance ?? 0;
-
+            decimal lasttransaction = _context.Transactions.OrderByDescending(t => t.createdon).Last()?.balance ?? 0;
+            
             if (incomeModel.Status != null || incomeModel.StatusID == 2)
             {
                 TransactionModel transactions = new TransactionModel();

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FinanceFlow.Server.DBContext;
+using FinanceFlow.Server.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using FinanceFlow.Server.DBContext;
-using FinanceFlow.Server.Models;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -52,12 +53,18 @@ namespace FinanceFlow.Server.Controllers
             return budgetModel;
         }
 
+        public double GetV()
+        {
+            return 0.00;
+        }
+
         [Authorize]
         // PUT: api/Budgets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBudgetModel(int id, BudgetModel budgetModel)
+        public async Task<IActionResult> PutBudgetModel(int id, BudgetModel budgetModel, double zero)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (id != budgetModel.Id)
             {
                 return BadRequest();
@@ -82,11 +89,53 @@ namespace FinanceFlow.Server.Controllers
             }
 
 
-            var transaction = _context.Transactions.Where(b => b.budgetid == budgetModel.Id).FirstOrDefault();
+            //var transaction = _context.Transactions.Where(b => b.budgetid == budgetModel.Id && b.UserId == int.Parse(userId)).FirstOrDefault();
 
-            var lasttransaction = _context.Transactions
-    .OrderByDescending(t => t.createdon).Last()?.balance ?? 0;
-            if (transaction is null || (budgetModel.status is not null || budgetModel.statusID is 2))
+            //decimal lasttransaction = _context.Transactions.Where(b => b.UserId == int.Parse(userId)).OrderByDescending(t => t.createdon).FirstOrDefault()?.balance ?? 0;
+
+            //if (transaction is not null || (budgetModel.status is not null || budgetModel.statusID is 2))
+            //{
+            //    TransactionModel transactions = new TransactionModel();
+
+            //    transactions.debit = Convert.ToDecimal(budgetModel.Amount);
+            //    transactions.valuedate = budgetModel.createdon;
+            //    transactions.budgetid = budgetModel.Id;
+            //    transactions.type = TransactionType.Budgets;
+            //    //transactions.createdon = DateTime.Now;
+            //    //transactions.valuedate = DateTime.Now;
+
+            //    transactions.balance = lasttransaction - Convert.ToDecimal(budgetModel.Amount);
+
+            //    _context.Transactions.Update(transactions);
+            //    await _context.SaveChangesAsync();
+
+            //}
+            var userIdInt = int.Parse(userId);
+            var transactionsQuery = _context.Transactions.Where(b => b.UserId == userIdInt);
+
+            decimal credit = transactionsQuery.Sum(b => b.credit ?? 0);
+            decimal debit = transactionsQuery.Sum(b => b.debit ?? 0);
+            decimal balance = credit - debit;
+
+            var transactionToUpdate = transactionsQuery.FirstOrDefault(b => b.budgetid == budgetModel.Id);
+
+            if (transactionToUpdate != null)
+            {
+                //decimal spentAmount = (decimal)budgetModel.spentAmount;
+                //decimal Amount = (decimal)budgetModel.Amount;
+                transactionToUpdate.debit = (decimal)budgetModel.Amount;
+                //transactionToUpdate.debit = budgetModel.spentAmount ?? budgetModel.Amount ?? (decimal)0;
+
+                //transactionToUpdate.debit = (decimal)((decimal)budgetModel.spentAmount ?? (decimal)budgetModel.Amount);
+                transactionToUpdate.valuedate = budgetModel.remindon;
+                transactionToUpdate.incomeid = budgetModel.Id;
+                transactionToUpdate.type = TransactionType.Incomes;
+                transactionToUpdate.balance = balance;
+
+                _context.Transactions.Update(transactionToUpdate);
+                await _context.SaveChangesAsync();
+            }
+            else
             {
                 TransactionModel transactions = new TransactionModel();
 
@@ -94,14 +143,14 @@ namespace FinanceFlow.Server.Controllers
                 transactions.valuedate = budgetModel.createdon;
                 transactions.budgetid = budgetModel.Id;
                 transactions.type = TransactionType.Budgets;
-                //transactions.createdon = DateTime.Now;
-                //transactions.valuedate = DateTime.Now;
-                transactions.balance = lasttransaction - Convert.ToDecimal(budgetModel.Amount);
+                transactions.UserId = int.Parse(userId);
+                transactions.balance = balance - Convert.ToDecimal(budgetModel.Amount);
 
-                _context.Transactions.Update(transactions);
+                _context.Transactions.Add(transactions);
                 await _context.SaveChangesAsync();
 
             }
+
             return NoContent();
         }
 
@@ -111,6 +160,7 @@ namespace FinanceFlow.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<BudgetModel>> PostBudgetModel(BudgetModel budgetModel)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (budgetModel is null)
             {
                 return NoContent();
