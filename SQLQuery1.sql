@@ -1,0 +1,1 @@
+﻿Select SUM(credit)-SUM(debit) from Transactions

@@ -131,7 +131,8 @@ namespace FinanceFlow.Server.Controllers
                 transactionToUpdate.incomeid = budgetModel.Id;
                 transactionToUpdate.type = TransactionType.Incomes;
                 transactionToUpdate.balance = balance;
-
+                transactionToUpdate.id = transactionToUpdate.id;
+                
                 _context.Transactions.Update(transactionToUpdate);
                 await _context.SaveChangesAsync();
             }
