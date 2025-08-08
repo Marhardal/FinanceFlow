@@ -1,1 +1,1 @@
-﻿Select SUM(credit)-SUM(debit) from Transactions
+﻿select SUM(credit), SUM(debit) from Transactions

@@ -9,6 +9,7 @@ using FinanceFlow.Server.DBContext;
 using FinanceFlow.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using FinanceFlow.Server.Classes;
 
 namespace FinanceFlow.Server.Controllers
 {
@@ -130,14 +131,23 @@ namespace FinanceFlow.Server.Controllers
             //    await _context.SaveChangesAsync();
             //}
             var userIdInt = int.Parse(userId);
-            var transactionsQuery = _context.Transactions.Where(b => b.UserId == userIdInt);
-
+            var transactionsQuery = _context.Transactions.Where(b => b.UserId == userIdInt).ToList();
+            
+            var transactioncredits = transactionsQuery.Where(t => t.type == TransactionType.Incomes).Sum(t => t.credit ?? 0);
+            var transactiondebits = transactionsQuery.Where(t => t.type == TransactionType.Investment && t.type == TransactionType.Budgets).Sum(t => t.debit ?? 0);
+            
             decimal credit = transactionsQuery.Sum(b => b.credit ?? 0);
             decimal debit = transactionsQuery.Sum(b => b.debit ?? 0);
             decimal balance = credit - debit;
+            // Replace this line:
+            // FinAccess access;
+            //double bal = access.GetBalance(userId);
 
+            // With the following lines:
+            FinAccess access = new FinAccess(_context);
+            Task bal = access.GetBalanceAsync(userId);
             var transactionToUpdate = transactionsQuery.FirstOrDefault(b => b.incomeid == incomeModel.Id);
-
+            
             if (transactionToUpdate != null)
             {
                 transactionToUpdate.credit = incomeModel.Amount;
@@ -254,6 +264,8 @@ namespace FinanceFlow.Server.Controllers
 
             return NoContent();
         }
+
+
 
         private bool IncomeModelExists(int id)
         {

@@ -111,49 +111,105 @@ namespace FinanceFlow.Server.Controllers
 
             //}
             var userIdInt = int.Parse(userId);
-            var transactionsQuery = _context.Transactions.Where(b => b.UserId == userIdInt);
+            //var transactionsQuery = _context.Transactions.Where(b => b.UserId == userIdInt);
 
-            decimal credit = transactionsQuery.Sum(b => b.credit ?? 0);
-            decimal debit = transactionsQuery.Sum(b => b.debit ?? 0);
-            decimal balance = credit - debit;
+            //decimal credit = transactionsQuery.Sum(b => b.credit ?? 0);
+            //decimal debit = transactionsQuery.Sum(b => b.debit ?? 0);
+            //decimal balance = credit - debit;
 
-            var transactionToUpdate = transactionsQuery.FirstOrDefault(b => b.budgetid == budgetModel.Id);
+            //var transactionToUpdate = transactionsQuery.FirstOrDefault(b => b.budgetid == budgetModel.Id);
 
-            if (transactionToUpdate != null)
+            //if (transactionToUpdate != null)
+            //{
+            //    //decimal spentAmount = (decimal)budgetModel.spentAmount;
+            //    //decimal Amount = (decimal)budgetModel.Amount;
+            //    transactionToUpdate.debit = (decimal)budgetModel.Amount;
+            //    //transactionToUpdate.debit = budgetModel.spentAmount ?? budgetModel.Amount ?? (decimal)0;
+
+            //    //transactionToUpdate.debit = (decimal)((decimal)budgetModel.spentAmount ?? (decimal)budgetModel.Amount);
+            //    transactionToUpdate.valuedate = budgetModel.remindon;
+            //    transactionToUpdate.incomeid = budgetModel.Id;
+            //    transactionToUpdate.type = TransactionType.Budgets;
+            //    transactionToUpdate.balance = balance;
+            //    transactionToUpdate.id = transactionToUpdate.id;
+            //    _context.Entry(transactionToUpdate).State = EntityState.Modified;
+
+            //    //_context.Transactions.Update(transactionToUpdate);
+            //}
+            //else
+            //{
+            //    TransactionModel transactions = new TransactionModel();
+
+            //    transactions.debit = Convert.ToDecimal(budgetModel.Amount);
+            //    transactions.valuedate = budgetModel.remindon;
+            //    transactions.budgetid = budgetModel.Id;
+            //    transactions.type = TransactionType.Budgets;
+            //    transactions.UserId = int.Parse(userId);
+            //    transactions.balance = balance - Convert.ToDecimal(budgetModel.Amount);
+
+            //    _context.Transactions.Add(transactions);
+            //    await _context.SaveChangesAsync();
+
+            //}
+
+            await UpdateBudgetTransactionAsync(budgetModel, userIdInt);
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        private async Task UpdateBudgetTransactionAsync(BudgetModel budgetModel, int userId)
+        {
+            // Calculate current balance for the user
+            var currentBalance = await CalculateUserBalanceAsync(userId);
+
+            // Find existing transaction for this budget
+            var existingTransaction = await _context.Transactions
+                .FirstOrDefaultAsync(t => t.budgetid == budgetModel.Id && t.UserId == userId);
+
+            if (existingTransaction != null)
             {
-                //decimal spentAmount = (decimal)budgetModel.spentAmount;
-                //decimal Amount = (decimal)budgetModel.Amount;
-                transactionToUpdate.debit = (decimal)budgetModel.Amount;
-                //transactionToUpdate.debit = budgetModel.spentAmount ?? budgetModel.Amount ?? (decimal)0;
+                // Update existing transaction
+                existingTransaction.debit = (decimal)budgetModel.Amount;
+                existingTransaction.valuedate = budgetModel.remindon != default ? budgetModel.remindon : DateTime.UtcNow;
+                existingTransaction.type = TransactionType.Budgets;
+                existingTransaction.balance = currentBalance;
 
-                //transactionToUpdate.debit = (decimal)((decimal)budgetModel.spentAmount ?? (decimal)budgetModel.Amount);
-                transactionToUpdate.valuedate = budgetModel.remindon;
-                transactionToUpdate.incomeid = budgetModel.Id;
-                transactionToUpdate.type = TransactionType.Incomes;
-                transactionToUpdate.balance = balance;
-                transactionToUpdate.id = transactionToUpdate.id;
-                
-                _context.Transactions.Update(transactionToUpdate);
-                await _context.SaveChangesAsync();
+                _context.Transactions.Update(existingTransaction);
             }
             else
             {
-                TransactionModel transactions = new TransactionModel();
+                // Create new transaction
+                var newTransaction = new TransactionModel
+                {
+                    debit = (decimal)budgetModel.Amount,
+                    credit = 0,
+                    valuedate = budgetModel.remindon != default ? budgetModel.remindon : DateTime.UtcNow,
+                    budgetid = budgetModel.Id,
+                    type = TransactionType.Budgets,
+                    UserId = userId,
+                    balance = currentBalance - (decimal)budgetModel.Amount,
+                    createdon = DateTime.UtcNow
+                };
 
-                transactions.debit = Convert.ToDecimal(budgetModel.Amount);
-                transactions.valuedate = budgetModel.createdon;
-                transactions.budgetid = budgetModel.Id;
-                transactions.type = TransactionType.Budgets;
-                transactions.UserId = int.Parse(userId);
-                transactions.balance = balance - Convert.ToDecimal(budgetModel.Amount);
-
-                _context.Transactions.Add(transactions);
-                await _context.SaveChangesAsync();
-
+                _context.Transactions.Add(newTransaction);
             }
 
-            return NoContent();
+            await _context.SaveChangesAsync();
         }
+
+        private async Task<decimal> CalculateUserBalanceAsync(int userId)
+        {
+            var transactions = await _context.Transactions
+                .Where(t => t.UserId == userId)
+                .ToListAsync();
+
+            decimal totalCredit = transactions.Sum(t => t.credit ?? 0);
+            decimal totalDebit = transactions.Sum(t => t.debit ?? 0);
+
+            return totalCredit - totalDebit;
+        }
+
 
         [Authorize]
         // POST: api/Budgets
