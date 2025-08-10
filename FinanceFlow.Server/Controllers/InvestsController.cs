@@ -75,6 +75,15 @@ namespace FinanceFlow.Server.Controllers
             {
                 return BadRequest();
             }
+            
+            var userIdInt = int.Parse(userId);
+            var transactionsQuery = _context.Transactions.Where(b => b.UserId == userIdInt);
+
+            decimal credit = transactionsQuery.Sum(b => b.credit ?? 0);
+            decimal debit = transactionsQuery.Sum(b => b.debit ?? 0);
+            decimal balance = credit - debit;
+
+            var transactionToUpdate = transactionsQuery.FirstOrDefault(b => b.investId == investModel.InvestmentId);
 
             _context.Entry(investModel).State = EntityState.Modified;
             if (investModel.InvestmentId != 0)
@@ -97,6 +106,30 @@ namespace FinanceFlow.Server.Controllers
                 }
             }
 
+
+            if (transactionToUpdate != null)
+            {
+                transactionToUpdate.debit = investModel.amount;
+                transactionToUpdate.valuedate = investModel.Date;
+                transactionToUpdate.investId = investModel.Id;
+                transactionToUpdate.balance = balance;
+
+                RecalculateBalances(userIdInt, transactionToUpdate.valuedate);
+                _context.Transactions.Update(transactionToUpdate);
+                //await _context.SaveChangesAsync();
+            }
+            else
+            {
+                TransactionModel transactions = new TransactionModel();
+                transactions.debit = investModel.amount;
+                transactions.valuedate = investModel.Date;
+                transactions.investId = investModel.InvestmentId;
+                transactions.type = TransactionType.Investment;
+                transactions.balance = balance - investModel.amount;
+                transactions.UserId = int.Parse(userId);
+                _context.Transactions.Add(transactions);
+            }
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -112,58 +145,7 @@ namespace FinanceFlow.Server.Controllers
                     throw;
                 }
             }
-
-            //            var transaction = _context.Transactions.Where(b => b.investId == investModel.Id && b.UserId == int.Parse(userId)).FirstOrDefault();
-
-            //            var lasttransaction = _context.Transactions
-            //.OrderByDescending(t => t.createdon).Last()?.balance ?? 0;
-
-            //            if (transaction is not null)
-            //            {
-            //                TransactionModel transactions = new TransactionModel();
-            //                transactions.id = transaction.id;
-            //                transactions.debit = Convert.ToDecimal(investModel.amount);
-            //                transactions.valuedate = investModel.Date;
-            //                transactions.investId = investModel.Id;
-            //                transactions.type = TransactionType.Investment;
-            //                //transactions.createdon = DateTime.Now;
-            //                //transactions.date = DateTime.Now;
-            //                transactions.balance = lasttransaction - Convert.ToDecimal(investModel.amount);
-            //                _context.Update(transactions);
-            //                await _context.SaveChangesAsync();
-            //            }
-
-            var userIdInt = int.Parse(userId);
-            var transactionsQuery = _context.Transactions.Where(b => b.UserId == userIdInt);
-
-            decimal credit = transactionsQuery.Sum(b => b.credit ?? 0);
-            decimal debit = transactionsQuery.Sum(b => b.debit ?? 0);
-            decimal balance = credit - debit;
-
-            var transactionToUpdate = transactionsQuery.FirstOrDefault(b => b.investId == investModel.InvestmentId);
-
-            if (transactionToUpdate != null)
-            {
-                transactionToUpdate.debit = investModel.amount;
-                transactionToUpdate.valuedate = investModel.Date;
-                transactionToUpdate.investId = investModel.Id;
-                transactionToUpdate.balance = balance;
-                _context.Transactions.Update(transactionToUpdate);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                TransactionModel transactions = new TransactionModel();
-                transactions.debit = investModel.amount;
-                transactions.valuedate = investModel.Date;
-                transactions.investId = investModel.InvestmentId;
-                transactions.type = TransactionType.Investment;
-                transactions.balance = balance - investModel.amount;
-                transactions.UserId = int.Parse(userId);
-                _context.Transactions.Add(transactions);
-                await _context.SaveChangesAsync();
-            }
-
+                        
             return NoContent();
         }
 
@@ -266,6 +248,28 @@ namespace FinanceFlow.Server.Controllers
         private bool InvestModelExists(int id)
         {
             return _context.Invests.Any(e => e.Id == id);
+        }
+        
+        private void RecalculateBalances(int userId, DateTime startDate)
+        {
+            var transactions = _context.Transactions
+                .Where(t => t.UserId == userId && t.valuedate >= startDate)
+                .OrderBy(t => t.valuedate)
+                .ToList();
+
+            decimal previousBalance = _context.Transactions
+                .Where(t => t.UserId == userId && t.valuedate < startDate)
+                .OrderByDescending(t => t.valuedate)
+                .Select(t => t.balance)
+                .FirstOrDefault() ?? 0m;
+
+            foreach (var t in transactions)
+            {
+                previousBalance = previousBalance
+                    + (t.credit ?? 0m)
+                    - (t.debit ?? 0m);
+                t.balance = previousBalance;
+            }
         }
     }
 }
