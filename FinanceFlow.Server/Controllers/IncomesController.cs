@@ -100,36 +100,6 @@ namespace FinanceFlow.Server.Controllers
                     await _context.SaveChangesAsync();
                 }
             }
-            //var transaction = _context.Transactions.Where(b => b.incomeid == incomeModel.Id && b.UserId == int.Parse(userId)).FirstOrDefault();
-            //decimal credit = (decimal)_context.Transactions.Where(b => b.UserId == int.Parse(userId)).Sum(selector: b => b.credit);
-            //decimal debit = (decimal)_context.Transactions.Where(b => b.UserId == int.Parse(userId)).Sum(selector: b => b.debit);
-            //decimal balance = credit - debit;
-
-            //var transaction = _context.Transactions.Where(b => b.UserId == int.Parse(userId));
-            //decimal balance = 0;
-
-            //if (transaction is not null)
-            //{
-
-
-            //    decimal credit = (decimal)transaction.Sum(b => b.credit);
-            //    decimal debit = (decimal)transaction.Sum(b => b.debit);
-            //    balance = credit - debit;
-            //    var transactionid = transaction.Where(b => b.incomeid == incomeModel.Id).FirstOrDefault();
-            //    TransactionModel transactions = new TransactionModel();
-            //    transactions.id = transactionid.id; // Use null-coalescing operator to handle null case
-            //    transactions.credit = incomeModel.Amount;
-            //    transactions.valuedate = incomeModel.Date.Value;
-            //    transactions.incomeid = incomeModel.Id;
-            //    transactions.type = TransactionType.Incomes;
-            //    //transactions.createdon = DateTime.Now;
-            //    //transactions.date = DateTime.Now;
-            //    transactions.incomeid = incomeModel.Id;
-            //    transactions.balance = balance;
-
-            //    _context.Transactions.Update(transactions);
-            //    await _context.SaveChangesAsync();
-            //}
             var userIdInt = int.Parse(userId);
             var transactionsQuery = _context.Transactions.Where(b => b.UserId == userIdInt).ToList();
             
@@ -139,11 +109,7 @@ namespace FinanceFlow.Server.Controllers
             decimal credit = transactionsQuery.Sum(b => b.credit ?? 0);
             decimal debit = transactionsQuery.Sum(b => b.debit ?? 0);
             decimal balance = credit - debit;
-            // Replace this line:
-            // FinAccess access;
-            //double bal = access.GetBalance(userId);
-
-            // With the following lines:
+            
             FinAccess access = new FinAccess(_context);
             Task bal = access.GetBalanceAsync(userId);
             var transactionToUpdate = transactionsQuery.FirstOrDefault(b => b.incomeid == incomeModel.Id);
