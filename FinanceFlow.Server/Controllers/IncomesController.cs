@@ -121,6 +121,8 @@ namespace FinanceFlow.Server.Controllers
                 transactionToUpdate.incomeid = incomeModel.Id;
                 transactionToUpdate.balance = balance;
 
+                RecalculateBalances(userIdInt, transactionToUpdate.valuedate);
+
                 _context.Transactions.Update(transactionToUpdate);
                 await _context.SaveChangesAsync();
             }
@@ -236,6 +238,29 @@ namespace FinanceFlow.Server.Controllers
         private bool IncomeModelExists(int id)
         {
             return _context.Incomes.Any(e => e.Id == id);
+        }
+
+
+        private void RecalculateBalances(int userId, DateTime startDate)
+        {
+            var transactions = _context.Transactions
+                .Where(t => t.UserId == userId && t.valuedate >= startDate)
+                .OrderBy(t => t.valuedate)
+                .ToList();
+
+            decimal previousBalance = _context.Transactions
+                .Where(t => t.UserId == userId && t.valuedate < startDate)
+                .OrderByDescending(t => t.valuedate)
+                .Select(t => t.balance)
+                .FirstOrDefault() ?? 0m;
+
+            foreach (var t in transactions)
+            {
+                previousBalance = previousBalance
+                    + (t.credit ?? 0m)
+                    - (t.debit ?? 0m);
+                t.balance = previousBalance;
+            }
         }
     }
 }
