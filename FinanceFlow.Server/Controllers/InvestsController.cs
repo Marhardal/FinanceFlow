@@ -93,14 +93,23 @@ namespace FinanceFlow.Server.Controllers
                 {
                     if (investment != null)
                     {
-                        if (investment.CurrentAmount.HasValue)
-                        {
-                            investment.CurrentAmount += Convert.ToDecimal(investModel.amount);
-                        }
-                        else
-                        {
-                            investment.CurrentAmount = Convert.ToDecimal(investModel.amount);
-                        }
+                        //var suminvest = await _context.Invests.Where(i => i.InvestmentId == investModel.InvestmentId).Select(i => i.amount);
+                        //// Replace this line:
+                        //var suminvest = await _context.Invests.Where(i => i.InvestmentId == investModel.InvestmentId).Select(i => i.amount);
+
+                        // With this line:
+                        decimal suminvest = await _context.Invests
+                            .Where(i => i.InvestmentId == investModel.InvestmentId)
+                            .SumAsync(i => i.amount);
+                        //if (investment.CurrentAmount.HasValue)
+                        //{
+
+                        //    investment.CurrentAmount = Convert.ToDecimal(investModel.amount);
+                        //}
+                        //else
+                        //{
+                            investment.CurrentAmount = suminvest;
+                        //}
                         _context.Investments.Update(investment);
                     }
                 }
@@ -112,7 +121,7 @@ namespace FinanceFlow.Server.Controllers
                 transactionToUpdate.debit = investModel.amount;
                 transactionToUpdate.valuedate = investModel.Date;
                 transactionToUpdate.investId = investModel.Id;
-                transactionToUpdate.balance = balance;
+                transactionToUpdate.balance = balance - investModel.amount;
 
                 RecalculateBalances(userIdInt, transactionToUpdate.valuedate);
                 _context.Transactions.Update(transactionToUpdate);

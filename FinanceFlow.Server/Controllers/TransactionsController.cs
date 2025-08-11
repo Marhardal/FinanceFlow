@@ -126,10 +126,40 @@ namespace FinanceFlow.Server.Controllers
                 return NotFound();
             }
 
+            var date = transactionModel.valuedate;
+
+            if (transactionModel.UserId.HasValue)
+            {
+                RecalculateBalances(transactionModel.UserId.Value, date);
+            }
+
             _context.Transactions.Remove(transactionModel);
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+
+        private void RecalculateBalances(int userId, DateTime startDate)
+        {
+            var transactions = _context.Transactions
+                .Where(t => t.UserId == userId && t.valuedate >= startDate)
+                .OrderBy(t => t.valuedate)
+                .ToList();
+
+            decimal previousBalance = _context.Transactions
+                .Where(t => t.UserId == userId && t.valuedate < startDate)
+                .OrderByDescending(t => t.valuedate)
+                .Select(t => t.balance)
+                .FirstOrDefault() ?? 0m;
+
+            foreach (var t in transactions)
+            {
+                previousBalance = previousBalance
+                    + (t.credit ?? 0m)
+                    - (t.debit ?? 0m);
+                t.balance = previousBalance;
+            }
         }
 
         private bool TransactionModelExists(int id)
