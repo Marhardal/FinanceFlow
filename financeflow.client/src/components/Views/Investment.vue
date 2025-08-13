@@ -120,6 +120,7 @@ const getInvestments = async () => {
   try {
     const response = await apiClient.get('Investments')
     Investments.value = response.data;
+    // console.log(Investments.value);
   } catch (error) {
     console.error("Error fetching Investments:", error);
   }

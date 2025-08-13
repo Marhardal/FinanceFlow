@@ -13,6 +13,7 @@ namespace FinanceFlow.Server.Models
 
         public int? budgetid { get; set; }
         public int? investId { get; set; }
+        public int? UserId { get; set; }
 
         [Precision(18, 2)]
         public decimal? debit { get; set; }
@@ -23,7 +24,7 @@ namespace FinanceFlow.Server.Models
         [Precision(18, 2)]
         public decimal? balance { get; set; }
 
-        public DateTime date { get; set; } = DateTime.Now;
+        public DateTime valuedate { get; set; }
 
         public DateTime createdon { get; set; } = DateTime.Now;
     
@@ -32,6 +33,8 @@ namespace FinanceFlow.Server.Models
         public BudgetModel? Budget { get; set; }
 
         public InvestModel? Invest { get; set; }
+        
+        public UserModel? UserModel { get; set; }
     }
 
     public enum TransactionType

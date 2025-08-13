@@ -69,10 +69,21 @@ namespace FinanceFlow.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInvestModel(int id, InvestModel investModel)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             if (id != investModel.Id)
             {
                 return BadRequest();
             }
+            
+            var userIdInt = int.Parse(userId);
+            var transactionsQuery = _context.Transactions.Where(b => b.UserId == userIdInt);
+
+            decimal credit = transactionsQuery.Sum(b => b.credit ?? 0);
+            decimal debit = transactionsQuery.Sum(b => b.debit ?? 0);
+            decimal balance = credit - debit;
+
+            var transactionToUpdate = transactionsQuery.FirstOrDefault(b => b.investId == investModel.InvestmentId);
 
             _context.Entry(investModel).State = EntityState.Modified;
             if (investModel.InvestmentId != 0)
@@ -82,17 +93,50 @@ namespace FinanceFlow.Server.Controllers
                 {
                     if (investment != null)
                     {
-                        if (investment.CurrentAmount.HasValue)
-                        {
-                            investment.CurrentAmount += Convert.ToDecimal(investModel.amount);
-                        }
-                        else
-                        {
-                            investment.CurrentAmount = Convert.ToDecimal(investModel.amount);
-                        }
+                        //var suminvest = await _context.Invests.Where(i => i.InvestmentId == investModel.InvestmentId).Select(i => i.amount);
+                        //// Replace this line:
+                        //var suminvest = await _context.Invests.Where(i => i.InvestmentId == investModel.InvestmentId).Select(i => i.amount);
+
+                        // With this line:
+                        decimal suminvest = await _context.Invests
+                            .Where(i => i.InvestmentId == investModel.InvestmentId)
+                            .SumAsync(i => i.amount);
+                        //if (investment.CurrentAmount.HasValue)
+                        //{
+
+                        //    investment.CurrentAmount = Convert.ToDecimal(investModel.amount);
+                        //}
+                        //else
+                        //{
+                            investment.CurrentAmount = suminvest;
+                        //}
                         _context.Investments.Update(investment);
                     }
                 }
+            }
+
+
+            if (transactionToUpdate != null)
+            {
+                transactionToUpdate.debit = investModel.amount;
+                transactionToUpdate.valuedate = investModel.Date;
+                transactionToUpdate.investId = investModel.Id;
+                transactionToUpdate.balance = balance - investModel.amount;
+
+                RecalculateBalances(userIdInt, transactionToUpdate.valuedate);
+                _context.Transactions.Update(transactionToUpdate);
+                //await _context.SaveChangesAsync();
+            }
+            else
+            {
+                TransactionModel transactions = new TransactionModel();
+                transactions.debit = investModel.amount;
+                transactions.valuedate = investModel.Date;
+                transactions.investId = investModel.InvestmentId;
+                transactions.type = TransactionType.Investment;
+                transactions.balance = balance - investModel.amount;
+                transactions.UserId = int.Parse(userId);
+                _context.Transactions.Add(transactions);
             }
 
             try
@@ -110,23 +154,7 @@ namespace FinanceFlow.Server.Controllers
                     throw;
                 }
             }
-
-            var transaction = _context.Transactions.Where(b => b.investId == investModel.Id).FirstOrDefault();
-
-            if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
-            {
-                TransactionModel transactions = new TransactionModel();
-
-                transactions.debit = Convert.ToDecimal(investModel.amount);
-                transactions.date = DateTime.Now;
-                transactions.investId = investModel.Id;
-                transactions.type = TransactionType.Investment;
-                transactions.createdon = DateTime.Now;
-                transactions.date = DateTime.Now;
-                _context.Transactions.Add(transactions);
-                await _context.SaveChangesAsync();
-            }
-
+                        
             return NoContent();
         }
 
@@ -163,20 +191,27 @@ namespace FinanceFlow.Server.Controllers
                         }
                         _context.Investments.Update(investment);
                     }
-                    
-                    var transaction = _context.Transactions.Where(b => b.investId == investModel.InvestmentId).FirstOrDefault();
 
-                    if (transaction is null || (investModel.Status is not null || investModel.StatusID is 2))
+                    var userIdInt = int.Parse(userId);
+                    var transactionsQuery = _context.Transactions.Where(b => b.UserId == userIdInt);
+
+                    decimal credit = transactionsQuery.Sum(b => b.credit ?? 0);
+                    decimal debit = transactionsQuery.Sum(b => b.debit ?? 0);
+                    decimal balance = credit - debit;
+
+                    var transactionToUpdate = transactionsQuery.FirstOrDefault(b => b.investId == investModel.InvestmentId);
+
+                    if (transactionToUpdate == null)
                     {
                         TransactionModel transactions = new TransactionModel();
-
-                        transactions.debit = Convert.ToDecimal(investModel.amount);
-                        transactions.date = DateTime.Now;
+                        transactions.debit = investModel.amount;
+                        transactions.valuedate = investModel.Date;
                         transactions.investId = investModel.InvestmentId;
                         transactions.type = TransactionType.Investment;
-                        transactions.createdon = DateTime.Now;
-                        transactions.date = DateTime.Now;
+                        transactions.balance = balance - investModel.amount;
+                        transactions.UserId = int.Parse(userId);
                         _context.Transactions.Add(transactions);
+                        await _context.SaveChangesAsync();
                     }
 
                 }
@@ -222,6 +257,28 @@ namespace FinanceFlow.Server.Controllers
         private bool InvestModelExists(int id)
         {
             return _context.Invests.Any(e => e.Id == id);
+        }
+        
+        private void RecalculateBalances(int userId, DateTime startDate)
+        {
+            var transactions = _context.Transactions
+                .Where(t => t.UserId == userId && t.valuedate >= startDate)
+                .OrderBy(t => t.valuedate)
+                .ToList();
+
+            decimal previousBalance = _context.Transactions
+                .Where(t => t.UserId == userId && t.valuedate < startDate)
+                .OrderByDescending(t => t.valuedate)
+                .Select(t => t.balance)
+                .FirstOrDefault() ?? 0m;
+
+            foreach (var t in transactions)
+            {
+                previousBalance = previousBalance
+                    + (t.credit ?? 0m)
+                    - (t.debit ?? 0m);
+                t.balance = previousBalance;
+            }
         }
     }
 }

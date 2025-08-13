@@ -1,0 +1,1 @@
+﻿select SUM(credit), SUM(debit) from Transactions

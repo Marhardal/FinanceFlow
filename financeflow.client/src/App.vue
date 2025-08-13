@@ -11,23 +11,31 @@ const router = useRouter();
 
 const authuseStore = useStore();
 
+  const authUserID = ref("");
+
+const getAuthUserID = () => {
+  authUserID.value = localStorage.getItem('authUserID');
+  return authUserID.value ? authUserID : null;
+}
+
 const Logout = async () => {
   console.log("Logout");
+
+  localStorage.clear();
 
   localStorage.removeItem('authUserID');
   localStorage.removeItem('authRefreshToken');
   localStorage.removeItem('authRole');
   localStorage.removeItem('authToken');
 
-  const success = await authuseStore.logout();
-  if (!success) {
-    $toast.error("Error logging out. Please try again.");
-    return;
-  }
+  // const success = await authuseStore.logout();
+  // if (!success) {
+  //   $toast.error("Error logging out. Please try again.");
+  //   return;
+  // }
   router.push({ path: '/login' })
 
-  const authUserID = localStorage.getItem('authUserID');
-  if (authUserID == null) {
+  if (authUserID.value == null) {
     router.push({ path: '/login' })
   }
   // $toast.success("Logged in successfully.");
@@ -49,6 +57,9 @@ const handleClickOutside = (event) => {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
+  getAuthUserID();
+
+  // console.log("Auth User ID:", authUserID.value);
 });
 
 onBeforeUnmount(() => {
@@ -60,7 +71,7 @@ onBeforeUnmount(() => {
   <div class="flex w-screen h-screen text-gray-700">
 
     <!-- Component Start -->
-    <div class="flex flex-col items-center w-16 pb-4 overflow-auto border-r border-gray-300">
+    <div class="flex flex-col items-center w-16 pb-4 overflow-auto border-r border-gray-300" v-if="authUserID !== null">
       <a class="flex items-center justify-center flex-shrink-0 w-full h-16 bg-gray-300" href="#">
         <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -105,8 +116,8 @@ onBeforeUnmount(() => {
       </router-link>
     </div>
 
-    <div class="flex flex-col flex-grow">
-      <div class="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300">
+    <div class="flex flex-col flex-grow" >
+      <div class="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300" v-if="authUserID !== null">
         <h1 class="text-lg font-medium">Finance Flow</h1>
         <button
           class="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded hover:bg-gray-300">

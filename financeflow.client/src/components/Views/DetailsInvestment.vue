@@ -1,25 +1,25 @@
 <template>
   <ContainerBg>
     <div v-if="Investment">
-      <div class="border-b border-gray-200 p-5 rounded-lg">
-        <h2 class="text-3xl md:text-2xl font-bold mb-2">{{ Investment.name }} Details</h2>
+      <div class="p-5 border-b border-gray-200 rounded-lg">
+        <h2 class="mb-2 text-3xl font-bold md:text-2xl">{{ Investment.name }} Details</h2>
       </div>
-      <div class="border-b border-gray-200 p-5 rounded-lg">
+      <div class="p-5 border-b border-gray-200 rounded-lg">
         <div class="grid grid-cols-4 gap-4">
           <div class="col-span-1">
-            <h3 class="text-lg font-semibold mb-3">Investment Name</h3>
+            <h3 class="mb-3 text-lg font-semibold">Investment Name</h3>
           </div>
           <div class="col-span-3">
             <p class="text-md">{{ Investment.name }}</p>
           </div>
           <div class="col-span-1">
-            <h3 class="text-lg font-semibold mb-3">Investment Type</h3>
+            <h3 class="mb-3 text-lg font-semibold">Investment Type</h3>
           </div>
           <div class="col-span-3" v-if="Investment.investmentType != null">
             <p class="text-md">{{ Investment.investmentType.name }}</p>
           </div>
           <div class="col-span-1">
-            <h3 class="text-lg font-semibold mb-3">Investment Amount</h3>
+            <h3 class="mb-3 text-lg font-semibold">Investment Amount</h3>
           </div>
           <div class="col-span-3" v-if="Investment.currentAmount != null">
             <p class="text-md">{{ Investment.currentAmount.toLocaleString('en-mw', {
@@ -28,13 +28,13 @@
             }) }}</p>
           </div>
           <div class="col-span-1">
-            <h3 class="text-lg font-semibold mb-3">Company</h3>
+            <h3 class="mb-3 text-lg font-semibold">Company</h3>
           </div>
           <div class="col-span-3" v-if="Investment.company != null">
             <span class="text-md">{{ Investment.company }}</span>
           </div>
           <div class="col-span-1">
-            <h3 class="text-lg font-semibold mb-3">Yearly Percentage</h3>
+            <h3 class="mb-3 text-lg font-semibold">Yearly Percentage</h3>
           </div>
           <div class="col-span-3" v-if="Investment.percentage != null">
             <span class="text-md">{{ Investment.percentage }}</span>
@@ -46,7 +46,7 @@
                 minimumFractionDigits: 2, style:
                   'currency', currency: 'MWK'
               }) }}</span>
-              <XCircleIcon class="icon size-5 ml-2 text-sm" />
+              <XCircleIcon class="ml-2 text-sm icon size-5" />
             </div>
           </div>
           <div class="col-span-1">
@@ -77,19 +77,19 @@
         </div>
       </div>
 
-      <div class=" py-4">
+      <div class="py-4 ">
         <div class="grid grid-cols-7 border-b border-gray-200">
           <div class="col-span-6">
-            <h2 class="text-xl py-2 font-bold">Top-up Investments List</h2>
+            <h2 class="py-2 text-xl font-bold">Top-up Investments List</h2>
           </div>
           <div class="col-span-1">
             <router-link :to="{ path: '/investment/' + Investment.id + '/invest/create' }"
-              class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:text-black focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none bg-blue-600 px-4 py-2 justify-end align-baseline">Create
+              class="inline-flex items-center justify-end px-4 py-2 text-sm font-semibold text-white align-baseline bg-blue-600 border border-transparent rounded-lg gap-x-2 hover:text-black focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none">Create
             </router-link>
           </div>
         </div>
         <div v-if="Invests !== null && Invests.length > 0">
-          <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+          <div class="px-4 py-4 -mx-4 overflow-x-auto sm:-mx-8 sm:px-8">
             <div class="flex flex-col">
               <div class="-m-1.5 overflow-x-auto">
                 <div class="p-1.5 min-w-full inline-block align-middle">
@@ -98,43 +98,43 @@
                       <thead>
                         <tr>
                           <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                            class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
                             Income Name</th>
                           <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                            class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
                             Status</th>
                           <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                            class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
                             Amount</th>
                           <th scope="col"
-                            class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                            class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
                             Date</th>
                           <th scope="col"
-                            class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase dark:text-neutral-500">
+                            class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-end dark:text-neutral-500">
                             Action</th>
                         </tr>
                       </thead>
                       <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
                         <tr
-                          class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800"
+                          class="text-gray-800 hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white"
                           v-for="Invest in Invests" :key="Invest.id">
-                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.income">
-                            {{ Invest.income.name }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" v-if="Invest.status">
+                          <td class="px-6 py-4 text-sm font-medium whitespace-nowrap" v-if="Invest.incomes != null">
+                            {{ Invest.incomes.name }}</td>
+                          <td class="px-6 py-4 text-sm font-medium whitespace-nowrap" v-if="Invest.status">
                             {{ Invest.status.name }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm">{{
+                          <td class="px-6 py-4 text-sm whitespace-nowrap">{{
                             Invest.amount.toLocaleString('en-mw', {
                               minimumFractionDigits: 2, style: 'currency',
                               currency: 'MWK'
                             }) }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm" v-if="Invest.date">{{
+                          <td class="px-6 py-4 text-sm whitespace-nowrap" v-if="Invest.date">{{
                             dayjs(Invest.date).fromNow() }}</td>
-                          <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                          <td class="px-6 py-4 text-sm font-medium whitespace-nowrap text-end">
                             <router-link :to="{ path: '/investment/' + Investment.id + '/invest/edit/' + Invest.id }"
-                              class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent pr-1 text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
+                              class="inline-flex items-center pr-1 text-sm font-semibold text-blue-600 border border-transparent rounded-lg gap-x-2 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
                               |</router-link>
                             <button type="button"
-                              class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
+                              class="inline-flex items-center text-sm font-semibold text-blue-600 border border-transparent rounded-lg gap-x-2 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400"
                               @click="deleteInvest(Invest.id)">Delete</button>
                           </td>
                         </tr>
@@ -146,18 +146,18 @@
               </div>
             </div>
           </div>
-          <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between ">
-            <span class="text-xs xs:text-sm text-gray-900">
+          <div class="flex flex-col items-center px-5 py-5 bg-white border-t xs:flex-row xs:justify-between ">
+            <span class="text-xs text-gray-900 xs:text-sm">
               Showing 1 to 4 of 50 Entries
             </span>
             <div class="inline-flex mt-2 xs:mt-0">
               <button
-                class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
+                class="px-4 py-2 text-sm font-semibold transition duration-150 bg-indigo-600 rounded-l text-indigo-50 hover:bg-indigo-500">
                 Prev
               </button>
               &nbsp; &nbsp;
               <button
-                class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
+                class="px-4 py-2 text-sm font-semibold transition duration-150 bg-indigo-600 rounded-r text-indigo-50 hover:bg-indigo-500">
                 Next
               </button>
             </div>

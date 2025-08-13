@@ -4,6 +4,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 import router from './Others/Router.js'
 import formkitconfig from './Others/formkit.config'
@@ -13,9 +14,16 @@ import { plugin, defaultConfig} from "@formkit/vue"
 import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 
+// import VueAwesomePaginate from "vue-awesome-paginate";
+// import "vue-awesome-paginate/dist/style.css";
+
+// createApp(App).use(VueAwesomePaginate).mount("#app");
+
 const app = createApp(App);
 
 const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+
 app.use(pinia);
 
 app.use(plugin, defaultConfig(formkitconfig));
