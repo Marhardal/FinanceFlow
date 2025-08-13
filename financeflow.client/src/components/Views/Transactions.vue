@@ -152,8 +152,8 @@ const deleteTransaction = async (id) => {
     if (response.status === 200) {
       getTransactions();
       $toast.success('Transaction Deleted Successfully!');
-      // router.push('/transactions');
-      router.replace('/transactions').then(() => window.location.reload())
+      router.push('/transactions');
+      // router.replace('/transactions').then(() => window.location.reload())
     }
     console.log(response.status);
   } catch (error) {
