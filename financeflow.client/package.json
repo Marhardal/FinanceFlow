@@ -16,6 +16,8 @@
     "@tailwindcss/vite": "^4.0.3",
     "axios": "^1.7.9",
     "chart.js": "^4.4.8",
+    "datatables.net-dt": "^2.3.2",
+    "datatables.net-vue3": "^3.0.4",
     "dayjs": "^1.11.13",
     "pinia": "^3.0.1",
     "tailwindcss": "^4.0.3",
