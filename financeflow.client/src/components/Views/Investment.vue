@@ -9,7 +9,8 @@
             clip-rule="evenodd" />
         </svg>
         <input class="flex-grow block ml-1 outline-none bg-gray-50" type="text" name="" id=""
-          placeholder="Search for Investments." v-model="search" @keyup="getSearchedInvestments()">
+          placeholder="Search for Investments." v-model="search"  @keyup="getSearchedInvestments()">
+
       </div>
     </ListHeader>
     <div>
@@ -17,16 +18,53 @@
         <div class="flex flex-col">
           <div class="-m-1.5 overflow-x-auto">
             <div class="p-1.5 min-w-full inline-block align-middle">
-                  <DataTable :data="Investments" class="display">
-        <thead>
-            <tr>
-                <th>A</th>
-                <th>B</th>
-            </tr>
-        </thead>
-    </DataTable>
+            <!--       <DataTable :data="Investments" class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                    <thead>
+                    <tr>
+                      <th scope="col"
+                        class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
+                        Name</th>
+                      <th scope="col"
+                        class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
+                        Amount</th>
+                      <th scope="col"
+                        class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
+                        Category</th>
+                      <th scope="col"
+                        class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-start dark:text-neutral-500">
+                        Date</th>
+                      <th scope="col"
+                        class="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-end dark:text-neutral-500">
+                        Action</th>
+                    </tr>
+                    </thead>
+<tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
+                    <tr class="text-gray-800 hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white" v-for="Investment in Investments"
+                      :key="Investment.id">
+                      <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
+                        {{ Investment.name }}</td>
+                      <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
+                      {{ Investment.currentAmount.toLocaleString('en-mw', { minimumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }}</td>
+                      <td class="px-6 py-4 text-sm font-medium whitespace-nowrap" v-if="Investment.investmentType">
+                        {{ Investment.investmentType.name }}</td>
+                      <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
+                        {{ dayjs(Investment.createdOn).fromNow() }}</td>
+                      <td class="px-6 py-4 text-sm font-medium whitespace-nowrap text-end">
+                        <router-link :to="{ path: 'Investment/edit/' + Investment.id }"
+                          class="inline-flex items-center pr-1 text-sm font-semibold text-blue-600 border border-transparent rounded-lg gap-x-2 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Edit
+                          |</router-link>
+                        <router-link :to="{ path: 'Investment/details/'+ Investment.id }"
+                          class="inline-flex items-center pr-1 text-sm font-semibold text-blue-600 border border-transparent rounded-lg gap-x-2 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">Details
+                          |</router-link>
+                        <button type="button" @click="deleteInvestment(Investment.id)"
+                          class="inline-flex items-center text-sm font-semibold text-blue-600 border border-transparent rounded-lg gap-x-2 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:text-blue-400">
+                          Delete</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </DataTable> -->
               <div class="overflow-hidden">
-              <!--   <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
                   <thead>
                     <tr>
                       <th scope="col"
@@ -70,7 +108,7 @@
                       </td>
                     </tr>
                   </tbody>
-                </table> -->
+                </table>
               </div>
             </div>
           </div>
@@ -99,12 +137,13 @@
 <script setup>
 import ListHeader from '../Components/ListHeader.vue';
 import apiClient from '../../Others/apiClient';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick, watch, reactive, computed } from 'vue';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useToast } from 'vue-toast-notification';
 import { useRouter } from 'vue-router';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import dayjs from 'dayjs';
+import $ from 'jquery'
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net-dt';
 
@@ -135,6 +174,15 @@ const getSearchedInvestments = async () => {
   }
 };
 
+// const getSearchedInvestments = computed(() => {
+//       return Investments.value.filter((i) => {
+//         const searchTerm = search.value.toLowerCase();
+//         return (
+//           i.name.toLowerCase().includes(searchTerm) ||
+//           i.investmentType?.name.toLowerCase().includes(searchTerm)
+//         );
+//       });
+//     });
 
 
 const deleteInvestment = async (id) => {
@@ -153,9 +201,15 @@ const deleteInvestment = async (id) => {
   }
 };
 
+// watch(Investments, () => {
+//   initDataTable()
+// })
+
 onMounted(() => {
   getInvestments();
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import 'datatables.net-dt';
+</style>

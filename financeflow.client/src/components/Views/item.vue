@@ -38,7 +38,7 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
-                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800" v-for="item in items"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800" v-for="item in paginatedItems"
                       :key="item.id">
                       <!-- dark:text-neutral-200 -->
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -80,29 +80,24 @@
 
 <!-- Disable Breakpoint Buttons -->
 
-<vue-awesome-paginate
-  :total-items="50"
-  v-model="currentPage"
-  :items-per-page="5"
-  :max-pages-shown="5"
-  @click="onClickHandler"
-  :disable-breakpoint-buttons="true"
-/>
         <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between ">
           <span class="text-xs xs:text-sm text-gray-900">
-            Showing 1 to 4 of 50 Entries
+            Showing {{ currentPage }} to {{ totalPages }} of {{ items.length }} Items
           </span>
           <div class="inline-flex mt-2 xs:mt-0">
             <button
-              class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
+              class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l" @click="prevPage">
               Prev
             </button>
             &nbsp; &nbsp;
-            
-            <RouterLink
+<button
+              class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l" @click="nextPage">
+              Next
+            </button>
+            <!-- <RouterLink
               class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
               <nuxt-link :to="{path: `/`, query: {page, previousPage} }">Next</nuxt-link>
-            </RouterLink>
+            </RouterLink> -->
           </div>
         </div>
       </div>
@@ -121,30 +116,33 @@ import PaginateVue from '../PaginateVue.vue';
 const items = ref([]);
 const $toast = useToast();
 const router = useRouter();
+const currentPage = ref(1);
+const itemsPerPage = 10;
+
 
 const search = ref('');
 
 const route = useRoute();
 
-const page = computed(() => Number(route.query.page) || 1)
+const totalPages = computed(() =>
+      Math.ceil(items.value.length / itemsPerPage)
+    );
 
-const offset = computed(() => (page.value - 1) * 15)
+    const paginatedItems = computed(() => {
+      const start = (currentPage.value - 1) * itemsPerPage;
+      return items.value.slice(start, start + itemsPerPage);
+    });
 
-const totalpages = computed(() => Math.ceil(items.value.length / 15))
+    const nextPage = () => {
+      if (currentPage.value < totalPages.value) currentPage.value++;
+    };
 
-const nextPage = computed(()  => {
-  if (page.value < totalpages.value) {
-    return page.value + 1
-  }
-  return totalpages.value
-});
+    const prevPage = () => {
+      if (currentPage.value > 1) currentPage.value--;
+    };
 
-const previousPage = computed(() => {
-  if (page.value > totalpages.value) {
-    return page.value - 1
-  }
-  return false
-});
+
+
 
 const getItems = async () => {
   try {
