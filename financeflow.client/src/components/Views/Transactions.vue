@@ -36,7 +36,7 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 dark:divide-neutral-700" v-if="Transactions != null">
-                    <tr class="px-6 py-4 text-sm font-medium whitespace-nowrap" v-for="transition in Transactions"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-neutral-500 hover:rounded hover:text-white text-gray-800" v-for="transition in paginatedTransaction"
                       :key="transition.id">
                       <!-- dark:text-neutral-200 -->
                       <td class="px-6 py-4 text-sm font-medium whitespace-nowrap" v-if="transition.type == 0">Incomes
@@ -104,16 +104,16 @@
         </div>
         <div class="flex flex-col items-center px-5 py-5 bg-white border-t xs:flex-row xs:justify-between ">
           <span class="text-xs text-gray-900 xs:text-sm">
-            Showing 1 to 4 of 50 Entries
+            Showing {{ currentPage }} to {{ totalPages }} of {{ Transactions.length }} Transactions.
           </span>
           <div class="inline-flex mt-2 xs:mt-0">
             <button
-              class="px-4 py-2 text-sm font-semibold transition duration-150 bg-indigo-600 rounded-l text-indigo-50 hover:bg-indigo-500">
+              class="px-4 py-2 text-sm font-semibold transition duration-150 bg-indigo-600 rounded-l text-indigo-50 hover:bg-indigo-500" @click="prevPage" :disabled="currentPage == 1">
               Prev
             </button>
             &nbsp; &nbsp;
             <button
-              class="px-4 py-2 text-sm font-semibold transition duration-150 bg-indigo-600 rounded-r text-indigo-50 hover:bg-indigo-500">
+              class="px-4 py-2 text-sm font-semibold transition duration-150 bg-indigo-600 rounded-r text-indigo-50 hover:bg-indigo-500" @click="nextPage" :disabled="currentPage == totalPages">
               Next
             </button>
           </div>
@@ -124,7 +124,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import ListHeader from '../Components/ListHeader.vue';
 import apiClient from '../../Others/apiClient'
 import dayjs from 'dayjs';
@@ -134,6 +134,8 @@ import { useRouter } from 'vue-router';
 
 const $toast = useToast();
 const router = useRouter();
+const currentPage = ref(1);
+const itemsPerPage = 10;
 
 dayjs.extend(relativeTime);
 const Transactions = ref([]);
@@ -145,6 +147,24 @@ const getTransactions = async () => {
     console.log(Transactions);
   }
 }
+
+
+const totalPages = computed(() =>
+      Math.ceil(Transactions.value.length / itemsPerPage)
+    );
+
+    const paginatedTransaction = computed(() => {
+      const start = (currentPage.value - 1) * itemsPerPage;
+      return Transactions.value.slice(start, start + itemsPerPage);
+    });
+
+    const nextPage = () => {
+      if (currentPage.value < totalPages.value) currentPage.value++;
+    };
+
+    const prevPage = () => {
+      if (currentPage.value > 1) currentPage.value--;
+    };
 
 const deleteTransaction = async (id) => {
   try {

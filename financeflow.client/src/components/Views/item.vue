@@ -91,7 +91,7 @@
             </button>
             &nbsp; &nbsp;
 <button
-              class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l" @click="nextPage">
+              class="px-4 py-2 text-sm font-semibold transition duration-150 bg-indigo-600 rounded-r text-indigo-50 hover:bg-indigo-500" @click="nextPage">
               Next
             </button>
             <!-- <RouterLink
